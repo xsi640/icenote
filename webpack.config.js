@@ -45,6 +45,9 @@ module.exports = {
                     limit: 4096,
                     name: './public/fonts/[hash].[ext]'
                 }
+            },{
+                test: /\.(json)$/,
+                loader: 'json-loader'
             }
         ]
     },

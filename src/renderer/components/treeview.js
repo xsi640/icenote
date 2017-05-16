@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {Tree} from 'antd'
 import NoteBook from './notebook'
 import Category from './category'
@@ -73,4 +74,12 @@ export default class TreeView extends Component {
             }
         </div>)
     }
+}
+
+TreeView.propTypes = {
+    onAddNoteBook: PropTypes.func,
+    onModifyNoteBook: PropTypes.func,
+    onDeleteNoteBook: PropTypes.func,
+    onSelect: PropTypes.func,
+    dataSource: PropTypes.array,
 }

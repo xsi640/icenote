@@ -1,0 +1,42 @@
+.nb_list {
+  .top {
+    display: grid;
+    grid-template-columns: 50px auto 50px;
+    grid-template-rows: 40px 40px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+    Button {
+      border: none;
+      width: 38px;
+      height: 38px;
+      overflow: hidden;
+      z-index: 9999;
+    }
+
+    .left, .right, .title {
+      font-size: 16px;
+      line-height: 36px;
+      font-weight: 600;
+    }
+
+    .left Button {
+      float: left;
+    }
+    .right Button {
+      float: right;
+    }
+    .search {
+      grid-column: 1/4;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+  }
+}
+
+.nb_list {
+  height: 100%;
+  .list {
+    height: calc(100vh - 80px);
+    overflow: auto;
+  }
+}

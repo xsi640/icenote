@@ -1,0 +1,37 @@
+.radio-toolbar{
+  height: auto;
+}
+.radio-toolbar input[type="radio"] {
+  display: none;
+}
+
+.radio-toolbar label {
+  display: inline-block;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 4px 10px;
+  height: 90px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.radio-toolbar input[type="radio"]:checked + label {
+  background-color: #0e77ca;
+  color: #ffffff;
+}
+
+.note-item {
+
+  .title {
+    font-size: 14px;
+  }
+  .summary {
+    margin-top: 3px;
+    font-size: 12px;
+    overflow: hidden;
+  }
+}

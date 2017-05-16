@@ -4,19 +4,17 @@ import TreeView from '../components/treeview'
 import './main.scss'
 import './splitpane.scss'
 import 'antd/dist/antd.css';
-import notepad_icon from '../images/notepad.png'
 import NoteContent from './notecontent'
 
 const dataSource =
     [{
         id: '0',
         name: '我的笔记本',
-        icon: notepad_icon,
         type: 'category',
         children: [{
             id: '1',
             name: '你的第一个笔记本',
-            count: '2'
+            count: 2
         }]
     }]
 

@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types';
 
 export default class Category extends Component {
     render() {
@@ -9,4 +10,10 @@ export default class Category extends Component {
             </div>
         );
     }
+}
+
+Category.propTypes = {
+    id: PropTypes.string,
+    icon: PropTypes.string,
+    name: PropTypes.string,
 }
