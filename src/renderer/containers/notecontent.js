@@ -3,6 +3,7 @@ import NoteList from '../components/notelist'
 import Editor from '../components/editor'
 import {Button, Icon, Input} from 'antd'
 import SplitPane from 'react-split-pane'
+const Search = Input.Search;
 import './notecontent.scss'
 
 export default class NoteContent extends Component {
@@ -21,7 +22,10 @@ export default class NoteContent extends Component {
                             <Button shape="circle" icon="edit"></Button>
                         </div>
                         <div className="search">
-                            <Input addonAfter={<Icon type="search"/>} placeholder="keyword"/>
+                            <Search
+                                placeholder="input search text"
+                                onSearch={value => console.log(value)}
+                            />
                         </div>
                     </div>
                     <div className="list">

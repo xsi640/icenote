@@ -1,22 +1,13 @@
 import React, {Component} from 'react'
 import SplitPane from 'react-split-pane'
-import TreeView from '../components/treeview'
+import NoteTreeView from '../components/notetreeview'
+import Tags from '../components/tags'
 import './main.scss'
 import './splitpane.scss'
 import 'antd/dist/antd.css';
 import NoteContent from './notecontent'
-
-const dataSource =
-    [{
-        id: '0',
-        name: '我的笔记本',
-        type: 'category',
-        children: [{
-            id: '1',
-            name: '你的第一个笔记本',
-            count: 2
-        }]
-    }]
+import {Button} from "antd";
+import NoteBookModal from '../components/notebookmodal'
 
 export default class Main extends Component {
 
@@ -39,22 +30,40 @@ export default class Main extends Component {
         console.log('onDeleteNoteBook', e, data);
     }
 
-    onSelect(key, sender) {
-        console.log('onSelect', key, sender);
+    onSelectNotebook(key, sender) {
+        console.log('onSelectNotebook', key, sender);
     }
 
     render() {
-        return <SplitPane split="vertical" minSize={200} defaultSize={220}>
-            <div className="left">
-                <div className="notebook">
-                    <TreeView dataSource={dataSource} onAddNoteBook={this.onAddNoteBook}
-                              onModifyNoteBook={this.onModifyNoteBook} onDeleteNoteBook={this.onDeleteNoteBook}
-                              onSelect={this.onSelect}/>
-                </div>
-            </div>
-            <div className="content">
-                <NoteContent/>
-            </div>
-        </SplitPane>
+        return (
+            <div>
+                <SplitPane split="vertical" minSize={200} defaultSize={220}>
+                    <div className="left">
+                        <SplitPane split="horizontal" minSize={500} defaultSize={500} allowResize={false}>
+                            <div className="notebook">
+                                <div className="title">
+                                    My Notebook
+                                    <Button shape="circle" icon="file-add"/>
+                                </div>
+                                <div className="notebook-root">
+                                    <NoteTreeView onAddNoteBook={this.onAddNoteBook}
+                                                  onModifyNoteBook={this.onModifyNoteBook}
+                                                  onDeleteNoteBook={this.onDeleteNoteBook}
+                                                  onSelect={this.onSelectNotebook}/>
+                                </div>
+                            </div>
+                            <div className="tags">
+                                <div className="title">Tags</div>
+                                <Tags/>
+                            </div>
+                        </SplitPane>
+
+                    </div>
+                    <div className="content">
+                        <NoteContent/>
+                    </div>
+                </SplitPane>
+                <NoteBookModal/>
+            </div>)
     }
 }

@@ -1,11 +1,11 @@
-.radio-toolbar{
+.note-list{
   height: auto;
 }
-.radio-toolbar input[type="radio"] {
+.note-list input[type="radio"] {
   display: none;
 }
 
-.radio-toolbar label {
+.note-list label {
   display: inline-block;
   background-color: transparent;
   cursor: pointer;
@@ -19,7 +19,7 @@
   -webkit-box-orient: vertical;
 }
 
-.radio-toolbar input[type="radio"]:checked + label {
+.note-list input[type="radio"]:checked + label {
   background-color: #0e77ca;
   color: #ffffff;
 }

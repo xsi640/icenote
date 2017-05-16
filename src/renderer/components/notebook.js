@@ -39,7 +39,6 @@ export default class NoteBook extends Component {
                     <MenuItem data={this.props.data} onClick={this.onModifyNoteBook}>
                         重命名
                     </MenuItem>
-                    <MenuItem divider/>
                     <MenuItem data={this.props.data} onClick={this.onDeleteNoteBook}>
                         删除笔记本
                     </MenuItem>

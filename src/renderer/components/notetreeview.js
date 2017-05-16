@@ -2,10 +2,9 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {Tree} from 'antd'
 import NoteBook from './notebook'
-import Category from './category'
 const TreeNode = Tree.TreeNode
 
-export default class TreeView extends Component {
+export default class NoteTreeView extends Component {
 
     constructor(props) {
         super(props);
@@ -44,18 +43,13 @@ export default class TreeView extends Component {
             })
             node.isLeaf = false;
         }
-        let header = null;
-        if (typeof node.type !== 'undefined' && node.type === 'category') {
-            header = <Category id={node.id} icon={node.icon} name={node.name}/>
-        } else {
-            header = <NoteBook id={node.id} icon={node.icon}
+        let header = <NoteBook id={node.id} icon={node.icon}
                                name={node.name}
                                count={node.count}
                                data={node}
                                onAddNoteBook={this.onAddNoteBook}
                                onModifyNoteBook={this.onModifyNoteBook}
                                onDeleteNoteBook={this.onDeleteNoteBook}/>
-        }
         return (
             <TreeNode key={node.id} title={header} data={node}>
                 {children}
@@ -68,7 +62,7 @@ export default class TreeView extends Component {
             {
                 <Tree onSelect={this.onSelect}>
                     {
-                        this.props.dataSource.map(item => this.renderTreeNode(item))
+                        this.props.dataSource ? this.props.dataSource.map(item => this.renderTreeNode(item)) : null
                     }
                 </Tree>
             }
@@ -76,7 +70,7 @@ export default class TreeView extends Component {
     }
 }
 
-TreeView.propTypes = {
+NoteTreeView.propTypes = {
     onAddNoteBook: PropTypes.func,
     onModifyNoteBook: PropTypes.func,
     onDeleteNoteBook: PropTypes.func,

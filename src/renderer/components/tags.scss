@@ -1,0 +1,29 @@
+.tag-list {
+  height: auto;
+  overflow: auto;
+}
+
+.tag-list input[type="radio"] {
+  display: none;
+}
+
+.tag-list label {
+  display: inline-block;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 4px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.tag-list input[type="radio"]:checked + label {
+  background-color: #0e77ca;
+  color: #ffffff;
+}
+
+.tag-item {
+  font-size: 12px;
+}

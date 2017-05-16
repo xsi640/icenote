@@ -1,19 +1,19 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import './notelist.scss'
+import './tags.scss'
 
-export default class NoteList extends Component {
+export default class Tag extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             data: [],
-            selectedIndex: 0,
+            selectedIndex: -1,
         }
         this.onChange = this.onChange.bind(this);
     }
 
-    onChange(e) {
+    onChange(e){
         let obj = null;
         for(let i = 0; i < this.state.data.length; i++){
             if(this.state.data['id'] === e.target.value){
@@ -25,7 +25,6 @@ export default class NoteList extends Component {
         this.props.onChange(e, obj);
     }
 
-
     render() {
         let {data, selectedIndex} = this.state;
         let list = [];
@@ -33,26 +32,25 @@ export default class NoteList extends Component {
             let item = data[i];
             let checked = i === selectedIndex;
             list.push(
-                <div className="note-item" key={item.id}>
+                <div className="tag-item" key={item.id}>
                     <input type="radio" id={item.id} name="radios" value={item.id} onChange={this.onChange}
                            checked={checked}></input>
                     <label htmlFor={item.id}>
-                        <div className="title">{item.title}</div>
-                        <div className="summary">{item.summary}</div>
+                        <div className="name">{item.name}</div>
                     </label>
                 </div>
             )
         }
 
         return (
-            <div className="note-list">
+            <div className="tag-list">
                 {list}
             </div>
         )
     }
 }
 
-NoteList.PropTypes = {
+Tag.PropTypes = {
     data: PropTypes.array,
-    onChange: PropTypes.func
+    onChanged: PropTypes.func,
 }
