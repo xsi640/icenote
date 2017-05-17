@@ -1,0 +1,5 @@
+export const ACTION_MESSAGE = {
+    NOTE_SAVE: 'NOTE_SAVE',
+    NOTE_LIST: 'NOTE_LIST',
+    NOTE_DELETE: 'NOTE_DELETE',
+}

@@ -9,14 +9,14 @@ const regIPCMessage = () => {
     function _reg(msg, func) {
         ipcMain.on(msg, (event, args) => {
             log.info(`receive msg:${msg} args:${JSON.stringify(args)}`);
-            func(event, args, (err, data) => {
-                if (typeof err === 'undefined' &&
+            func(event, args, (error, data) => {
+                if (typeof error === 'undefined' &&
                     typeof data === 'undefined') {
                     return;
                 }
                 let result = {
                     data,
-                    err
+                    error: typeof error === 'undefined' || error === null ? undefined : error.message,
                 }
                 log.info(`send msg:${msg} data:${JSON.stringify(result)}`);
                 event.sender.send(msg, result)
@@ -24,15 +24,15 @@ const regIPCMessage = () => {
         })
     };
 
-    _reg(IPCMESSAGE.CATEGORY_LIST, (event, args, callback) => {
+    _reg(IPCMESSAGE.NOTE_LIST, (event, args, callback) => {
         CategoryService.findAll(callback)
     })
 
-    _reg(IPCMESSAGE.CATEGORY_SAVE, (event, args, callback) => {
+    _reg(IPCMESSAGE.NOTE_SAVE, (event, args, callback) => {
         CategoryService.insertOrUpdate(args, callback)
     })
 
-    _reg(IPCMESSAGE.CATEGORY_DELETE, (event, args, callback) => {
+    _reg(IPCMESSAGE.NOTE_DELETE, (event, args, callback) => {
         CategoryService.remove(args, callback)
     })
 
@@ -44,15 +44,15 @@ const regIPCMessage = () => {
         TagsService.remove(args, callback)
     })
 
-    _reg(IPCMESSAGE.NOTE_LIST, (event, args, callback) => {
+    _reg(IPCMESSAGE.NOTE_CONTENT_LIST, (event, args, callback) => {
         NoteService.findNotesByCategoryId(args.categoryId, callback)
     })
 
-    _reg(IPCMESSAGE.NOTE_DELETE, (event, args, callback) => {
+    _reg(IPCMESSAGE.NOTE_CONTENT_DELETE, (event, args, callback) => {
         NoteService.remove(args, callback)
     })
 
-    _reg(IPCMESSAGE.NOTE_SAVE, (event, args, callback) => {
+    _reg(IPCMESSAGE.NOTE_CONTENT_SAVE, (event, args, callback) => {
         NoteService.insertOrUpdate(args, callback)
     })
 }

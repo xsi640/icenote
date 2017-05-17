@@ -12,16 +12,16 @@ export default class NoteBook extends Component {
         this.onDeleteNoteBook = this.onDeleteNoteBook.bind(this)
     }
 
-    onAddNoteBook(e, data) {
-        this.props.onAddNoteBook(e, data)
+    onAddNoteBook(e) {
+        this.props.onAddNoteBook(e, this.props.data)
     }
 
-    onModifyNoteBook(e, data) {
-        this.props.onModifyNoteBook(e, data)
+    onModifyNoteBook(e) {
+        this.props.onModifyNoteBook(e, this.props.data)
     }
 
-    onDeleteNoteBook(e, data) {
-        this.props.onDeleteNoteBook(e, data);
+    onDeleteNoteBook(e) {
+        this.props.onDeleteNoteBook(e, this.props.data);
     }
 
     render() {

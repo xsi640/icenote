@@ -9,13 +9,13 @@ import './notecontent.scss'
 export default class NoteContent extends Component {
     render() {
         return (
-            <SplitPane split="vertical" minSize={270} defaultSize={300}>
+            <SplitPane split="vertical" minSize={270} defaultSize={300} maxSize={-300}>
                 <div className="nb_list">
                     <div className="top">
                         <div className="left">
                             <Button shape="circle" icon="file-add"></Button>
                         </div>
-                        <div className="title">
+                        <div className="title unselect">
                             title
                         </div>
                         <div className="right">

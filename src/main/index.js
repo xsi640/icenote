@@ -2,22 +2,13 @@ const {app, BrowserWindow} = require('electron')
 const path = require('path')
 const url = require('url')
 const {ipcMain} = require('electron')
-
-require('electron-reload')(path.join(__dirname, '../../public/'), {electron: require('electron-prebuilt')});
-
-ipcMain.on('asynchronous-message', (event, arg) => {
-    console.log(arg) // prints "ping"
-    event.sender.send('asynchronous-reply', 'pong')
-})
-
-ipcMain.on('synchronous-message', (event, arg) => {
-    console.log(arg) // prints "ping"
-    event.returnValue = 'pong'
-})
+const regIPCMessage = require('./ipcMessage')
 
 let win
 
 function createWindow() {
+    regIPCMessage();
+
     win = new BrowserWindow({
         width: 1100,
         height: 700,
