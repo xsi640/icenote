@@ -1,12 +1,25 @@
 import React, {Component} from 'react'
-import NoteList from '../components/notelist'
+import ContentList from '../components/contentlist'
 import Editor from '../components/editor'
 import {Button, Icon, Input} from 'antd'
 import SplitPane from 'react-split-pane'
 const Search = Input.Search;
-import './notecontent.scss'
+import './content.scss'
 
 export default class NoteContent extends Component {
+
+    constructor(props){
+        super(props);
+    }
+
+    setNotebook(notebook){
+        this._notebook = notebook;
+    }
+
+    addNoteContent(){
+
+    }
+
     render() {
         return (
             <SplitPane split="vertical" minSize={270} defaultSize={300} maxSize={-300}>
@@ -19,7 +32,7 @@ export default class NoteContent extends Component {
                             title
                         </div>
                         <div className="right">
-                            <Button shape="circle" icon="edit"></Button>
+                            <Button shape="circle" icon="edit" onClick={this.addNoteContent}></Button>
                         </div>
                         <div className="search">
                             <Search
@@ -29,7 +42,7 @@ export default class NoteContent extends Component {
                         </div>
                     </div>
                     <div className="list">
-                        <NoteList/>
+                        <ContentList/>
                     </div>
                 </div>
                 <div className="nb_content">

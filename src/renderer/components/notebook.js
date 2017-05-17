@@ -3,25 +3,25 @@ import PropTypes from 'prop-types'
 import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu"
 import './notebook_menu.scss'
 
-export default class NoteBook extends Component {
+export default class Notebook extends Component {
 
     constructor(props) {
         super(props);
-        this.onAddNoteBook = this.onAddNoteBook.bind(this)
-        this.onModifyNoteBook = this.onModifyNoteBook.bind(this)
-        this.onDeleteNoteBook = this.onDeleteNoteBook.bind(this)
+        this.onAddNotebook = this.onAddNotebook.bind(this)
+        this.onModifyNotebook = this.onModifyNotebook.bind(this)
+        this.onDeleteNotebook = this.onDeleteNotebook.bind(this)
     }
 
-    onAddNoteBook(e) {
-        this.props.onAddNoteBook(e, this.props.data)
+    onAddNotebook(e) {
+        this.props.onAddNotebook(e, this.props.data)
     }
 
-    onModifyNoteBook(e) {
-        this.props.onModifyNoteBook(e, this.props.data)
+    onModifyNotebook(e) {
+        this.props.onModifyNotebook(e, this.props.data)
     }
 
-    onDeleteNoteBook(e) {
-        this.props.onDeleteNoteBook(e, this.props.data);
+    onDeleteNotebook(e) {
+        this.props.onDeleteNotebook(e, this.props.data);
     }
 
     render() {
@@ -33,13 +33,13 @@ export default class NoteBook extends Component {
                     {this.props.count ? <div className="count">({this.props.count})</div> : null}
                 </ContextMenuTrigger>
                 <ContextMenu id={this.props.id}>
-                    <MenuItem   data={this.props.data} onClick={this.onAddNoteBook}>
+                    <MenuItem   data={this.props.data} onClick={this.onAddNotebook}>
                         新建笔记本
                     </MenuItem>
-                    <MenuItem data={this.props.data} onClick={this.onModifyNoteBook}>
+                    <MenuItem data={this.props.data} onClick={this.onModifyNotebook}>
                         重命名
                     </MenuItem>
-                    <MenuItem data={this.props.data} onClick={this.onDeleteNoteBook}>
+                    <MenuItem data={this.props.data} onClick={this.onDeleteNotebook}>
                         删除笔记本
                     </MenuItem>
                 </ContextMenu>
@@ -48,13 +48,13 @@ export default class NoteBook extends Component {
     }
 }
 
-NoteBook.propTypes = {
+Notebook.propTypes = {
     id: PropTypes.string,
     icon: PropTypes.string,
     name: PropTypes.string,
     count: PropTypes.number,
     data: PropTypes.object,
-    onAddNoteBook: PropTypes.func,
-    onModifyNoteBook: PropTypes.func,
-    onDeleteNoteBook: PropTypes.func,
+    onAddNotebook: PropTypes.func,
+    onModifyNotebook: PropTypes.func,
+    onDeleteNotebook: PropTypes.func,
 }

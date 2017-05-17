@@ -1,4 +1,4 @@
-const NoteDB = require('../db/notedb')
+const NoteDB = require('../db/contentdb')
 
 const insertOrUpdate = (note, callback) => {
     NoteDB.insertOrUpdate(note, callback)
@@ -16,12 +16,12 @@ const remove = (ids, callback) => {
     NoteDB.remove(arrId, callback)
 }
 
-const removeByCategoryId = (categoryId, callback) => {
-    NoteDB.removeByCategoryId(categoryId, callback)
+const removeByNotebookId = (categoryId, callback) => {
+    NoteDB.removeByNotebookId(categoryId, callback)
 }
 
-const findNotesByCategoryId = (categoryId, callback) => {
-    NoteDB.findNotesByCategoryId(categoryId, callback)
+const findNotesByNotebookId = (categoryId, callback) => {
+    NoteDB.findNotesByNotebookId(categoryId, callback)
 }
 
 const findNotesByTags = (tags, callback) => {
@@ -31,7 +31,7 @@ const findNotesByTags = (tags, callback) => {
 module.exports = {
     insertOrUpdate,
     remove,
-    removeByCategoryId,
-    findNotesByCategoryId,
+    removeByNotebookId,
+    findNotesByNotebookId,
     findNotesByTags
 }

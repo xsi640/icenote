@@ -2,9 +2,9 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Modal, Input, Alert} from 'antd'
-import * as NoteBookModalActions from '../actions/notebookmodalactions'
+import * as NotebookModalActions from '../actions/notebookmodalactions'
 
-class NoteBookModal extends Component {
+class NotebookModal extends Component {
 
     constructor(props) {
         super(props)
@@ -27,8 +27,8 @@ class NoteBookModal extends Component {
         }
     }
 
-    show(parentNoteBook, notebook) {
-        this._parent = parentNoteBook;
+    show(parentNotebook, notebook) {
+        this._parent = parentNotebook;
         this._notebook = notebook;
         if (this._notebook !== null) {
             this.setState({title: this._notebook.title});
@@ -45,6 +45,7 @@ class NoteBookModal extends Component {
         let notebook = {};
         if (this._notebook !== null) {
             notebook._id = this._notebook._id;
+            notebook.parentId = this._notebook.parentId;
         }
         if(this._parent !== null){
             notebook.parentId = this._parent._id;
@@ -102,14 +103,14 @@ class NoteBookModal extends Component {
     }
 }
 
-NoteBookModal.PropTypes = {
+NotebookModal.PropTypes = {
     onOk: PropTypes.func,
     onClose: PropTypes.func,
     show: PropTypes.func,
 }
 
 const mapStateToProps = (state) => {
-    return state.NoteBookModalReducer;
+    return state.NotebookModalReducer;
 }
 
-export default connect(mapStateToProps, NoteBookModalActions, null, {withRef: true})(NoteBookModal)
+export default connect(mapStateToProps, NotebookModalActions, null, {withRef: true})(NotebookModal)

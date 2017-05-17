@@ -1,33 +1,33 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {Tree} from 'antd'
-import NoteBook from './notebook'
+import Notebook from './notebook'
 const TreeNode = Tree.TreeNode
 
 export default class NoteTreeView extends Component {
 
     constructor(props) {
         super(props);
-        this.onSelectNoteBook = this.onSelectNoteBook.bind(this);
-        this.onAddNoteBook = this.onAddNoteBook.bind(this);
-        this.onModifyNoteBook = this.onModifyNoteBook.bind(this);
-        this.onDeleteNoteBook = this.onDeleteNoteBook.bind(this);
+        this.onSelectNotebook = this.onSelectNotebook.bind(this);
+        this.onAddNotebook = this.onAddNotebook.bind(this);
+        this.onModifyNotebook = this.onModifyNotebook.bind(this);
+        this.onDeleteNotebook = this.onDeleteNotebook.bind(this);
     }
 
-    onAddNoteBook(e, data) {
-        this.props.onAddNoteBook(e, data)
+    onAddNotebook(e, data) {
+        this.props.onAddNotebook(e, data)
     }
 
-    onModifyNoteBook(e, data) {
-        this.props.onModifyNoteBook(e, data)
+    onModifyNotebook(e, data) {
+        this.props.onModifyNotebook(e, data)
     }
 
-    onDeleteNoteBook(e, data) {
-        this.props.onDeleteNoteBook(e, data);
+    onDeleteNotebook(e, data) {
+        this.props.onDeleteNotebook(e, data);
     }
 
-    onSelectNoteBook(key, data) {
-        this.props.onSelectNoteBook(key, data);
+    onSelectNotebook(key, data) {
+        this.props.onSelectNotebook(key, data);
     }
 
     renderTreeNode(parentId) {
@@ -38,13 +38,13 @@ export default class NoteTreeView extends Component {
         let root = [];
         dataSource.map(item => {
             if (item.parentId === parentId) {
-                let header = <NoteBook id={item._id}
+                let header = <Notebook id={item._id}
                                        name={item.title}
                                        count={item.count}
                                        data={item}
-                                       onAddNoteBook={this.onAddNoteBook}
-                                       onModifyNoteBook={this.onModifyNoteBook}
-                                       onDeleteNoteBook={this.onDeleteNoteBook}/>
+                                       onAddNotebook={this.onAddNotebook}
+                                       onModifyNotebook={this.onModifyNotebook}
+                                       onDeleteNotebook={this.onDeleteNotebook}/>
                 let isLeaf = true;
                 for (let node of dataSource) {
                     if (typeof node.parentId !== 'undefined' && node.parentId === item._id) {
@@ -66,7 +66,7 @@ export default class NoteTreeView extends Component {
     render() {
         return (<div>
             {
-                <Tree onSelect={this.onSelectNoteBook}>
+                <Tree onSelect={this.onSelectNotebook}>
                     {
                         this.renderTreeNode(undefined)
                     }
@@ -77,9 +77,9 @@ export default class NoteTreeView extends Component {
 }
 
 NoteTreeView.propTypes = {
-    onAddNoteBook: PropTypes.func,
-    onModifyNoteBook: PropTypes.func,
-    onDeleteNoteBook: PropTypes.func,
-    onSelectNoteBook: PropTypes.func,
+    onAddNotebook: PropTypes.func,
+    onModifyNotebook: PropTypes.func,
+    onDeleteNotebook: PropTypes.func,
+    onSelectNotebook: PropTypes.func,
     dataSource: PropTypes.array,
 }

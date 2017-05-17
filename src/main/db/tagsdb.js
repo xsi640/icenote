@@ -1,7 +1,7 @@
 const Datastore = require('nedb')
 const log = require('electron-log');
 
-const db = new Datastore({filename: 'database/tag.db', autoload: true});
+const db = new Datastore({filename: 'database/tags.db', autoload: true});
 
 const insertOrUpdate = (tag, callback) => {
     log.info('Tags insertOrUpdate tag:' + JSON.stringify(tag))

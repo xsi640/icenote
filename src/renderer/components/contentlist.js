@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import './notelist.scss'
+import './contentlist.scss'
 
-export default class NoteList extends Component {
+export default class ContentList extends Component {
 
     constructor(props) {
         super(props);
@@ -52,7 +52,7 @@ export default class NoteList extends Component {
     }
 }
 
-NoteList.PropTypes = {
+ContentList.PropTypes = {
     data: PropTypes.array,
     onChange: PropTypes.func
 }

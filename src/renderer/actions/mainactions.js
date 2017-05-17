@@ -2,7 +2,7 @@ import IPCMESSAGE from '../../constipc'
 const {ipcRenderer} = require('electron')
 import {ACTION_MESSAGE} from './constaction'
 
-export const getNoteBookList = () => {
+export const getNotebookList = () => {
     return dispatch => {
         ipcRenderer.once(IPCMESSAGE.NOTE_LIST, (event, args) => {
             if (typeof args.error === 'undefined') {
@@ -21,7 +21,7 @@ export const getNoteBookList = () => {
     }
 }
 
-export const deleteNoteBookList = (id) => {
+export const deleteNotebookList = (id) => {
     return dispatch => {
         ipcRenderer.once(IPCMESSAGE.NOTE_DELETE, (event, args) => {
             if (typeof args.error === 'undefined') {

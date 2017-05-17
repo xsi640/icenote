@@ -1,8 +1,8 @@
 const {ipcMain} = require('electron')
 const log = require('electron-log')
 const IPCMESSAGE = require('../constipc')
-const CategoryService = require('./service/categoryservice')
-const NoteService = require('./service/noteservice')
+const CategoryService = require('./service/notebookservice')
+const NoteService = require('./service/contentservice')
 const TagsService = require('./service/tagservice')
 
 const regIPCMessage = () => {
@@ -44,15 +44,15 @@ const regIPCMessage = () => {
         TagsService.remove(args, callback)
     })
 
-    _reg(IPCMESSAGE.NOTE_CONTENT_LIST, (event, args, callback) => {
-        NoteService.findNotesByCategoryId(args.categoryId, callback)
+    _reg(IPCMESSAGE.CONTENT_LIST, (event, args, callback) => {
+        NoteService.findNotesByNotebookId(args.categoryId, callback)
     })
 
-    _reg(IPCMESSAGE.NOTE_CONTENT_DELETE, (event, args, callback) => {
+    _reg(IPCMESSAGE.CONTENT_DELETE, (event, args, callback) => {
         NoteService.remove(args, callback)
     })
 
-    _reg(IPCMESSAGE.NOTE_CONTENT_SAVE, (event, args, callback) => {
+    _reg(IPCMESSAGE.CONTENT_SAVE, (event, args, callback) => {
         NoteService.insertOrUpdate(args, callback)
     })
 }

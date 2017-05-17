@@ -1,21 +1,21 @@
 const Datastore = require('nedb')
 const log = require('electron-log');
 
-const db = new Datastore({filename: 'database/category.db', autoload: true});
+const db = new Datastore({filename: 'database/notebook.db', autoload: true});
 
-const insertOrUpdate = (category, callback) => {
-    log.info('Category insertOrUpdate Category:'+JSON.stringify(category))
-    if (typeof category._id === 'undefined') {
-        db.insert(category, callback);
+const insertOrUpdate = (notebook, callback) => {
+    log.info('Category insertOrUpdate Category:'+JSON.stringify(notebook))
+    if (typeof notebook._id === 'undefined') {
+        db.insert(notebook, callback);
     } else {
-        db.findOne({_id: category._id}, (err, doc) => {
+        db.findOne({_id: notebook._id}, (err, doc) => {
             if (err)
                 callback(err, doc)
             if (doc === null) {
-                db.insert(category, callback);
+                db.insert(notebook, callback);
             } else {
-                db.update({_id: doc._id}, category, {}, () => {
-                    callback(undefined, category);
+                db.update({_id: doc._id}, notebook, {}, () => {
+                    callback(undefined, notebook);
                 })
             }
         });

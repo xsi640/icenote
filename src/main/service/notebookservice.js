@@ -1,7 +1,7 @@
-const CategoryDB = require('../db/categorydb')
+const CategoryDB = require('../db/notebookdb')
 
-const insertOrUpdate = (category, callback) => {
-    CategoryDB.insertOrUpdate(category, callback)
+const insertOrUpdate = (notebook, callback) => {
+    CategoryDB.insertOrUpdate(notebook, callback)
 }
 
 const remove = (ids, callback) => {

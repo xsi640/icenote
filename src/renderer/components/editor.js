@@ -7,7 +7,6 @@ import './editor.scss'
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/markdown/markdown"
 import "codemirror/theme/3024-day.css";
-import '../icons/iconfont'
 
 export default class Editor extends Component {
 

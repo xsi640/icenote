@@ -6,9 +6,9 @@ import Tags from '../components/tags'
 import './main.scss'
 import './splitpane.scss'
 import 'antd/dist/antd.css';
-import NoteContent from './notecontent'
+import NoteContent from './content'
 import {Button, Modal} from "antd";
-import NoteBookModal from '../components/notebookmodal'
+import NotebookModal from '../components/notebookmodal'
 import * as MainActions from '../actions/mainactions'
 
 class Main extends Component {
@@ -16,41 +16,41 @@ class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            notbookDataSource: []
+            notebookDataSource: []
         }
 
-        this.onAddNoteBook = this.onAddNoteBook.bind(this);
-        this.onModifyNoteBook = this.onModifyNoteBook.bind(this);
-        this.onDeleteNoteBook = this.onDeleteNoteBook.bind(this);
+        this.onAddNotebook = this.onAddNotebook.bind(this);
+        this.onModifyNotebook = this.onModifyNotebook.bind(this);
+        this.onDeleteNotebook = this.onDeleteNotebook.bind(this);
         this.noteBookModalClose = this.noteBookModalClose.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({...nextProps});
         if (typeof nextProps.deleteNum === 'number' && nextProps.deleteNum > 0) {
-            this.props.getNoteBookList();
+            this.props.getNotebookList();
         }
     }
 
     componentDidMount() {
-        this.props.getNoteBookList();
+        this.props.getNotebookList();
     }
 
-    onAddNoteBook(e, data) {
-        this.refs.noteBookModal.getWrappedInstance().show(data, null);
+    onAddNotebook(e, data) {
+        this.refs.notebookModal.getWrappedInstance().show(data, null);
     }
 
-    onModifyNoteBook(e, data) {
-        this.refs.noteBookModal.getWrappedInstance().show(null, data);
+    onModifyNotebook(e, data) {
+        this.refs.notebookModal.getWrappedInstance().show(null, data);
     }
 
-    onDeleteNoteBook(e, data) {
-        let {deleteNoteBookList} = this.props;
+    onDeleteNotebook(e, data) {
+        let {deleteNotebookList} = this.props;
         Modal.confirm({
             title: 'delete "' + data.title + '" notebook?',
             content: 'you can\'t undo the action.',
             onOk() {
-                deleteNoteBookList(data._id);
+                deleteNotebookList(data._id);
             },
             onCancel() {
             },
@@ -62,11 +62,10 @@ class Main extends Component {
     }
 
     noteBookModalOk() {
-
     }
 
     noteBookModalClose() {
-        this.props.getNoteBookList();
+        this.props.getNotebookList();
     }
 
     render() {
@@ -79,15 +78,15 @@ class Main extends Component {
                                 <div className="title unselect">
                                     My Notebook
                                     <Button shape="circle" icon="file-add" onClick={(e) => {
-                                        this.refs.noteBookModal.getWrappedInstance().show(null, null)
+                                        this.refs.notebookModal.getWrappedInstance().show(null, null)
                                     }}/>
                                 </div>
                                 <div className="notebook-root">
-                                    <NoteTreeView dataSource={this.state.notbookDataSource}
-                                                  onAddNoteBook={this.onAddNoteBook}
-                                                  onModifyNoteBook={this.onModifyNoteBook}
-                                                  onDeleteNoteBook={this.onDeleteNoteBook}
-                                                  onSelectNoteBook={this.onSelectNotebook}/>
+                                    <NoteTreeView dataSource={this.state.notebookDataSource}
+                                                  onAddNotebook={this.onAddNotebook}
+                                                  onModifyNotebook={this.onModifyNotebook}
+                                                  onDeleteNotebook={this.onDeleteNotebook}
+                                                  onSelectNotebook={this.onSelectNotebook}/>
                                 </div>
                             </div>
                             <div className="tags">
@@ -101,7 +100,7 @@ class Main extends Component {
                         <NoteContent/>
                     </div>
                 </SplitPane>
-                <NoteBookModal ref="noteBookModal" onOK={this.noteBookModalOk} onClose={this.noteBookModalClose}/>
+                <NotebookModal ref="notebookModal" onOK={this.noteBookModalOk} onClose={this.noteBookModalClose}/>
             </div>)
     }
 }
