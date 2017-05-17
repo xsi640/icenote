@@ -15,13 +15,29 @@ export default class Editor extends Component {
         super(props);
 
         this.state = {
+            tags: [],
+            suggestions: [],
+            content: '',
+            title: '',
             preview: false,
         };
         this.handleDelete = this.handleDelete.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.handleDrag = this.handleDrag.bind(this);
-        this.updateCode = this.updateCode.bind(this);
+        this.onSave = this.onSave.bind(this);
+        this.onChange = this.onChange.bind(this);
         this.changePreviewState = this.changePreviewState.bind(this);
+        this.setContent = this.setContent.bind(this);
+    }
+
+    setContent(content) {
+        console.log('setContent', content);
+        this._content = content;
+        this.setState({
+            title: this._content.title,
+            content: this._content.content,
+            tags: this._content.tags,
+        })
     }
 
     handleDelete(i) {
@@ -43,16 +59,24 @@ export default class Editor extends Component {
         // this.setState({tags: tags});
     }
 
-    updateCode(content) {
-        console.log('updateCode', content)
-    }
-
     changePreviewState() {
         this.setState({preview: !this.state.preview});
     }
 
+    onChange(name, value) {
+        this.setState({[name]: value})
+    }
+
+    onSave() {
+        this._content.title = this.state.title;
+        this._content.content = this.state.content;
+        this._content.tags = this.state.tags;
+
+        this.props.onSave(this._content);
+    }
+
     render() {
-        const {tags, suggestions, content} = this.props;
+        const {tags, suggestions, content, title} = this.state;
         const options = {
             lineNumbers: true,
             mode: 'markdown',
@@ -61,7 +85,9 @@ export default class Editor extends Component {
         return (
             <div className="editor-root">
                 <div className="title">
-                    <Input className="in-title" placeholder="title"/>
+                    <Input className="in-title" placeholder="title" value={title} onChange={e => {
+                        this.onChange('title', e.target.value)
+                    }}/>
                 </div>
                 <div className="tags">
                     <ReactTags tags={tags}
@@ -75,10 +101,13 @@ export default class Editor extends Component {
                 </div>
                 <div className="editor">
                     <div style={{display: this.state.preview ? 'none' : 'block'}}>
-                        <CodeMirror value={this.content} onChange={this.updateCode} options={options}/>
+                        <CodeMirror ref="codeMirror" value={content} options={options} onFocusChange={this.onSave}
+                                    onChange={e => {
+                                        this.onChange('content', e)
+                                    }}/>
                     </div>
                     <div className="md" style={{display: this.state.preview ? 'block' : 'none'}}>
-                        <ReactMarkdown escapeHtml={false} skipHtml={false} source={this.content}/>
+                        <ReactMarkdown escapeHtml={false} skipHtml={false} source={content}/>
                     </div>
                 </div>
             </div>
@@ -87,13 +116,6 @@ export default class Editor extends Component {
 }
 
 Editor.PropTypes = {
-    content: PropTypes.string,
-    tags: PropTypes.array,
-    suggestions: PropTypes.array,
-}
-
-Editor.DefaultProps = {
-    content: '',
-    tags: [],
-    suggestions: []
+    setContent: PropTypes.func,
+    onSave: PropTypes.func,
 }

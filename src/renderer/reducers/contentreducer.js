@@ -12,7 +12,11 @@ export default function (state = {}, action) {
                 return {...state, deleteNum: action.payload};
             else if (typeof action.error !== 'undefined')
                 return {...state, error: action.error}
-            break;
+        case ACTION_MESSAGE.CONTENT_SAVE:
+            if (typeof action.payload !== 'undefined')
+                return {...state, content: action.payload};
+            else if (typeof action.error !== 'undefined')
+                return {...state, error: action.error}
         default:
             return state;
     }

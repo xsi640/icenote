@@ -1,8 +1,8 @@
 const {ipcMain} = require('electron')
 const log = require('electron-log')
 const IPCMESSAGE = require('../constipc')
-const CategoryService = require('./service/notebookservice')
-const NoteService = require('./service/contentservice')
+const NotebookService = require('./service/notebookservice')
+const ContentService = require('./service/contentservice')
 const TagsService = require('./service/tagservice')
 
 const regIPCMessage = () => {
@@ -25,15 +25,15 @@ const regIPCMessage = () => {
     };
 
     _reg(IPCMESSAGE.NOTE_LIST, (event, args, callback) => {
-        CategoryService.findAll(callback)
+        NotebookService.findAll(callback)
     })
 
     _reg(IPCMESSAGE.NOTE_SAVE, (event, args, callback) => {
-        CategoryService.insertOrUpdate(args, callback)
+        NotebookService.insertOrUpdate(args, callback)
     })
 
     _reg(IPCMESSAGE.NOTE_DELETE, (event, args, callback) => {
-        CategoryService.remove(args, callback)
+        NotebookService.remove(args, callback)
     })
 
     _reg(IPCMESSAGE.TAGS_SAVE, (event, args, callback) => {
@@ -45,18 +45,18 @@ const regIPCMessage = () => {
     })
 
     _reg(IPCMESSAGE.CONTENT_LIST, (event, args, callback) => {
-        if (typeof args.notebookId === 'undefined')
-            NoteService.findNotesByNotebookId(args.notebookId, callback)
+        if (typeof args.notebookId !== 'undefined')
+            ContentService.findNotesByNotebookId(args.notebookId, callback)
         else
-            NoteService.findNotesByTags(args.tags, callback)
+            ContentService.findNotesByTags(args.tags, callback)
     })
 
     _reg(IPCMESSAGE.CONTENT_DELETE, (event, args, callback) => {
-        NoteService.remove(args, callback)
+        ContentService.remove(args, callback)
     })
 
     _reg(IPCMESSAGE.CONTENT_SAVE, (event, args, callback) => {
-        NoteService.insertOrUpdate(args, callback)
+        ContentService.insertOrUpdate(args, callback)
     })
 }
 

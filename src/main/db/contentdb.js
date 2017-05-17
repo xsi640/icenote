@@ -4,7 +4,7 @@ const log = require('electron-log');
 const db = new Datastore({filename: 'database/content.db', autoload: true});
 
 const insertOrUpdate = (content, callback) => {
-    log.info('Note insertOrUpdate Note:' + JSON.stringify(content))
+    log.info('Content insertOrUpdate Note:' + JSON.stringify(content))
     if (typeof content._id === 'undefined') {
         db.insert(content, callback);
     } else {
@@ -23,22 +23,22 @@ const insertOrUpdate = (content, callback) => {
 }
 
 const remove = (ids, callback) => {
-    log.info('Note remove ids:' + JSON.stringify(ids))
+    log.info('Content remove ids:' + JSON.stringify(ids))
     db.remove({_id: {$in: ids}}, {}, callback)
 }
 
 const removeByNotebookId = (notebookId, callback) => {
-    log.info('Note removeByNotebookId categoryId:' + notebookId)
-    db.remove({categoryId: notebookId}, {}, callback)
+    log.info('Content removeByNotebookId categoryId:' + notebookId)
+    db.remove({notebookId: notebookId}, {}, callback)
 }
 
 const findNotesByNotebookId = (notebookId, callback) => {
-    log.info('Note findNodesByCategoryId categoryId:' + notebookId)
-    db.find({categoryId: notebookId}, {}, callback)
+    log.info('Content findNotesByNotebookId categoryId:' + notebookId)
+    db.find({notebookId: notebookId}, {}, callback)
 }
 
 const findNotesByTags = (tags, callback) => {
-    log.info('Note findNodesByTags tags:' + tags)
+    log.info('Content findNotesByTags tags:' + tags)
     db.find({tags: {$in: tags}}, {}, callback)
 }
 

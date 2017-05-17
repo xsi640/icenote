@@ -4,7 +4,7 @@ const log = require('electron-log');
 const db = new Datastore({filename: 'database/notebook.db', autoload: true});
 
 const insertOrUpdate = (notebook, callback) => {
-    log.info('Category insertOrUpdate Category:'+JSON.stringify(notebook))
+    log.info('Notebook insertOrUpdate Category:'+JSON.stringify(notebook))
     if (typeof notebook._id === 'undefined') {
         db.insert(notebook, callback);
     } else {
@@ -23,14 +23,14 @@ const insertOrUpdate = (notebook, callback) => {
 }
 
 const remove = (ids, callback) => {
-    log.info('Category remove ids:'+JSON.stringify(ids))
+    log.info('Notebook remove ids:'+JSON.stringify(ids))
     db.remove({_id: {$in: ids}}, {}, (err, num) => {
         callback(err, num);
     })
 }
 
 const findAll = (callback) => {
-    log.info('Category findAll')
+    log.info('Notebook findAll')
     db.find({}).exec((err, docs) => {
         callback(err, docs);
     })

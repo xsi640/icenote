@@ -16,8 +16,8 @@ export default class ContentList extends Component {
         let {dataSource} = this.props;
         let obj = null;
         for (let i = 0; i < dataSource.length; i++) {
-            if (dataSource['_id'] === e.target.value) {
-                this.state.selectedIndex = i;
+            if (dataSource[i]._id === e.target.value) {
+                this.setState({selectedIndex: i});
                 obj = dataSource[i];
                 break;
             }
@@ -33,12 +33,12 @@ export default class ContentList extends Component {
             let item = dataSource[i];
             let checked = i === selectedIndex;
             list.push(
-                <div className="note-item" key={item.id}>
-                    <input type="radio" id={item.id} name="radios" value={item.id} onChange={this.onChange}
+                <div className="note-item" key={item._id}>
+                    <input type="radio" id={item._id} name="radios" value={item._id} onChange={this.onChange}
                            checked={checked}></input>
-                    <label htmlFor={item.id}>
-                        <div className="title">{item.title}</div>
-                        <div className="summary">{item.summary}</div>
+                    <label htmlFor={item._id}>
+                        <div className="title">{item.title === '' ? 'UnTitled' : item.title}</div>
+                        <div className="summary">{item.content}</div>
                     </label>
                 </div>
             )

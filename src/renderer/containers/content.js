@@ -14,11 +14,13 @@ class Content extends Component {
         super(props);
 
         this.state = {
+            title: '',
             contentDataSource: []
         }
 
         this.setNotebook = this.setNotebook.bind(this);
         this.addNoteContent = this.addNoteContent.bind(this);
+        this.onSelect = this.onSelect.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -29,20 +31,30 @@ class Content extends Component {
     }
 
     setNotebook(notebook) {
-        console.log('123')
         this._notebook = notebook;
+        this.setState({title: this._notebook.title})
         this.props.list(this._notebook._id)
     }
 
     addNoteContent() {
+        console.log(this._notebook)
         this.props.save({
             title: '',
             content: '',
             type: 'markdown',
             createTime: new Date(),
             lastUpdateTime: new Date(),
-            tags: []
+            tags: [],
+            notebookId: this._notebook._id,
         });
+    }
+
+    onSelect(e, content) {
+        this.refs.editor.setContent(content);
+    }
+
+    onSave(content) {
+        console.log('save', content);
     }
 
     render() {
@@ -54,7 +66,7 @@ class Content extends Component {
                             <Button shape="circle" icon="file-add"></Button>
                         </div>
                         <div className="title unselect">
-                            title
+                            {this.state.title}
                         </div>
                         <div className="right">
                             <Button shape="circle" icon="edit" onClick={this.addNoteContent}></Button>
@@ -67,11 +79,11 @@ class Content extends Component {
                         </div>
                     </div>
                     <div className="list">
-                        <ContentList/>
+                        <ContentList dataSource={this.state.contentDataSource} onSelect={this.onSelect}/>
                     </div>
                 </div>
                 <div className="nb_content">
-                    <Editor/>
+                    <Editor ref="editor" onSave={this.onSave}/>
                 </div>
             </SplitPane>
         );
