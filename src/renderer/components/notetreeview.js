@@ -66,7 +66,7 @@ export default class NoteTreeView extends Component {
     render() {
         return (<div>
             {
-                <Tree onSelect={this.onSelectNotebook}>
+                <Tree onSelect={this.onSelectNotebook} multiple={false} defaultExpandAll={true}>
                     {
                         this.renderTreeNode(undefined)
                     }

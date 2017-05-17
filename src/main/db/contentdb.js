@@ -27,14 +27,14 @@ const remove = (ids, callback) => {
     db.remove({_id: {$in: ids}}, {}, callback)
 }
 
-const removeByNotebookId = (categoryId, callback) => {
-    log.info('Note removeByNotebookId categoryId:' + categoryId)
-    db.remove({categoryId: categoryId}, {}, callback)
+const removeByNotebookId = (notebookId, callback) => {
+    log.info('Note removeByNotebookId categoryId:' + notebookId)
+    db.remove({categoryId: notebookId}, {}, callback)
 }
 
-const findNotesByNotebookId = (categoryId, callback) => {
-    log.info('Note findNodesByCategoryId categoryId:' + categoryId)
-    db.find({categoryId: categoryId}, {}, callback)
+const findNotesByNotebookId = (notebookId, callback) => {
+    log.info('Note findNodesByCategoryId categoryId:' + notebookId)
+    db.find({categoryId: notebookId}, {}, callback)
 }
 
 const findNotesByTags = (tags, callback) => {

@@ -7,30 +7,30 @@ export default class ContentList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
             selectedIndex: 0,
         }
         this.onChange = this.onChange.bind(this);
     }
 
     onChange(e) {
+        let {dataSource} = this.props;
         let obj = null;
-        for(let i = 0; i < this.state.data.length; i++){
-            if(this.state.data['id'] === e.target.value){
+        for (let i = 0; i < dataSource.length; i++) {
+            if (dataSource['_id'] === e.target.value) {
                 this.state.selectedIndex = i;
-                obj = this.state.data[i];
+                obj = dataSource[i];
                 break;
             }
         }
-        this.props.onChange(e, obj);
+        this.props.onSelect(e, obj);
     }
 
-
     render() {
-        let {data, selectedIndex} = this.state;
+        let {selectedIndex} = this.state;
+        let {dataSource} = this.props;
         let list = [];
-        for (let i = 0; i < data.length; i++) {
-            let item = data[i];
+        for (let i = 0; i < dataSource.length; i++) {
+            let item = dataSource[i];
             let checked = i === selectedIndex;
             list.push(
                 <div className="note-item" key={item.id}>
@@ -53,6 +53,10 @@ export default class ContentList extends Component {
 }
 
 ContentList.PropTypes = {
-    data: PropTypes.array,
-    onChange: PropTypes.func
+    dataSource: PropTypes.array,
+    onSelect: PropTypes.func
+}
+
+ContentList.defaultProps = {
+    dataSource: [],
 }

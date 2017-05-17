@@ -6,7 +6,7 @@ import Tags from '../components/tags'
 import './main.scss'
 import './splitpane.scss'
 import 'antd/dist/antd.css';
-import NoteContent from './content'
+import Content from './content'
 import {Button, Modal} from "antd";
 import NotebookModal from '../components/notebookmodal'
 import * as MainActions from '../actions/mainactions'
@@ -22,6 +22,7 @@ class Main extends Component {
         this.onAddNotebook = this.onAddNotebook.bind(this);
         this.onModifyNotebook = this.onModifyNotebook.bind(this);
         this.onDeleteNotebook = this.onDeleteNotebook.bind(this);
+        this.onSelectNotebook = this.onSelectNotebook.bind(this);
         this.noteBookModalClose = this.noteBookModalClose.bind(this);
     }
 
@@ -57,8 +58,23 @@ class Main extends Component {
         });
     }
 
-    onSelectNotebook(key, sender) {
-        console.log('onSelectNotebook', key, sender);
+    onSelectNotebook(keys, sender) {
+        let notebook = null;
+        for (let nb of this.state.notebookDataSource) {
+            let exists = false;
+            for(let key of keys){
+                if(key === nb._id){
+                    exists = true;
+                    break;
+                }
+            }
+            if(exists){
+                notebook = nb;
+            }
+        }
+        if (notebook != null) {
+            this.refs.content.getWrappedInstance().setNotebook(notebook);
+        }
     }
 
     noteBookModalOk() {
@@ -97,7 +113,7 @@ class Main extends Component {
 
                     </div>
                     <div className="content">
-                        <NoteContent/>
+                        <Content ref="content"/>
                     </div>
                 </SplitPane>
                 <NotebookModal ref="notebookModal" onOK={this.noteBookModalOk} onClose={this.noteBookModalClose}/>

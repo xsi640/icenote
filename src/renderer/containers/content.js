@@ -1,4 +1,6 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import * as ContentActions from '../actions/contentactions'
 import ContentList from '../components/contentlist'
 import Editor from '../components/editor'
 import {Button, Icon, Input} from 'antd'
@@ -6,18 +8,41 @@ import SplitPane from 'react-split-pane'
 const Search = Input.Search;
 import './content.scss'
 
-export default class NoteContent extends Component {
+class Content extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
+
+        this.state = {
+            contentDataSource: []
+        }
+
+        this.setNotebook = this.setNotebook.bind(this);
+        this.addNoteContent = this.addNoteContent.bind(this);
     }
 
-    setNotebook(notebook){
+    componentWillReceiveProps(nextProps) {
+        this.setState({...nextProps});
+        if (typeof nextProps.deleteNum === 'number' && nextProps.deleteNum > 0) {
+            this.props.getNotebookList();
+        }
+    }
+
+    setNotebook(notebook) {
+        console.log('123')
         this._notebook = notebook;
+        this.props.list(this._notebook._id)
     }
 
-    addNoteContent(){
-
+    addNoteContent() {
+        this.props.save({
+            title: '',
+            content: '',
+            type: 'markdown',
+            createTime: new Date(),
+            lastUpdateTime: new Date(),
+            tags: []
+        });
     }
 
     render() {
@@ -52,3 +77,10 @@ export default class NoteContent extends Component {
         );
     }
 }
+
+
+const mapStateToProps = (state) => {
+    return state.ContentReducer;
+}
+
+export default connect(mapStateToProps, ContentActions, null, {withRef: true})(Content)

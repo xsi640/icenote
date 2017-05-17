@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {Input, Button} from 'antd';
 import {WithContext as ReactTags} from 'react-tag-input';
 import CodeMirror from 'react-codemirror'
@@ -14,9 +15,6 @@ export default class Editor extends Component {
         super(props);
 
         this.state = {
-            tags: [],
-            suggestions: [],
-            code: '',
             preview: false,
         };
         this.handleDelete = this.handleDelete.bind(this);
@@ -27,35 +25,26 @@ export default class Editor extends Component {
     }
 
     handleDelete(i) {
-        let tags = this.state.tags;
-        tags.splice(i, 1);
-        this.setState({tags: tags});
+        console.log('delete tag', this.props.tags[i]);
     }
 
     handleAddition(tag) {
-        let tags = this.state.tags;
-        tags.push({
-            id: tags.length + 1,
-            text: tag
-        });
-        this.setState({tags: tags});
+        console.log('add tag', tag);
     }
 
     handleDrag(tag, currPos, newPos) {
-        let tags = this.state.tags;
+        let tags = this.props.tags;
 
         // mutate array
-        tags.splice(currPos, 1);
-        tags.splice(newPos, 0, tag);
-
-        // re-render
-        this.setState({tags: tags});
+        // tags.splice(currPos, 1);
+        // tags.splice(newPos, 0, tag);
+        //
+        // // re-render
+        // this.setState({tags: tags});
     }
 
-    updateCode(newCode) {
-        this.setState({
-            code: newCode,
-        });
+    updateCode(content) {
+        console.log('updateCode', content)
     }
 
     changePreviewState() {
@@ -63,7 +52,7 @@ export default class Editor extends Component {
     }
 
     render() {
-        const {tags, suggestions} = this.state;
+        const {tags, suggestions, content} = this.props;
         const options = {
             lineNumbers: true,
             mode: 'markdown',
@@ -86,13 +75,25 @@ export default class Editor extends Component {
                 </div>
                 <div className="editor">
                     <div style={{display: this.state.preview ? 'none' : 'block'}}>
-                        <CodeMirror value={this.state.code} onChange={this.updateCode} options={options}/>
+                        <CodeMirror value={this.content} onChange={this.updateCode} options={options}/>
                     </div>
                     <div className="md" style={{display: this.state.preview ? 'block' : 'none'}}>
-                        <ReactMarkdown escapeHtml={false} skipHtml={false} source={this.state.code}/>
+                        <ReactMarkdown escapeHtml={false} skipHtml={false} source={this.content}/>
                     </div>
                 </div>
             </div>
         )
     }
+}
+
+Editor.PropTypes = {
+    content: PropTypes.string,
+    tags: PropTypes.array,
+    suggestions: PropTypes.array,
+}
+
+Editor.DefaultProps = {
+    content: '',
+    tags: [],
+    suggestions: []
 }
