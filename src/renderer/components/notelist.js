@@ -46,16 +46,21 @@ export default class NoteList extends Component {
         for (let i = 0; i < dataSource.length; i++) {
             let item = dataSource[i];
             let checked = i === selectedIndex;
+
+            let className = "note-item";
+            if (i % 2 === 0) {
+                className = "note-item even"
+            }
             list.push(
-                <div className="note-item" key={item._id}>
+                <div className={className} key={item._id}>
                     <ContextMenuTrigger id={item._id}>
                         <div onClick={(e) => {
                             this.onSelect(e, item._id)
                         }}>
                             <input type="radio" id={item._id} name="radios" value={item._id} checked={checked}></input>
                             <label htmlFor={item._id}>
-                                <div className="title">{item.title === '' ? 'UnTitled' : item.title}</div>
-                                <div className="summary">{item.content}</div>
+                                <div className="title unselect">{item.title === '' ? 'UnTitled' : item.title}</div>
+                                <div className="summary unselect">{item.content}</div>
                             </label>
                         </div>
                     </ContextMenuTrigger>

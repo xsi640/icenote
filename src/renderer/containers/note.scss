@@ -1,4 +1,7 @@
 .nb_list {
+  background-color: #212943;
+  color: #a9b4d2;
+
   .top {
     display: grid;
     grid-template-columns: 50px auto 50px;
@@ -10,16 +13,21 @@
       width: 38px;
       height: 38px;
       overflow: hidden;
+      background-color: transparent;
       z-index: 1;
+      color: #a9b4d2;
+      &:hover {
+        color: #d2eafb;
+      }
     }
 
-    .left, .right, .title {
+    .nb_left, .right, .title {
       font-size: 16px;
       line-height: 36px;
       font-weight: 600;
     }
 
-    .left Button {
+    .nb_left Button {
       float: left;
     }
     .right Button {
@@ -29,6 +37,22 @@
       grid-column: 1/4;
       margin-left: 5px;
       margin-right: 5px;
+
+      .ant-input {
+        outline: none;
+        box-shadow: none;
+        border: none;
+      }
+
+      webkit-input-placeholder {
+        color: #aab9d9;
+      }
+      .ant-input:focus, .ant-input:hover {
+        border-color: transparent;
+      }
+      .ant-input-suffix {
+        color: #aab9d9;
+      }
     }
   }
 }
@@ -40,12 +64,4 @@
     height: calc(100vh - 80px);
     overflow: auto;
   }
-}
-
-.mask {
-  background-color: rgba(0, 0, 0, 0.2);
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 99;
 }

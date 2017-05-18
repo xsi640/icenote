@@ -106,7 +106,7 @@ class Note extends Component {
                 <div className="nb_list">
                     {this.state.mask ? <div className="mask"></div> : null}
                     <div className="top">
-                        <div className="left">
+                        <div className="nb_left">
                             <Button shape="circle" icon="file-add"></Button>
                         </div>
                         <div className="title unselect">

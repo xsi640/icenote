@@ -1,3 +1,5 @@
+@import "~antd/dist/antd.css";
+
 .unselect {
   -webkit-user-select: none;
   cursor: default;
@@ -7,6 +9,8 @@
   width: 100%;
   height: 100%;
   font-size: 14px;
+  background-color: #1c2237;
+  color: #818ca9;
 
   .notebook {
     width: 100%;
@@ -20,14 +24,27 @@
   }
   .title {
     font-size: 16px;
-    margin-left: 8px;
+    margin-left: 10px;
+    height: 50px;
+    line-height: 40px;
 
     Button {
+      margin-top: 10px;
+      margin-right: 10px;
+      height: 20px;
+      width: 30px;
       border: none;
+      overflow: hidden;
+      background-color: transparent;
+      z-index: 1;
+      color: #1c2237;
       float: right;
-      outline: none;
-
+      font-size: 12px;
+      background-color: #818ca9;
+      border-radius: 6px;
       &:hover {
+        background-color: white;
+        color: #818ca9;
       }
     }
   }
@@ -36,10 +53,41 @@
     padding-top: 0;
     padding-bottom: 0;
     margin-left: 10px;
+    color: #818ca9;
   }
 
   .tags {
     margin-top: 5px;
     height: auto;
   }
+}
+
+.ant-tree li span.ant-tree-switcher.ant-tree-bottom_open:after, .ant-tree li span.ant-tree-switcher.ant-tree-center_open:after, .ant-tree li span.ant-tree-switcher.ant-tree-noline_open:after, .ant-tree li span.ant-tree-switcher.ant-tree-roots_open:after {
+  color: #818ca9;
+}
+
+.ant-tree li span.ant-tree-switcher.ant-tree-bottom_close:after, .ant-tree li span.ant-tree-switcher.ant-tree-center_close:after, .ant-tree li span.ant-tree-switcher.ant-tree-noline_close:after, .ant-tree li span.ant-tree-switcher.ant-tree-roots_close:after {
+  color: #818ca9;
+}
+
+.notebook {
+  color: #818ca9;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background-color: transparent;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(28, 34, 55, 0.6);
 }

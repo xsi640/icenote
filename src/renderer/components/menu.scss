@@ -13,6 +13,8 @@
   opacity: 0;
   pointer-events: none;
   z-index: 9999;
+  -webkit-user-select: none;
+  cursor: default;
 }
 
 .react-contextmenu.react-contextmenu--visible {

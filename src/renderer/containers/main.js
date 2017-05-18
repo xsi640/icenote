@@ -5,7 +5,6 @@ import NoteTreeView from '../components/notetreeview'
 import Tags from '../components/tags'
 import './main.scss'
 import './splitpane.scss'
-import 'antd/dist/antd.css';
 import Note from './note'
 import {Button, Modal} from "antd";
 import NotebookModal from '../components/notebookmodal'
@@ -81,7 +80,7 @@ class Main extends Component {
         this.props.getNotebookList();
     }
 
-    onSaved(){
+    onSaved() {
         this.refs.tags.getWrappedInstance().refresh();
     }
 
@@ -89,31 +88,29 @@ class Main extends Component {
         return (
             <div>
                 <SplitPane split="vertical" minSize={200} defaultSize={220} maxSize={-800}>
-                    <div className="left">
-                        <SplitPane split="horizontal" minSize={300} defaultSize={400} maxSize={-200}>
-                            <div className="notebook">
-                                <div className="title unselect">
-                                    My Notebook
-                                    <Button shape="circle" icon="file-add" onClick={(e) => {
-                                        this.refs.notebookModal.getWrappedInstance().show(null, null)
-                                    }}/>
-                                </div>
-                                <div className="notebook-root">
-                                    <NoteTreeView dataSource={this.state.dataSource}
-                                                  onAddNotebook={this.onAddNotebook}
-                                                  onModifyNotebook={this.onModifyNotebook}
-                                                  onDeleteNotebook={this.onDeleteNotebook}
-                                                  onSelectNotebook={this.onSelectNotebook}/>
-                                </div>
+                    <SplitPane split="horizontal" minSize={300} defaultSize={400} maxSize={-200} className="left">
+                        <div className="notebook">
+                            <div className="title unselect">
+                                My Notebook
+                                <Button shape="circle" onClick={(e) => {
+                                    this.refs.notebookModal.getWrappedInstance().show(null, null)
+                                }}>Add</Button>
                             </div>
-                            <div className="tags">
-                                <div className="title unselect">Tags</div>
-                                <Tags ref="tags"/>
+                            <div className="notebook-root">
+                                <NoteTreeView dataSource={this.state.dataSource}
+                                              onAddNotebook={this.onAddNotebook}
+                                              onModifyNotebook={this.onModifyNotebook}
+                                              onDeleteNotebook={this.onDeleteNotebook}
+                                              onSelectNotebook={this.onSelectNotebook}/>
                             </div>
-                        </SplitPane>
-                    </div>
+                        </div>
+                        <div className="tags">
+                            <div className="title unselect">Tags</div>
+                            <Tags ref="tags"/>
+                        </div>
+                    </SplitPane>
                     <div className="content">
-                        <Note ref="note" onSaved={this.onSaved} />
+                        <Note ref="note" onSaved={this.onSaved}/>
                     </div>
                 </SplitPane>
                 <NotebookModal ref="notebookModal" onClose={this.noteBookModalClose}/>

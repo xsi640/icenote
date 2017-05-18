@@ -28,12 +28,14 @@ export default class Notebook extends Component {
         return (
             <div className="notebook">
                 <ContextMenuTrigger id={this.props.id}>
-                    {this.props.icon ? <img src={this.props.icon} className="icon"/> : null}
-                    {this.props.name}
-                    {this.props.count ? <div className="count">({this.props.count})</div> : null}
+                    <div className="unselect">
+                        {this.props.icon ? <img src={this.props.icon} className="icon"/> : null}
+                        {this.props.name}
+                        {this.props.count ? <div className="count">({this.props.count})</div> : null}
+                    </div>
                 </ContextMenuTrigger>
                 <ContextMenu id={this.props.id}>
-                    <MenuItem   data={this.props.data} onClick={this.onAddNotebook}>
+                    <MenuItem data={this.props.data} onClick={this.onAddNotebook}>
                         New
                     </MenuItem>
                     <MenuItem data={this.props.data} onClick={this.onModifyNotebook}>

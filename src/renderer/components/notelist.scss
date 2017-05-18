@@ -11,7 +11,6 @@
   cursor: pointer;
   padding: 4px 10px;
   height: 90px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   overflow : hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -20,8 +19,12 @@
 }
 
 .note-list input[type="radio"]:checked + label {
-  background-color: #0e77ca;
-  color: #ffffff;
+  background-color: #161d31;
+  color: #a9b4d2;
+}
+
+.even{
+  background-color: #202740;
 }
 
 .note-item {
