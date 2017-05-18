@@ -4,19 +4,19 @@ import {ACTION_MESSAGE} from './constaction'
 
 export const save = (notebook) => {
     return dispatch => {
-        ipcRenderer.once(IPCMESSAGE.NOTE_SAVE, (event, args) => {
+        ipcRenderer.once(IPCMESSAGE.NOTEBOOK_SAVE, (event, args) => {
             if (typeof args.error === 'undefined') {
                 dispatch({
-                    type: ACTION_MESSAGE.NOTE_SAVE,
+                    type: ACTION_MESSAGE.NOTEBOOK_SAVE,
                     payload: args.data,
                 })
             } else {
                 dispatch({
-                    type: ACTION_MESSAGE.NOTE_SAVE,
+                    type: ACTION_MESSAGE.NOTEBOOK_SAVE,
                     error: args.error,
                 })
             }
         })
-        ipcRenderer.send(IPCMESSAGE.NOTE_SAVE, notebook)
+        ipcRenderer.send(IPCMESSAGE.NOTEBOOK_SAVE, notebook)
     }
 }

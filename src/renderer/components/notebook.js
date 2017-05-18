@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu"
-import './notebook_menu.scss'
+import './menu.scss'
 
 export default class Notebook extends Component {
 
@@ -34,13 +34,13 @@ export default class Notebook extends Component {
                 </ContextMenuTrigger>
                 <ContextMenu id={this.props.id}>
                     <MenuItem   data={this.props.data} onClick={this.onAddNotebook}>
-                        新建笔记本
+                        New
                     </MenuItem>
                     <MenuItem data={this.props.data} onClick={this.onModifyNotebook}>
-                        重命名
+                        Rename
                     </MenuItem>
                     <MenuItem data={this.props.data} onClick={this.onDeleteNotebook}>
-                        删除笔记本
+                        Delete
                     </MenuItem>
                 </ContextMenu>
             </div>

@@ -94,7 +94,7 @@ class NotebookModal extends Component {
                         Title:
                     </div>
                     <div>
-                        <Input placeholder="Input the notebook title." value={this.state.title} onChange={(e) => {
+                        <Input placeholder="Input the notebook title." value={this.state.title} onPressEnter={this._save} onChange={(e) => {
                             this.onChange('title', e.target.value)
                         }}/>
                     </div>
@@ -104,7 +104,6 @@ class NotebookModal extends Component {
 }
 
 NotebookModal.PropTypes = {
-    onOk: PropTypes.func,
     onClose: PropTypes.func,
     show: PropTypes.func,
 }

@@ -6,7 +6,7 @@ import Tags from '../components/tags'
 import './main.scss'
 import './splitpane.scss'
 import 'antd/dist/antd.css';
-import Content from './content'
+import Note from './note'
 import {Button, Modal} from "antd";
 import NotebookModal from '../components/notebookmodal'
 import * as MainActions from '../actions/mainactions'
@@ -16,7 +16,7 @@ class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            notebookDataSource: []
+            dataSource: []
         }
 
         this.onAddNotebook = this.onAddNotebook.bind(this);
@@ -60,24 +60,21 @@ class Main extends Component {
 
     onSelectNotebook(keys, sender) {
         let notebook = null;
-        for (let nb of this.state.notebookDataSource) {
+        for (let nb of this.state.dataSource) {
             let exists = false;
-            for(let key of keys){
-                if(key === nb._id){
+            for (let key of keys) {
+                if (key === nb._id) {
                     exists = true;
                     break;
                 }
             }
-            if(exists){
+            if (exists) {
                 notebook = nb;
             }
         }
         if (notebook != null) {
-            this.refs.content.getWrappedInstance().setNotebook(notebook);
+            this.refs.note.getWrappedInstance().setNotebook(notebook);
         }
-    }
-
-    noteBookModalOk() {
     }
 
     noteBookModalClose() {
@@ -98,7 +95,7 @@ class Main extends Component {
                                     }}/>
                                 </div>
                                 <div className="notebook-root">
-                                    <NoteTreeView dataSource={this.state.notebookDataSource}
+                                    <NoteTreeView dataSource={this.state.dataSource}
                                                   onAddNotebook={this.onAddNotebook}
                                                   onModifyNotebook={this.onModifyNotebook}
                                                   onDeleteNotebook={this.onDeleteNotebook}
@@ -110,13 +107,12 @@ class Main extends Component {
                                 <Tags/>
                             </div>
                         </SplitPane>
-
                     </div>
                     <div className="content">
-                        <Content ref="content"/>
+                        <Note ref="note"/>
                     </div>
                 </SplitPane>
-                <NotebookModal ref="notebookModal" onOK={this.noteBookModalOk} onClose={this.noteBookModalClose}/>
+                <NotebookModal ref="notebookModal" onClose={this.noteBookModalClose}/>
             </div>)
     }
 }

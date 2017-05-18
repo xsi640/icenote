@@ -1,10 +1,10 @@
 const Datastore = require('nedb')
 const log = require('electron-log');
 
-const db = new Datastore({filename: 'database/content.db', autoload: true});
+const db = new Datastore({filename: 'database/note.db', autoload: true});
 
 const insertOrUpdate = (content, callback) => {
-    log.info('Content insertOrUpdate Note:' + JSON.stringify(content))
+    log.info('Note insertOrUpdate Note:' + JSON.stringify(content))
     if (typeof content._id === 'undefined') {
         db.insert(content, callback);
     } else {
@@ -23,22 +23,23 @@ const insertOrUpdate = (content, callback) => {
 }
 
 const remove = (ids, callback) => {
-    log.info('Content remove ids:' + JSON.stringify(ids))
+    log.info('Note remove ids:' + JSON.stringify(ids))
     db.remove({_id: {$in: ids}}, {}, callback)
 }
 
 const removeByNotebookId = (notebookId, callback) => {
-    log.info('Content removeByNotebookId categoryId:' + notebookId)
+    log.info('Note removeByNotebookId notbookId:' + notebookId)
     db.remove({notebookId: notebookId}, {}, callback)
 }
 
 const findNotesByNotebookId = (notebookId, callback) => {
-    log.info('Content findNotesByNotebookId categoryId:' + notebookId)
-    db.find({notebookId: notebookId}, {}, callback)
+    log.info('Note findNotesByNotebookId notebookId:' + notebookId)
+    // db.find({notebookId: notebookId}, {}, callback)
+    db.find({notebookId: notebookId}).sort({lastUpdateTime: -1}).exec(callback);
 }
 
 const findNotesByTags = (tags, callback) => {
-    log.info('Content findNotesByTags tags:' + tags)
+    log.info('Note findNotesByTags tags:' + tags)
     db.find({tags: {$in: tags}}, {}, callback)
 }
 

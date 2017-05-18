@@ -1,7 +1,7 @@
-const CategoryDB = require('../db/notebookdb')
+const NotebookDB = require('../db/notebookdb')
 
 const insertOrUpdate = (notebook, callback) => {
-    CategoryDB.insertOrUpdate(notebook, callback)
+    NotebookDB.insertOrUpdate(notebook, callback)
 }
 
 const remove = (ids, callback) => {
@@ -13,11 +13,11 @@ const remove = (ids, callback) => {
             arrId.push(id);
         }
     }
-    CategoryDB.remove(arrId, callback)
+    NotebookDB.remove(arrId, callback)
 }
 
 const findAll = (callback) => {
-    CategoryDB.findAll(callback);
+    NotebookDB.findAll(callback);
 }
 
 module.exports = {

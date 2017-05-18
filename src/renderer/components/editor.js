@@ -20,6 +20,7 @@ export default class Editor extends Component {
             content: '',
             title: '',
             preview: false,
+            mask: true,
         };
         this.handleDelete = this.handleDelete.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
@@ -27,36 +28,53 @@ export default class Editor extends Component {
         this.onSave = this.onSave.bind(this);
         this.onChange = this.onChange.bind(this);
         this.changePreviewState = this.changePreviewState.bind(this);
-        this.setContent = this.setContent.bind(this);
+        this.setNote = this.setNote.bind(this);
+        this.clear = this.clear.bind(this);
+        this.readOnly = this.readOnly.bind(this);
     }
 
-    setContent(content) {
-        console.log('setContent', content);
-        this._content = content;
+    setNote(note) {
+        this._note = note;
         this.setState({
-            title: this._content.title,
-            content: this._content.content,
-            tags: this._content.tags,
+            title: this._note.title,
+            content: this._note.content,
+            tags: this._note.tags,
+            mask: false,
         })
     }
 
     handleDelete(i) {
-        console.log('delete tag', this.props.tags[i]);
+        let tags = this.state.tags;
+        tags.splice(i, 1);
+        this.setState({tags: tags});
     }
 
     handleAddition(tag) {
-        console.log('add tag', tag);
+        let tags = this.state.tags;
+        tags.push({
+            id: tags.length + 1,
+            text: tag
+        });
+        this.setState({tags: tags});
     }
 
     handleDrag(tag, currPos, newPos) {
-        let tags = this.props.tags;
+        let tags = this.state.tags;
+        tags.splice(currPos, 1);
+        tags.splice(newPos, 0, tag);
+        this.setState({ tags: tags });
+    }
 
-        // mutate array
-        // tags.splice(currPos, 1);
-        // tags.splice(newPos, 0, tag);
-        //
-        // // re-render
-        // this.setState({tags: tags});
+    clear() {
+        this.setState({
+            title: '',
+            content: '',
+            tags: [],
+        })
+    }
+
+    readOnly() {
+        this.setState({mask: true})
     }
 
     changePreviewState() {
@@ -68,11 +86,11 @@ export default class Editor extends Component {
     }
 
     onSave() {
-        this._content.title = this.state.title;
-        this._content.content = this.state.content;
-        this._content.tags = this.state.tags;
+        this._note.title = this.state.title;
+        this._note.content = this.state.content;
+        this._note.tags = this.state.tags;
 
-        this.props.onSave(this._content);
+        this.props.onSave(this._note);
     }
 
     render() {
@@ -110,6 +128,7 @@ export default class Editor extends Component {
                         <ReactMarkdown escapeHtml={false} skipHtml={false} source={content}/>
                     </div>
                 </div>
+                {this.state.mask ? <div className="mask"></div> : null}
             </div>
         )
     }

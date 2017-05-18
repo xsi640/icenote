@@ -1,4 +1,4 @@
-const NoteDB = require('../db/contentdb')
+const NoteDB = require('../db/notedb')
 
 const insertOrUpdate = (content, callback) => {
     NoteDB.insertOrUpdate(content, callback)

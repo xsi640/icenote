@@ -4,38 +4,38 @@ import {ACTION_MESSAGE} from './constaction'
 
 export const getNotebookList = () => {
     return dispatch => {
-        ipcRenderer.once(IPCMESSAGE.NOTE_LIST, (event, args) => {
+        ipcRenderer.once(IPCMESSAGE.NOTEBOOK_LIST, (event, args) => {
             if (typeof args.error === 'undefined') {
                 dispatch({
-                    type: ACTION_MESSAGE.NOTE_LIST,
+                    type: ACTION_MESSAGE.NOTEBOOK_LIST,
                     payload: args.data,
                 })
             } else {
                 dispatch({
-                    type: ACTION_MESSAGE.NOTE_LIST,
+                    type: ACTION_MESSAGE.NOTEBOOK_LIST,
                     error: args.error,
                 })
             }
         })
-        ipcRenderer.send(IPCMESSAGE.NOTE_LIST)
+        ipcRenderer.send(IPCMESSAGE.NOTEBOOK_LIST)
     }
 }
 
-export const deleteNotebookList = (id) => {
+export const deleteNotebook = (id) => {
     return dispatch => {
-        ipcRenderer.once(IPCMESSAGE.NOTE_DELETE, (event, args) => {
+        ipcRenderer.once(IPCMESSAGE.NOTEBOOK_DELETE, (event, args) => {
             if (typeof args.error === 'undefined') {
                 dispatch({
-                    type: ACTION_MESSAGE.NOTE_DELETE,
+                    type: ACTION_MESSAGE.NOTEBOOK_DELETE,
                     payload: args.data,
                 })
             } else {
                 dispatch({
-                    type: ACTION_MESSAGE.NOTE_LIST,
+                    type: ACTION_MESSAGE.NOTEBOOK_DELETE,
                     error: args.error,
                 })
             }
         })
-        ipcRenderer.send(IPCMESSAGE.NOTE_DELETE, id);
+        ipcRenderer.send(IPCMESSAGE.NOTEBOOK_DELETE, id);
     }
 }
