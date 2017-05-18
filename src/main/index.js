@@ -4,33 +4,62 @@ const url = require('url')
 const {ipcMain} = require('electron')
 const regIPCMessage = require('./ipcMessage')
 
-let win
+let mainWindow, loadingScreen, windowParams = {
+    width: 1100,
+    height: 700,
+    show: false,
+    webPreferences: {
+        experimentalFeatures: true
+    }
+};
 
 function createWindow() {
     regIPCMessage();
 
-    win = new BrowserWindow({
-        width: 1100,
-        height: 700,
-        webPreferences: {
-            experimentalFeatures: true
-        }
-    })
+    mainWindow = new BrowserWindow(windowParams)
 
-    win.loadURL(url.format({
+    mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, '../../public/index.html'),
         protocol: 'file:',
         slashes: true
     }))
 
-    win.webContents.openDevTools()
+    mainWindow.webContents.on('did-finish-load', () => {
+        mainWindow.show();
 
-    win.on('closed', () => {
-        win = null
+        if (loadingScreen) {
+            let loadingScreenBounds = loadingScreen.getBounds();
+            mainWindow.setBounds(loadingScreenBounds);
+            loadingScreen.close();
+        }
+    });
+
+    if (process.env.NODE_ENV === `development`) {
+        //mainWindow.webContents.openDevTools()
+    }
+
+    mainWindow.on('closed', () => {
+        mainWindow = null
     })
 }
 
-app.on('ready', createWindow)
+function createLoadingScreen() {
+    loadingScreen = new BrowserWindow(Object.assign(windowParams, {parent: mainWindow}));
+    loadingScreen.loadURL(url.format({
+        pathname: path.join(__dirname, '../../public/loading.html'),
+        protocol: 'file:',
+        slashes: true
+    }))
+    loadingScreen.on('closed', () => loadingScreen = null);
+    loadingScreen.webContents.on('did-finish-load', () => {
+        loadingScreen.show();
+    });
+}
+
+app.on('ready', () => {
+    createLoadingScreen();
+    createWindow();
+})
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit()
@@ -38,7 +67,7 @@ app.on('window-all-closed', () => {
 })
 
 app.on('activate', () => {
-    if (win === null) {
+    if (mainWindow === null) {
         createWindow()
     }
 })
