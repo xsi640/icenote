@@ -42,6 +42,7 @@ class Note extends Component {
             this.refs.editor.setNote(this._note);
             this.props.list(this._notebook._id);
             this.refs.noteList.setSelectedIndex(0);
+            this.props.onSaved();
         }
         if (typeof nextProps.dataSource !== 'undefined') {
             if (nextProps.dataSource.length == 0) {

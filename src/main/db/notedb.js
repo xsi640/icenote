@@ -22,6 +22,10 @@ const insertOrUpdate = (content, callback) => {
     }
 }
 
+const get = (id, callback) => {
+    db.findOne({_id: id}, callback);
+}
+
 const remove = (ids, callback) => {
     log.info('Note remove ids:' + JSON.stringify(ids))
     db.remove({_id: {$in: ids}}, {}, callback)
@@ -43,4 +47,4 @@ const findNotesByTags = (tags, callback) => {
     db.find({tags: {$in: tags}}, {}, callback)
 }
 
-module.exports = {insertOrUpdate, remove, removeByNotebookId, findNotesByNotebookId, findNotesByTags}
+module.exports = {insertOrUpdate, get, remove, removeByNotebookId, findNotesByNotebookId, findNotesByTags}

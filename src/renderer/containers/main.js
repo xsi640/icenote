@@ -81,6 +81,10 @@ class Main extends Component {
         this.props.getNotebookList();
     }
 
+    onSaved(){
+        this.refs.tags.getWrappedInstance().refresh();
+    }
+
     render() {
         return (
             <div>
@@ -104,12 +108,12 @@ class Main extends Component {
                             </div>
                             <div className="tags">
                                 <div className="title unselect">Tags</div>
-                                <Tags/>
+                                <Tags ref="tags"/>
                             </div>
                         </SplitPane>
                     </div>
                     <div className="content">
-                        <Note ref="note"/>
+                        <Note ref="note" onSaved={this.onSaved} />
                     </div>
                 </SplitPane>
                 <NotebookModal ref="notebookModal" onClose={this.noteBookModalClose}/>

@@ -1,15 +1,15 @@
 const NoteDB = require('../db/notedb')
 
-const insertOrUpdate = (content, callback) => {
-    NoteDB.insertOrUpdate(content, callback)
+const insertOrUpdate = (note, callback) => {
+    NoteDB.insertOrUpdate(note, callback);
 }
 
 const remove = (ids, callback) => {
     let arrId = [];
     if (typeof ids === 'string') {
         arrId = [ids];
-    }else {
-        for(let id of ids){
+    } else {
+        for (let id of ids) {
             arrId.push(id);
         }
     }

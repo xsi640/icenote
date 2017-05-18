@@ -1,35 +1,47 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
+import * as TagsActions from '../actions/tagsactions'
 import './tags.scss'
 
-export default class Tag extends Component {
+class Tags extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
             selectedIndex: -1,
         }
         this.onChange = this.onChange.bind(this);
     }
 
-    onChange(e){
+    componentDidMount(){
+        this.props.list();
+    }
+
+
+    onChange(e) {
         let obj = null;
-        for(let i = 0; i < this.state.data.length; i++){
-            if(this.state.data['id'] === e.target.value){
+        let {dataSource} = this.props;
+        for (let i = 0; i < dataSource.length; i++) {
+            if (dataSource[i]._id === e.target.value) {
                 this.state.selectedIndex = i;
-                obj = this.state.data[i];
+                obj = dataSource[i];
                 break;
             }
         }
         this.props.onChange(e, obj);
     }
 
+    refresh() {
+        this.props.list();
+    }
+
     render() {
-        let {data, selectedIndex} = this.state;
+        let {selectedIndex} = this.state;
+        let {dataSource} = this.props;
         let list = [];
-        for (let i = 0; i < data.length; i++) {
-            let item = data[i];
+        for (let i = 0; i < dataSource.length; i++) {
+            let item = dataSource[i];
             let checked = i === selectedIndex;
             list.push(
                 <div className="tag-item" key={item.id}>
@@ -50,7 +62,16 @@ export default class Tag extends Component {
     }
 }
 
-Tag.PropTypes = {
-    data: PropTypes.array,
+Tags.propTypes  = {
     onChanged: PropTypes.func,
 }
+
+Tags.defaultProps  = {
+    dataSource: []
+}
+
+const mapStateToProps = (state) => {
+    return state.TagsReducer;
+}
+
+export default connect(mapStateToProps, TagsActions, null, {withRef: true})(Tags)

@@ -36,4 +36,12 @@ const findAll = (callback) => {
     })
 }
 
-module.exports = {insertOrUpdate, remove, findAll}
+const findTags = (tags, callback) => {
+    db.find({name: {$in: tags}}, callback);
+}
+
+const updateCount = (id, count, callback) => {
+    db.update({_id: id}, {count: count}, {}, callback);
+}
+
+module.exports = {insertOrUpdate, remove, findAll, findTags, updateCount}
