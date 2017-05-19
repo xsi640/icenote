@@ -1,4 +1,4 @@
-import IPCMESSAGE from '../../constipc'
+import IPCMESSAGE from '../../../constipc'
 const {ipcRenderer} = require('electron')
 import {ACTION_MESSAGE} from './constaction'
 

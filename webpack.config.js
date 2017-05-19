@@ -1,15 +1,18 @@
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const autoprefixer = require('autoprefixer')
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
     target: 'electron',
-    entry: ['./src/renderer/index.js'], //入口
+    entry: {
+        'main': './src/renderer/main/index.js',
+        'loading': './src/renderer/loading/index.js'
+    },
     output: { //输出
-        path: __dirname,
-        publicPath: '../',
-        filename: './public/bundle.js'
+        path: path.join(__dirname, 'public'),
+        filename: 'js/[name].js'
     },
     resolve: {
         modules: ['node_modules'], //node_modules用于搜索模块的目录
@@ -36,16 +39,16 @@ module.exports = {
                 loader: "url-loader",
                 query: {
                     limit: 8196,
-                    name: './public/images/[hash].[ext]'
+                    name: './images/[hash].[ext]'
                 }
             }, {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
                 loader: 'url-loader',
                 query: {
                     limit: 4096,
-                    name: './public/fonts/[hash].[ext]'
+                    name: './fonts/[hash].[ext]'
                 }
-            },{
+            }, {
                 test: /\.(json)$/,
                 loader: 'json-loader'
             }
@@ -66,11 +69,33 @@ module.exports = {
                 drop_console: false
             }
         }),
-        new ExtractTextPlugin('public/styles.css'), //输出css
+        new ExtractTextPlugin('[name].css'), //输出css
         new webpack.LoaderOptionsPlugin({
             minimize: true,
             options: {
                 postcss: [autoprefixer]
+            }
+        }),
+        new HtmlWebpackPlugin({
+            template: 'index.ejs',
+            filename: 'main.html',
+            title: 'icenote',
+            inject: 'body',
+            chunks: ['main'],//需要引入的chunk，不配置就会引入所有页面的资源
+            minify: { //压缩HTML文件
+                removeComments: true, //移除HTML中的注释
+                collapseWhitespace: false //删除空白符与换行符
+            }
+        }),
+        new HtmlWebpackPlugin({
+            template: 'index.ejs',
+            filename: 'loading.html',
+            title: 'loading',
+            inject: 'body',
+            chunks: ['loading'],//需要引入的chunk，不配置就会引入所有页面的资源
+            minify: { //压缩HTML文件
+                removeComments: true, //移除HTML中的注释
+                collapseWhitespace: false //删除空白符与换行符
             }
         })
     ],

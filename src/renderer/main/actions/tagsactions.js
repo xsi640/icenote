@@ -1,22 +1,22 @@
-import IPCMESSAGE from '../../constipc'
+import IPCMESSAGE from '../../../constipc'
 const {ipcRenderer} = require('electron')
 import {ACTION_MESSAGE} from './constaction'
 
-export const save = (notebook) => {
+export const list = () => {
     return dispatch => {
-        ipcRenderer.once(IPCMESSAGE.NOTEBOOK_SAVE, (event, args) => {
+        ipcRenderer.once(IPCMESSAGE.TAGS_LIST, (event, args) => {
             if (typeof args.error === 'undefined') {
                 dispatch({
-                    type: ACTION_MESSAGE.NOTEBOOK_SAVE,
+                    type: ACTION_MESSAGE.TAGS_LIST,
                     payload: args.data,
                 })
             } else {
                 dispatch({
-                    type: ACTION_MESSAGE.NOTEBOOK_SAVE,
+                    type: ACTION_MESSAGE.TAGS_LIST,
                     error: args.error,
                 })
             }
         })
-        ipcRenderer.send(IPCMESSAGE.NOTEBOOK_SAVE, notebook)
+        ipcRenderer.send(IPCMESSAGE.TAGS_LIST)
     }
 }

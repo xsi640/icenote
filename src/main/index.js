@@ -19,7 +19,7 @@ function createWindow() {
     mainWindow = new BrowserWindow(windowParams)
 
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, '../../public/index.html'),
+        pathname: path.join(__dirname, '../../public/main.html'),
         protocol: 'file:',
         slashes: true
     }))
@@ -35,7 +35,7 @@ function createWindow() {
     });
 
     if (process.env.NODE_ENV === `development`) {
-        //mainWindow.webContents.openDevTools()
+        mainWindow.webContents.openDevTools()
     }
 
     mainWindow.on('closed', () => {
