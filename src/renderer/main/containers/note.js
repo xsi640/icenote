@@ -85,14 +85,17 @@ class Note extends Component {
         this.props.save(note);
     }
 
-    onClickMenu(e, cmd, item) {
+    onClickMenu(e, cmd, items) {
         let {deleteNote} = this.props;
         if (cmd === 'delete') {
             Modal.confirm({
-                title: 'delete "' + (item.title === '' ? 'UnTitled' : item.title) + '" note?',
+                title: 'delete selected notes?',
                 content: 'you can\'t undo the action.',
                 onOk() {
-                    deleteNote(item._id);
+                    let ids = [];
+                    for (let item of items)
+                        ids.push(item._id)
+                    deleteNote(ids);
                 },
                 onCancel() {
                 },

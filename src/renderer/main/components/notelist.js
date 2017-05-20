@@ -67,7 +67,11 @@ export default class NoteList extends Component {
         e.preventDefault();
     }
 
-    onClickMenu(e, cmd, data) {
+    onClickMenu(e, cmd) {
+        let data = [];
+        for (let index of this.state.selectedIndexs) {
+            data.push(this.props.dataSource[index]);
+        }
         this.props.onClickMenu(e, cmd, data);
     }
 
@@ -99,23 +103,23 @@ export default class NoteList extends Component {
                     </ContextMenuTrigger>
                     <ContextMenu id={item._id}>
                         <MenuItem data={item} onClick={(e) => {
-                            this.onClickMenu(e, 'move', item)
+                            this.onClickMenu(e, 'move')
                         }}>
                             Move to Notebook
                         </MenuItem>
                         <MenuItem data={item} onClick={(e) => {
-                            this.onClickMenu(e, 'delete', item)
+                            this.onClickMenu(e, 'delete')
                         }}>
                             Delete Note
                         </MenuItem>
                         <MenuItem divider/>
                         <MenuItem data={item} onClick={(e) => {
-                            this.onClickMenu(e, 'export_pdf', item)
+                            this.onClickMenu(e, 'export_pdf')
                         }}>
                             Export to pdf
                         </MenuItem>
                         <MenuItem data={item} onClick={(e) => {
-                            this.onClickMenu(e, 'export_html', item)
+                            this.onClickMenu(e, 'export_html')
                         }}>
                             Export to html
                         </MenuItem>

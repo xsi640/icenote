@@ -28,7 +28,7 @@ const get = (id, callback) => {
 
 const remove = (ids, callback) => {
     log.info('Note remove ids:' + JSON.stringify(ids))
-    db.remove({_id: {$in: ids}}, {}, callback)
+    db.remove({_id: {$in: ids}}, {multi: true}, callback)
 }
 
 const removeByNotebookId = (notebookId, callback) => {
