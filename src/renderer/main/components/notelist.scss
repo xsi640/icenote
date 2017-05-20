@@ -1,7 +1,7 @@
 .note-list{
   height: auto;
 }
-.note-list input[type="radio"] {
+.note-list input[type="checkbox"] {
   display: none;
 }
 
@@ -18,7 +18,7 @@
   -webkit-box-orient: vertical;
 }
 
-.note-list input[type="radio"]:checked + label {
+.note-list input[type="checkbox"]:checked + label {
   background-color: #161d31;
   color: #a9b4d2;
 }
