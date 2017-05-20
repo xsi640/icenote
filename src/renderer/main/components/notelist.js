@@ -3,33 +3,13 @@ import PropTypes from 'prop-types'
 import './notelist.scss'
 import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu"
 import './menu.scss'
-
-Array.prototype.contains = function (obj) {
-    var i = this.length;
-    while (i--) {
-        if (this[i] === obj) {
-            return true;
-        }
-    }
-    return false;
-}
-Array.prototype.remove = function () {
-    var what, a = arguments, L = a.length, ax;
-    while (L && this.length) {
-        what = a[--L];
-        while ((ax = this.indexOf(what)) !== -1) {
-            this.splice(ax, 1);
-        }
-    }
-    return this;
-};
+import '../../utils/array'
 
 export default class NoteList extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            selectedIndex: 0,
             selectedIndexs: [],
         }
 
@@ -40,7 +20,7 @@ export default class NoteList extends Component {
     }
 
     setSelectedIndex(index) {
-        this.setState({selectedIndex: index});
+        this.setState({selectedIndexs: [index]});
     }
 
     onSelect(e, id) {
