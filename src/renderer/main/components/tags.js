@@ -12,9 +12,10 @@ class Tags extends Component {
             selectedIndex: -1,
         }
         this.onChange = this.onChange.bind(this);
+        this.refresh = this.refresh.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.list();
     }
 
@@ -33,6 +34,7 @@ class Tags extends Component {
     }
 
     refresh() {
+        console.log('refresh')
         this.props.list();
     }
 
@@ -43,12 +45,13 @@ class Tags extends Component {
         for (let i = 0; i < dataSource.length; i++) {
             let item = dataSource[i];
             let checked = i === selectedIndex;
+            console.log(item._id)
             list.push(
-                <div className="tag-item" key={item.id}>
-                    <input type="radio" id={item.id} name="radios" value={item.id} onChange={this.onChange}
+                <div className="tag-item" key={item._id}>
+                    <input type="radio" id={item._id} name="radios" value={item._id} onChange={this.onChange}
                            checked={checked}></input>
-                    <label htmlFor={item.id}>
-                        <div className="name">{item.name}</div>
+                    <label htmlFor={item._id}>
+                        <div className="name">{item.text} ({item.count})</div>
                     </label>
                 </div>
             )
@@ -62,11 +65,11 @@ class Tags extends Component {
     }
 }
 
-Tags.propTypes  = {
+Tags.propTypes = {
     onChanged: PropTypes.func,
 }
 
-Tags.defaultProps  = {
+Tags.defaultProps = {
     dataSource: []
 }
 

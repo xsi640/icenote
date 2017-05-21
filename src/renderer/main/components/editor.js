@@ -50,6 +50,11 @@ export default class Editor extends Component {
     }
 
     handleAddition(tag) {
+        for (let tag of this.state.tags) {
+            if (tag.text == tag) {
+                return;
+            }
+        }
         let tags = this.state.tags;
         tags.push({
             id: tags.length + 1,
@@ -62,7 +67,7 @@ export default class Editor extends Component {
         let tags = this.state.tags;
         tags.splice(currPos, 1);
         tags.splice(newPos, 0, tag);
-        this.setState({ tags: tags });
+        this.setState({tags: tags});
     }
 
     clear() {

@@ -7,12 +7,12 @@ export const list = () => {
         ipcRenderer.once(IPCMESSAGE.TAGS_LIST, (event, args) => {
             if (typeof args.error === 'undefined') {
                 dispatch({
-                    type: ACTION_MESSAGE.TAGS_LIST,
+                    type: ACTION_MESSAGE.TAG_LIST,
                     payload: args.data,
                 })
             } else {
                 dispatch({
-                    type: ACTION_MESSAGE.TAGS_LIST,
+                    type: ACTION_MESSAGE.TAG_LIST,
                     error: args.error,
                 })
             }

@@ -23,10 +23,20 @@ const insertOrUpdate = (tag, callback) => {
 }
 
 const remove = (ids, callback) => {
-    log.info('Tags remove ids' + JSON.stringify(ids))
+    log.info('Tags remove ids' + JSON.stringify(ids));
     db.remove({_id: {$in: ids}}, {}, (err, num) => {
         callback(err, num);
     })
+}
+
+const clear = (callback) => {
+    log.info('Tags clear');
+    db.remove({}, {multi: true}, callback);
+}
+
+const insert = (tag, callback) => {
+    log.info('Tags insert ' + JSON.stringify(tag));
+    db.insert(tag, callback);
 }
 
 const findAll = (callback) => {
@@ -44,4 +54,4 @@ const updateCount = (id, count, callback) => {
     db.update({_id: id}, {count: count}, {}, callback);
 }
 
-module.exports = {insertOrUpdate, remove, findAll, findTags, updateCount}
+module.exports = {insertOrUpdate, insert, remove, clear, findAll, findTags, updateCount}

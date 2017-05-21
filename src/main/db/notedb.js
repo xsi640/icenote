@@ -3,23 +3,33 @@ const log = require('electron-log');
 
 const db = new Datastore({filename: 'database/note.db', autoload: true});
 
-const insertOrUpdate = (content, callback) => {
-    log.info('Note insertOrUpdate Note:' + JSON.stringify(content))
-    if (typeof content._id === 'undefined') {
-        db.insert(content, callback);
+const insertOrUpdate = (note, callback) => {
+    log.info('Note insertOrUpdate Note:' + JSON.stringify(note))
+    if (typeof note._id === 'undefined') {
+        db.insert(note, callback);
     } else {
-        db.findOne({_id: content._id}, (err, doc) => {
+        db.findOne({_id: note._id}, (err, doc) => {
             if (err)
                 callback(err, doc)
             if (doc === null) {
-                db.insert(content, callback);
+                db.insert(note, callback);
             } else {
-                db.update({_id: doc._id}, content, {}, () => {
-                    callback(undefined, content);
+                db.update({_id: doc._id}, note, {}, () => {
+                    callback(undefined, note);
                 })
             }
         });
     }
+}
+
+const insert = (note, callback) => {
+    log.info('Note insert Note:' + JSON.stringify(note));
+    db.insert(note, callback);
+}
+
+const update = (note, callback) => {
+    log.info('Note update Note:' + JSON.stringify(note));
+    db.update({_id: note._id}, note, {}, callback);
 }
 
 const get = (id, callback) => {
@@ -47,4 +57,13 @@ const findNotesByTags = (tags, callback) => {
     db.find({tags: {$in: tags}}, {}, callback)
 }
 
-module.exports = {insertOrUpdate, get, remove, removeByNotebookId, findNotesByNotebookId, findNotesByTags}
+module.exports = {
+    insertOrUpdate,
+    insert,
+    update,
+    get,
+    remove,
+    removeByNotebookId,
+    findNotesByNotebookId,
+    findNotesByTags
+}

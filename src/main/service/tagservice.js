@@ -1,27 +1,90 @@
 const TagsDB = require('../db/tagsdb')
+const log = require('electron-log');
 
-const insertOrUpdate = (tag, callback) => {
-    TagsDB.insertOrUpdate(tag, callback)
+let TagCache = null;
+
+const load = (callback) => {
+    if (TagCache === null) {
+        TagsDB.findAll((err, docs) => {
+            if (docs.length > 0) {
+                TagCache = new Set(docs);
+            } else {
+                TagCache = new Set();
+            }
+            callback(err, docs);
+        })
+    } else {
+        callback(undefined, Array.from(TagCache));
+    }
 }
 
-const remove = (ids, callback) => {
-    let arrId = [];
-    if (typeof ids === 'string') {
-        arrId = [ids];
-    }else {
-        for(let id of ids){
-            arrId.push(id);
+const save = (callback) => {
+    TagsDB.clear((err, num) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+        TagsDB.insert(Array.from(TagCache), (err, docs) => {
+            if (err) {
+                callback(err);
+                return;
+            }
+            TagCache = new Set(docs);
+            callback(undefined, docs);
+        });
+    });
+}
+
+const addTags = (tags) => {
+    for (let tag of tags) {
+        let currTag = get(tag);
+        if (currTag != null) {
+            currTag.count += 1;
+        } else {
+            TagCache.add({text: tag, count: 1});
         }
     }
-    TagsDB.remove(arrId, callback)
+}
+
+const deleteTags = (tags) => {
+    for (let tag of tags) {
+        let currTag = get(tag);
+        if (currTag != null) {
+            currTag.count -= 1;
+            if (currTag.count === 0) {
+                TagCache.delete(currTag);
+            }
+        }
+    }
+}
+
+const get = (text) => {
+    let result = null;
+    for (let tag of TagCache) {
+        if (tag.text === text) {
+            result = tag;
+            break;
+        }
+    }
+    return result;
 }
 
 const findAll = (callback) => {
-    TagsDB.findAll(callback)
+    load((err, docs) => {
+        if (docs.length > 0) {
+            docs.sort((a, b) => {
+                return b.count - a.count;
+            })
+        }
+        callback(err, docs);
+    })
 }
 
 module.exports = {
-    insertOrUpdate,
-    remove,
-    findAll
+    load,
+    save,
+    addTags,
+    deleteTags,
+    get,
+    findAll,
 }

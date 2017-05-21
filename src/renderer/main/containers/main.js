@@ -23,6 +23,7 @@ class Main extends Component {
         this.onDeleteNotebook = this.onDeleteNotebook.bind(this);
         this.onSelectNotebook = this.onSelectNotebook.bind(this);
         this.noteBookModalClose = this.noteBookModalClose.bind(this);
+        this.onSaved = this.onSaved.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -81,6 +82,7 @@ class Main extends Component {
     }
 
     onSaved() {
+        console.log('onSaved')
         this.refs.tags.getWrappedInstance().refresh();
     }
 

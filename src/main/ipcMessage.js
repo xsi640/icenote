@@ -18,7 +18,7 @@ const regIPCMessage = () => {
                     data,
                     error: typeof error === 'undefined' || error === null ? undefined : error.message,
                 }
-                log.info(`send msg:${msg} data:${JSON.stringify(result)}`);
+                log.info(`send msg:${msg} ${JSON.stringify(result)}`);
                 event.sender.send(msg, result)
             })
         })
@@ -37,11 +37,13 @@ const regIPCMessage = () => {
     })
 
     _reg(IPCMESSAGE.TAGS_SAVE, (event, args, callback) => {
-        TagsService.insertOrUpdate(args, callback)
+        TagsService.addTags(args)
+        TagsService.save(callback)
     })
 
     _reg(IPCMESSAGE.TAGS_DELETE, (event, args, callback) => {
-        TagsService.remove(args, callback)
+        TagsService.deleteTags(args)
+        TagsService.save(callback)
     })
 
     _reg(IPCMESSAGE.TAGS_LIST, (event, args, callback) => {
