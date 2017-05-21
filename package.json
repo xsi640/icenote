@@ -6,7 +6,8 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --progress",
     "watch": "cross-env NODE_ENV=development webpack --progress --watch",
-    "dev": "cross-env NODE_ENV=development electron ."
+    "dev": "cross-env NODE_ENV=development electron .",
+    "package":"electron-packager ./public icenote --all --out ./publish --version 1.0.0 --overwrite"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "css-loader": "^0.28.1",
     "electron": "^1.6.6",
     "electron-hot": "^0.2.0",
+    "electron-packager": "^8.7.0",
     "electron-prebuilt": "^1.4.13",
     "electron-reload": "^1.1.0",
     "extract-text-webpack-plugin": "^2.1.0",
