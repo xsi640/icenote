@@ -7,6 +7,7 @@ const regIPCMessage = require('./ipcMessage')
 let mainWindow, loadingScreen, windowParams = {
     width: 1100,
     height: 700,
+    icon:'../../resources/logo.png',
     show: false,
     webPreferences: {
         experimentalFeatures: true

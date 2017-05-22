@@ -110,14 +110,14 @@ export default class Editor extends Component {
                 <div className="title">
                     <Input className="in-title" placeholder="title" value={title} onChange={e => {
                         this.onChange('title', e.target.value)
-                    }}/>
+                    }} onblur={this.onSave}/>
                 </div>
                 <div className="tags">
                     <ReactTags tags={tags}
                                suggestions={suggestions}
                                handleDelete={this.handleDelete}
                                handleAddition={this.handleAddition}
-                               handleDrag={this.handleDrag}/>
+                               handleDrag={this.handleDrag} handleInputBlur={this.onSave}/>
                 </div>
                 <div className="toolbar">
                     <Button icon="eye-o" shape="circle" onClick={this.changePreviewState}/>
