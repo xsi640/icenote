@@ -1,13 +1,13 @@
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
 const url = require('url')
-const {ipcMain} = require('electron')
+const fs = require('fs')
 const regIPCMessage = require('./ipcMessage')
 
 let mainWindow, loadingScreen, windowParams = {
     width: 1100,
     height: 700,
-    icon:'../../resources/logo.png',
+    icon: '../../resources/logo.png',
     show: false,
     webPreferences: {
         experimentalFeatures: true
@@ -15,9 +15,12 @@ let mainWindow, loadingScreen, windowParams = {
 };
 
 function createWindow() {
+
     regIPCMessage();
 
     mainWindow = new BrowserWindow(windowParams)
+
+    console.log(__dirname);
 
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, '../../public/main.html'),

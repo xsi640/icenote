@@ -120,6 +120,9 @@ export default class Editor extends Component {
                                handleDrag={this.handleDrag} handleInputBlur={this.onSave}/>
                 </div>
                 <div className="toolbar">
+                    <!--
+                     预览、分屏阅读；加粗、倾斜、删除线；标题、引用、code；项目列表，编号列表，checkbox；链接、分割线
+                    -->
                     <Button icon="eye-o" shape="circle" onClick={this.changePreviewState}/>
                 </div>
                 <div className="editor">

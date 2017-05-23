@@ -7,7 +7,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress",
     "watch": "cross-env NODE_ENV=development webpack --progress --watch",
     "dev": "cross-env NODE_ENV=development electron .",
-    "package":"electron-packager ./public icenote --all --out ./publish --version 1.0.0 --icon ./resources/logo --overwrite"
+    "package":"electron-packager . icenote --all --out ./publish --version 1.0.0 --icon=./resources/logo --overwrite"
   },
   "repository": {
     "type": "git",
