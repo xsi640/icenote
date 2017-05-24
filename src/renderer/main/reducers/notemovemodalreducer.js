@@ -4,7 +4,7 @@ export default function (state = {}, action) {
     switch (action.type) {
         case ACTION_MESSAGE.NOTE_SAVE:
             if (typeof action.payload !== 'undefined')
-                return {...state, notebook: action.payload};
+                return {...state, note: action.payload};
             else if (typeof action.error !== 'undefined')
                 return {...state, error: action.error}
         default:

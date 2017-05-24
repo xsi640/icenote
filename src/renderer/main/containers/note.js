@@ -5,6 +5,7 @@ import NoteList from '../components/notelist'
 import Editor from '../components/editor'
 import {Button, Input, Modal} from 'antd'
 import SplitPane from 'react-split-pane'
+import NoteMoveModal from '../components/notemovemodal'
 const Search = Input.Search;
 import './note.scss'
 
@@ -15,7 +16,6 @@ class Note extends Component {
 
         this.state = {
             title: '',
-            dataSource: [],
             mask: true,
         }
 
@@ -24,22 +24,10 @@ class Note extends Component {
         this.onSelect = this.onSelect.bind(this);
         this.onClickMenu = this.onClickMenu.bind(this);
         this.onSave = this.onSave.bind(this);
+        this.closeMoveModal = this.closeMoveModal.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
-        // if (typeof nextProps.deleteNum === 'number' && nextProps.deleteNum > 0) {
-        //     this.props.list(this._notebook._id);
-        // }
-        // if (typeof nextProps.note !== 'undefined' && nextProps.note !== null) {
-        //     this._note = nextProps.note;
-        //     this.refs.editor.setNote(this._note);
-        // }
-        // if (typeof nextProps.dataSource !== 'undefined') {
-        //     if (nextProps.dataSource.length == 0) {
-        //         this.refs.editor.clear();
-        //         this.refs.editor.readOnly();
-        //     }
-        // }
     }
 
     setNotebook(notebook) {
@@ -95,7 +83,13 @@ class Note extends Component {
                 onCancel() {
                 },
             });
+        } else if (cmd === 'move') {
+            this.refs.noteMoveModal.getWrappedInstance().show(items[0]);
         }
+    }
+
+    closeMoveModal() {
+        this.props.list(this._notebook._id);
     }
 
     render() {
@@ -125,6 +119,8 @@ class Note extends Component {
                                   dataSource={this.props.dataSource}
                                   onSelect={this.onSelect}/>
                     </div>
+                    <NoteMoveModal ref="noteMoveModal" dataSource={this.props.noteBookDataSource}
+                                   onClose={this.closeMoveModal}/>
                 </div>
                 <div className="nb_content">
                     <Editor ref="editor" onSave={this.onSave}/>

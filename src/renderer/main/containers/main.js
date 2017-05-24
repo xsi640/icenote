@@ -99,7 +99,7 @@ class Main extends Component {
                         </div>
                     </SplitPane>
                     <div className="content">
-                        <Note ref="note" onSaved={this.onSaved}/>
+                        <Note ref="note" onSaved={this.onSaved} noteBookDataSource={this.state.dataSource}/>
                     </div>
                 </SplitPane>
                 <NotebookModal ref="notebookModal" onClose={this.noteBookModalClose}/>

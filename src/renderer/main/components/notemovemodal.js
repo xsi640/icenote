@@ -24,30 +24,30 @@ class NoteMoveModal extends Component {
         this.setState({...nextProps});
         if (typeof nextProps.note !== 'undefined') {
             this._note = nextProps.note;
+            this.props.onClose();
             this.onClose();
         }
     }
 
     show(note) {
         this._note = note;
-        this.setState({visible: true});
+        this.setState({visible: true, notebookId: this._note.notebookId});
     }
 
     _save() {
         if (this._note.notebookId === this.state.notebookId) {
             this.onClose();
         } else {
-            this.props.save(this._note, this.state.notebookId);
+            this.props.move(this._note, this.state.notebookId);
         }
     }
 
     onClose() {
         this.setState({visible: false});
-        this.props.onClose(this._note);
     }
 
     onChange(value) {
-        this.setState({note: value})
+        this.setState({notebookId: value})
     }
 
     renderTreeNode(parentId) {
@@ -58,7 +58,19 @@ class NoteMoveModal extends Component {
         let root = [];
         dataSource.map(item => {
             if (item.parentId === parentId) {
-                root.push(<TreeNode value={item._id} title={item.title} key={item._id}/>)
+                let isLeaf = true;
+                for (let node of dataSource) {
+                    if (typeof node.parentId !== 'undefined' && node.parentId === item._id) {
+                        isLeaf = false;
+                        break;
+                    }
+                }
+                if (!isLeaf)
+                    root.push(<TreeNode value={item._id} title={item.title}
+                                        key={item._id}>{this.renderTreeNode(item._id)}</TreeNode>)
+                else
+                    root.push(<TreeNode value={item._id} title={item.title} key={item._id}/>)
+
             }
         })
         return root;
@@ -84,14 +96,14 @@ class NoteMoveModal extends Component {
                     </div>
                     <div className="unselect">
                         Move to:
-                        <div className="select">
+                        <div>
                             <TreeSelect
                                 showSearch
                                 style={{width: 300}}
                                 value={this.state.notebookId}
                                 dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
                                 placeholder="Please select"
-                                allowClear
+                                allowClear={false}
                                 treeDefaultExpandAll
                                 onChange={this.onChange}
                             >
