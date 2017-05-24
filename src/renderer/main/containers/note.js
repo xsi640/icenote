@@ -50,6 +50,7 @@ class Note extends Component {
                 this.refs.editor.readOnly();
             } else {
                 this.refs.editor.setNote(nextProps.dataSource[0])
+                this.refs.noteList.setSelectedIndex(0);
             }
         }
     }

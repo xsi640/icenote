@@ -76,7 +76,7 @@ export default class NoteTreeView extends Component {
     }
 }
 
-NoteTreeView.propTypes = {
+NoteTreeView.PropTypes = {
     onAddNotebook: PropTypes.func,
     onModifyNotebook: PropTypes.func,
     onDeleteNotebook: PropTypes.func,

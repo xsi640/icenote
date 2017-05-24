@@ -3,12 +3,13 @@ import {connect} from 'react-redux'
 import SplitPane from 'react-split-pane'
 import NoteTreeView from '../components/notetreeview'
 import Tags from '../components/tags'
-import './main.scss'
-import './splitpane.scss'
 import Note from './note'
 import {Button, Modal} from "antd";
 import NotebookModal from '../components/notebookmodal'
 import * as MainActions from '../actions/mainactions'
+import _ from 'underscore'
+import './main.scss'
+import './splitpane.scss'
 
 class Main extends Component {
 
@@ -59,20 +60,10 @@ class Main extends Component {
     }
 
     onSelectNotebook(keys, sender) {
-        let notebook = null;
-        for (let nb of this.state.dataSource) {
-            let exists = false;
-            for (let key of keys) {
-                if (key === nb._id) {
-                    exists = true;
-                    break;
-                }
-            }
-            if (exists) {
-                notebook = nb;
-            }
-        }
-        if (notebook != null) {
+        let notebook = _.find(this.state.dataSource, (item)=>{
+            return _.contains(keys, item._id);
+        })
+        if (notebook) {
             this.refs.note.getWrappedInstance().setNotebook(notebook);
         }
     }

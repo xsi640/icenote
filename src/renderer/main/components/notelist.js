@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import './notelist.scss'
+import _ from 'underscore'
 import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu"
 import './menu.scss'
-import '../../utils/array'
+import './notelist.scss'
 
 export default class NoteList extends Component {
 
@@ -26,15 +26,10 @@ export default class NoteList extends Component {
     onSelect(e, id) {
         let {ctrlKey, shiftKey, metaKey} = e;
         let {dataSource} = this.props;
-        let obj = null;
-        let selectedIndex = -1;
-        for (let i = 0; i < dataSource.length; i++) {
-            if (dataSource[i]._id === id) {
-                selectedIndex = i;
-                obj = dataSource[i];
-                break;
-            }
-        }
+        let obj = _.find(dataSource, (item) => {
+            return item._id === id;
+        });
+        let selectedIndex = obj ? _.indexOf(dataSource, obj) : -1;
         if (!ctrlKey && !shiftKey && !metaKey) {
             this.state.selectedIndexs = [selectedIndex];
         } else if (shiftKey && this._lastSelectedIndex !== -1) {
@@ -52,10 +47,11 @@ export default class NoteList extends Component {
                 }
             }
         } else if (ctrlKey || metaKey) {
-            if (!this.state.selectedIndexs.contains(selectedIndex)) {
+            let index = _.indexOf(this.state.selectedIndexs, selectedIndex);
+            if (index === -1) {
                 this.state.selectedIndexs.push(selectedIndex);
             } else {
-                this.state.selectedIndexs.remove(selectedIndex);
+                this.state.selectedIndexs.splice(index, 1);
                 obj = null;
             }
         }
@@ -81,8 +77,7 @@ export default class NoteList extends Component {
         let list = [];
         for (let i = 0; i < dataSource.length; i++) {
             let item = dataSource[i];
-            let checked = selectedIndexs.contains(i);
-
+            let checked = _.contains(selectedIndexs, i);
             let className = "note-item";
             if (i % 2 === 0) {
                 className = "note-item even"

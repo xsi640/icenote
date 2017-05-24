@@ -45,7 +45,6 @@ class Tags extends Component {
         for (let i = 0; i < dataSource.length; i++) {
             let item = dataSource[i];
             let checked = i === selectedIndex;
-            console.log(item._id)
             list.push(
                 <div className="tag-item" key={item._id}>
                     <input type="radio" id={item._id} name="radios" value={item._id} onChange={this.onChange}
