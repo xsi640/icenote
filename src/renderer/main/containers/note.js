@@ -15,7 +15,6 @@ class Note extends Component {
 
         this.state = {
             title: '',
-            tags: [],
             dataSource: [],
             mask: true,
         }
@@ -27,32 +26,20 @@ class Note extends Component {
         this.onSave = this.onSave.bind(this);
     }
 
-    componentDidMount() {
-        this.props.tags();
-    }
-
     componentWillReceiveProps(nextProps) {
-        this.setState({...nextProps});
-        if (typeof nextProps.deleteNum === 'number' && nextProps.deleteNum > 0) {
-            this.props.list(this._notebook._id);
-            this.refs.noteList.setSelectedIndex(0);
-        }
-        if (typeof nextProps.note !== 'undefined' && nextProps.note !== null) {
-            this._note = nextProps.note;
-            this.refs.editor.setNote(this._note);
-            this.props.list(this._notebook._id);
-            this.refs.noteList.setSelectedIndex(0);
-            this.props.onSaved();
-        }
-        if (typeof nextProps.dataSource !== 'undefined') {
-            if (nextProps.dataSource.length == 0) {
-                this.refs.editor.clear();
-                this.refs.editor.readOnly();
-            } else {
-                this.refs.editor.setNote(nextProps.dataSource[0])
-                this.refs.noteList.setSelectedIndex(0);
-            }
-        }
+        // if (typeof nextProps.deleteNum === 'number' && nextProps.deleteNum > 0) {
+        //     this.props.list(this._notebook._id);
+        // }
+        // if (typeof nextProps.note !== 'undefined' && nextProps.note !== null) {
+        //     this._note = nextProps.note;
+        //     this.refs.editor.setNote(this._note);
+        // }
+        // if (typeof nextProps.dataSource !== 'undefined') {
+        //     if (nextProps.dataSource.length == 0) {
+        //         this.refs.editor.clear();
+        //         this.refs.editor.readOnly();
+        //     }
+        // }
     }
 
     setNotebook(notebook) {
@@ -70,6 +57,8 @@ class Note extends Component {
             lastUpdateTime: new Date(),
             tags: [],
             notebookId: this._notebook._id,
+        }, () => {
+            this.props.list(this._notebook._id);
         });
     }
 
@@ -83,11 +72,14 @@ class Note extends Component {
     onSave(note) {
         this._note = note;
         this._note.lastUpdateTime = new Date();
-        this.props.save(note);
+        this.props.save(note, () => {
+            this.props.list(this._notebook._id);
+        });
     }
 
     onClickMenu(e, cmd, items) {
-        let {deleteNote} = this.props;
+        let {deleteNote, list} = this.props;
+        let notebookId = this._notebook._id;
         if (cmd === 'delete') {
             Modal.confirm({
                 title: 'delete selected notes?',
@@ -96,7 +88,9 @@ class Note extends Component {
                     let ids = [];
                     for (let item of items)
                         ids.push(item._id)
-                    deleteNote(ids);
+                    deleteNote(ids, () => {
+                        list(notebookId)
+                    });
                 },
                 onCancel() {
                 },
@@ -128,7 +122,7 @@ class Note extends Component {
                     </div>
                     <div className="list">
                         <NoteList ref="noteList" onClickMenu={this.onClickMenu}
-                                  dataSource={this.state.dataSource}
+                                  dataSource={this.props.dataSource}
                                   onSelect={this.onSelect}/>
                     </div>
                 </div>

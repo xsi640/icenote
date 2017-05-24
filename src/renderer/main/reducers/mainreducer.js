@@ -1,16 +1,15 @@
 import {ACTION_MESSAGE} from '../actions/constaction';
+import _ from 'underscore'
 
-export default function (state = {}, action) {
+export default function (state = {dataSource: []}, action) {
     switch (action.type) {
         case ACTION_MESSAGE.NOTEBOOK_LIST:
             if (typeof action.payload !== 'undefined')
-                return {...state, dataSource: action.payload, deleteNum: undefined};
+                return {...state, dataSource: action.payload}
             else if (typeof action.error !== 'undefined')
-                return {...state, error: action.error, deleteNum: undefined}
+                return {...state, error: action.error}
         case ACTION_MESSAGE.NOTEBOOK_DELETE:
-            if (typeof action.payload !== 'undefined')
-                return {...state, deleteNum: action.payload};
-            else if (typeof action.error !== 'undefined')
+          if (typeof action.error !== 'undefined')
                 return {...state, error: action.error}
             break;
         default:

@@ -1,5 +1,6 @@
 const Datastore = require('nedb')
 const log = require('electron-log');
+const _ = require('underscore')
 
 const db = new Datastore({filename: 'database/note.db', autoload: true});
 
@@ -33,7 +34,11 @@ const update = (note, callback) => {
 }
 
 const get = (id, callback) => {
-    db.findOne({_id: id}, callback);
+    if (_.isArray(id)) {
+        db.find({_id: {$in: id}}, callback);
+    } else {
+        db.findOne({_id: id}, callback);
+    }
 }
 
 const remove = (ids, callback) => {
@@ -49,7 +54,7 @@ const removeByNotebookId = (notebookId, callback) => {
 const findNotesByNotebookId = (notebookId, callback) => {
     log.info('Note findNotesByNotebookId notebookId:' + notebookId)
     // db.find({notebookId: notebookId}, {}, callback)
-    db.find({notebookId: notebookId}).sort({lastUpdateTime: -1}).exec(callback);
+    db.find({notebookId: notebookId}).sort({createTime: -1}).exec(callback);
 }
 
 const findNotesByTags = (tags, callback) => {

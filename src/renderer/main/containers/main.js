@@ -29,9 +29,6 @@ class Main extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({...nextProps});
-        if (typeof nextProps.deleteNum === 'number' && nextProps.deleteNum > 0) {
-            this.props.getNotebookList();
-        }
     }
 
     componentDidMount() {
@@ -63,7 +60,7 @@ class Main extends Component {
         let notebook = _.find(this.state.dataSource, (item)=>{
             return _.contains(keys, item._id);
         })
-        if (notebook) {
+        if (notebook != null) {
             this.refs.note.getWrappedInstance().setNotebook(notebook);
         }
     }
@@ -73,7 +70,6 @@ class Main extends Component {
     }
 
     onSaved() {
-        console.log('onSaved')
         this.refs.tags.getWrappedInstance().refresh();
     }
 

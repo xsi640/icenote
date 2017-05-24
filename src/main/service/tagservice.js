@@ -30,7 +30,8 @@ const save = (callback) => {
                 return;
             }
             TagCache = new Set(docs);
-            callback(undefined, docs);
+            if (typeof callback === 'function')
+                callback(undefined, docs);
         });
     });
 }

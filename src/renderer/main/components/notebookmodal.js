@@ -15,15 +15,16 @@ class NotebookModal extends Component {
         }
         this._save = this._save.bind(this);
         this.show = this.show.bind(this);
-        this.onClose = this.onClose.bind(this);
-        this.onChange = this.onChange.bind(this);
+        this.close = this.close.bind(this);
+        this.change = this.change.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({...nextProps});
         if (typeof nextProps.notebook !== 'undefined') {
             this._notebook = nextProps.notebook;
-            this.onClose();
+            this.props.onClose(this._notebook);
+            this.close();
         }
     }
 
@@ -54,9 +55,8 @@ class NotebookModal extends Component {
         this.props.save(notebook)
     }
 
-    onClose() {
+    close() {
         this.setState({visible: false});
-        this.props.onClose(this._notebook);
     }
 
     _validInput() {
@@ -67,7 +67,7 @@ class NotebookModal extends Component {
         return true;
     }
 
-    onChange(name, value) {
+    change(name, value) {
         this.setState({[name]: value})
     }
 
@@ -77,7 +77,7 @@ class NotebookModal extends Component {
                 <Modal title={<div
                     className="unselect">{typeof this._notebook === 'undefined' || this._notebook === null ? 'Add NoteBook' : 'Modify NoteBook'}</div>}
                        visible={this.state.visible}
-                       onOk={this._save} onCancel={this.onClose}
+                       onOk={this._save} onCancel={this.close}
                        closable={false}>
                     {
                         typeof this.state.error === 'string' && this.state.error !== '' ?
@@ -95,7 +95,7 @@ class NotebookModal extends Component {
                     </div>
                     <div>
                         <Input placeholder="Input the notebook title." value={this.state.title} onPressEnter={this._save} onChange={(e) => {
-                            this.onChange('title', e.target.value)
+                            this.change('title', e.target.value)
                         }}/>
                     </div>
                 </Modal>

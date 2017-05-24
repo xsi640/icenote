@@ -21,14 +21,24 @@ export const getNotebookList = () => {
     }
 }
 
-export const deleteNotebook = (id) => {
+export const deleteNotebookList = (id) => {
     return dispatch => {
         ipcRenderer.once(IPCMESSAGE.NOTEBOOK_DELETE, (event, args) => {
             if (typeof args.error === 'undefined') {
-                dispatch({
-                    type: ACTION_MESSAGE.NOTEBOOK_DELETE,
-                    payload: args.data,
+                ipcRenderer.once(IPCMESSAGE.NOTEBOOK_LIST, (event, args) => {
+                    if (typeof args.error === 'undefined') {
+                        dispatch({
+                            type: ACTION_MESSAGE.NOTEBOOK_LIST,
+                            payload: args.data,
+                        })
+                    } else {
+                        dispatch({
+                            type: ACTION_MESSAGE.NOTEBOOK_LIST,
+                            error: args.error,
+                        })
+                    }
                 })
+                ipcRenderer.send(IPCMESSAGE.NOTEBOOK_LIST)
             } else {
                 dispatch({
                     type: ACTION_MESSAGE.NOTEBOOK_DELETE,

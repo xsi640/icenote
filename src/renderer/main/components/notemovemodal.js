@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Modal, TreeSelect, Alert} from 'antd'
+const TreeNode = TreeSelect.TreeNode;
 import * as NoteMoveModalActions from '../actions/notemovemodalactions'
 
 class NoteMoveModal extends Component {
@@ -36,7 +37,7 @@ class NoteMoveModal extends Component {
         if (this._note.notebookId === this.state.notebookId) {
             this.onClose();
         } else {
-            this.props.save(this._note._id, this.state.notebookId);
+            this.props.save(this._note, this.state.notebookId);
         }
     }
 
@@ -47,6 +48,20 @@ class NoteMoveModal extends Component {
 
     onChange(value) {
         this.setState({note: value})
+    }
+
+    renderTreeNode(parentId) {
+        let {dataSource} = this.props;
+        if (typeof dataSource === 'undefined')
+            return;
+        if (dataSource.length === 0) return;
+        let root = [];
+        dataSource.map(item => {
+            if (item.parentId === parentId) {
+                root.push(<TreeNode value={item._id} title={item.title} key={item._id}/>)
+            }
+        })
+        return root;
     }
 
     render() {
@@ -65,7 +80,7 @@ class NoteMoveModal extends Component {
                             /> : null
                     }
                     <div className="unselect">
-                        The note:{this._note.title}
+                        The note:{this._note ? this._note.title : null}
                     </div>
                     <div className="unselect">
                         Move to:
@@ -80,6 +95,9 @@ class NoteMoveModal extends Component {
                                 treeDefaultExpandAll
                                 onChange={this.onChange}
                             >
+                                {
+                                    this.renderTreeNode(undefined)
+                                }
                             </TreeSelect>
                         </div>
                     </div>
@@ -88,7 +106,7 @@ class NoteMoveModal extends Component {
     }
 }
 
-NotebookModal.PropTypes = {
+NoteMoveModal.PropTypes = {
     onClose: PropTypes.func,
     show: PropTypes.func,
     dataSource: PropTypes.array,
