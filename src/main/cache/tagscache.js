@@ -10,55 +10,40 @@ class TagCache {
         this._data = this._store.Data;
     }
 
-    insertOrUpdate(tag) {
-        if (typeof tag._id === 'undefined') {
-            this.insert(tag);
+    add(tag) {
+        if (tag.length === 0)
+            return;
+
+        let currentTag = _.find(this._data, (item) => {
+            return item.text === tag;
+        })
+
+        if (_.isUndefined(currentTag)) {
+            let result = {
+                _id: guid.create().value,
+                text: tag,
+                count: 1
+            }
+            this._data.push(result);
+            return result;
         } else {
-            let t = this.get(tag._id);
-            if (typeof t === 'undefined') {
-                this.insert(tag)
+            currentTag.count = currentTag.count + 1;
+            return currentTag;
+        }
+    }
+
+    remove(tag) {
+        let index = _.findIndex(this._data, (item) => {
+            return item.text === tag;
+        })
+        if (index !== -1) {
+            let currentTag = this._data[index];
+            if (currentTag.count <= 1) {
+                this._data.splice(index, 1);
             } else {
-                this.update(tag)
+                currentTag.count -= 1;
             }
         }
-    }
-
-    insert(tag) {
-        if (typeof tag._id === 'undefined')
-            tag._id = guid.create().value;
-        this._data.push(tag);
-    }
-
-    update(notebook) {
-        this.delete(notebook._id);
-        this._data.push(notebook);
-    }
-
-    constains(tagId) {
-        return this.get(tagId) !== undefined;
-    }
-
-    delete(tagId) {
-        let index = this.findIndex(tagId);
-        if (index !== -1) {
-            this._data.splice(index, 1);
-        }
-    }
-
-    findAll() {
-        return this._data.sort(utils.compare('createTime'));
-    }
-
-    findIndex(tagId) {
-        return _.findIndex(this._data, (item) => {
-            return item._id === tagId;
-        })
-    }
-
-    get(tagId) {
-        return _.find(this._data, (item) => {
-            return item._id === tagId;
-        });
     }
 }
 

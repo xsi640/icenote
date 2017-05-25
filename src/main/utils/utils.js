@@ -34,9 +34,20 @@ const compare = (name) => {
     }
 }
 
+const loop = (min, max, func) => {
+    new Promise((resolve, reject) => {
+        func(min, resolve, reject);
+    }).then(() => {
+        if (min < max) {
+            loop(min + 1, max, func)
+        }
+    })
+}
+
 module.exports = {
     getUserDataPath,
     save,
     read,
     compare,
+    loop,
 }

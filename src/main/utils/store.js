@@ -19,7 +19,7 @@ class Store {
         try {
             this._data = utils.read(this._path);
         } catch (error) {
-            this._data = {};
+            this._data = [];
         }
     }
 }
