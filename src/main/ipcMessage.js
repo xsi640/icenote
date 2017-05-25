@@ -36,16 +36,6 @@ const regIPCMessage = () => {
         NotebookService.remove(args, callback)
     })
 
-    _reg(IPCMESSAGE.TAGS_SAVE, (event, args, callback) => {
-        TagsService.addTags(args)
-        TagsService.save(callback)
-    })
-
-    _reg(IPCMESSAGE.TAGS_DELETE, (event, args, callback) => {
-        TagsService.deleteTags(args)
-        TagsService.save(callback)
-    })
-
     _reg(IPCMESSAGE.TAGS_LIST, (event, args, callback) => {
         TagsService.findAll(callback)
     })

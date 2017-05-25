@@ -3,6 +3,30 @@ const path = require('path')
 const url = require('url')
 const fs = require('fs')
 const regIPCMessage = require('./ipcMessage')
+const guid = require('./utils/guid')
+
+function loop(min, max) {
+    new Promise((resolve, reject) => {
+        setTimeout(() => {
+            try {
+                console.log(min);
+                if (min > 5) {
+                    throw new Error('xxx' + min);
+                }
+            } catch (e) {
+                reject(e);
+            }
+            resolve();
+        }, 500);
+    }).then(() => {
+        if (min < max) {
+            loop(min + 1, max)
+        }
+    }).catch(err => {
+        throw err
+    })
+}
+
 
 let mainWindow, loadingScreen, windowParams = {
     width: 1100,
