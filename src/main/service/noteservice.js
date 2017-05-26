@@ -52,7 +52,7 @@ const remove = (ids, callback) => {
                     callback(err, undefined);
                 } else {
                     for (let doc of docs) {
-                        TagService.deleteTags(doc.tags);
+                        TagService.deleteTags(utils.extract(doc.tags, 'text'));
                     }
                     callback(err, num);
                 }
