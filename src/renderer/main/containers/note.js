@@ -95,6 +95,9 @@ class Note extends Component {
     }
 
     handleNewNote() {
+        if (this._notebook === null)
+            return;
+
         this.props.save({
             title: '',
             content: '',
@@ -121,7 +124,7 @@ class Note extends Component {
     setNotebook(notebook) {
         this._tag = null;
         this._notebook = notebook;
-        this.setState({title: this._notebook.title, readOnly: false})
+        this.setState({title: 'title: ' + this._notebook.title, readOnly: false})
         this.load();
         this.refs.noteList.setSelectedIndex(0);
     }
@@ -129,7 +132,7 @@ class Note extends Component {
     setTag(tag) {
         this._tag = tag;
         this._notebook = null;
-        this.setState({title: tag, readOnly: false})
+        this.setState({title: 'tag: ' + tag, readOnly: false})
         this.load();
         this.refs.noteList.setSelectedIndex(0);
     }
