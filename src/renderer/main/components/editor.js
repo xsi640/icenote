@@ -89,6 +89,7 @@ export default class Editor extends Component {
             title: '',
             content: '',
             tags: [],
+            readOnly: true,
         })
     }
 

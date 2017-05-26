@@ -25,6 +25,7 @@ class Main extends Component {
         this.handleSelectNotebook = this.handleSelectNotebook.bind(this);
         this.handleNotebookSaved = this.handleNotebookSaved.bind(this);
         this.handleNoteSaved = this.handleNoteSaved.bind(this);
+        this.handleSelectTag = this.handleSelectTag.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -56,13 +57,18 @@ class Main extends Component {
         });
     }
 
-    handleSelectNotebook(keys, sender) {
-        let notebook = _.find(this.state.dataSource, (item)=>{
-            return _.contains(keys, item._id);
-        })
+    handleSelectNotebook(keys, notebook) {
         if (notebook != null) {
             this.refs.note.getWrappedInstance().setNotebook(notebook);
         }
+        this.refs.tags.getWrappedInstance().setSelectedIndex(-1);
+    }
+
+    handleSelectTag(e, tag) {
+        if (tag != null) {
+            this.refs.note.getWrappedInstance().setTag(tag.text);
+        }
+        this.refs.noteTreeView.clearSelected();
     }
 
     handleNotebookSaved() {
@@ -86,7 +92,7 @@ class Main extends Component {
                                 }}>Add</Button>
                             </div>
                             <div className="notebook-root">
-                                <NoteTreeView dataSource={this.state.dataSource}
+                                <NoteTreeView ref="noteTreeView" dataSource={this.state.dataSource}
                                               onAddNotebook={this.handleAddNotebook}
                                               onModifyNotebook={this.handleModifyNotebook}
                                               onDeleteNotebook={this.handleDeleteNotebook}
@@ -95,7 +101,7 @@ class Main extends Component {
                         </div>
                         <div className="tags">
                             <div className="title unselect">Tags</div>
-                            <Tags ref="tags"/>
+                            <Tags ref="tags" onSelected={this.handleSelectTag}/>
                         </div>
                     </SplitPane>
                     <div className="content">

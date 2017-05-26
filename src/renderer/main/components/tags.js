@@ -13,19 +13,23 @@ class Tags extends Component {
         }
         this.handleChange = this.handleChange.bind(this);
         this.refresh = this.refresh.bind(this);
+        this.setSelectedIndex = this.setSelectedIndex.bind(this);
     }
 
     componentDidMount() {
         this.props.list();
     }
 
+    setSelectedIndex(index) {
+        this.setState({selectedIndex: index})
+    }
 
     handleChange(e) {
         let obj = null;
         let {dataSource} = this.props;
         for (let i = 0; i < dataSource.length; i++) {
             if (dataSource[i]._id === e.target.value) {
-                this.state.selectedIndex = i;
+                this.setState({selectedIndex: i})
                 obj = dataSource[i];
                 break;
             }
@@ -41,18 +45,20 @@ class Tags extends Component {
         let {selectedIndex} = this.state;
         let {dataSource} = this.props;
         let list = [];
-        for (let i = 0; i < dataSource.length; i++) {
-            let item = dataSource[i];
-            let checked = i === selectedIndex;
-            list.push(
-                <div className="tag-item" key={item._id}>
-                    <input type="radio" id={item._id} name="radios" value={item._id} onChange={this.handleChange}
-                           checked={checked}></input>
-                    <label htmlFor={item._id}>
-                        <div className="name">{item.text} ({item.count})</div>
-                    </label>
-                </div>
-            )
+        if (!_.isUndefined(dataSource)) {
+            for (let i = 0; i < dataSource.length; i++) {
+                let item = dataSource[i];
+                let checked = i === selectedIndex;
+                list.push(
+                    <div className="tag-item" key={item._id}>
+                        <input type="radio" id={item._id} name="radios" value={item._id} onChange={this.handleChange}
+                               checked={checked}></input>
+                        <label htmlFor={item._id}>
+                            <div className="name">{item.text} ({item.count})</div>
+                        </label>
+                    </div>
+                )
+            }
         }
 
         return (
@@ -63,11 +69,12 @@ class Tags extends Component {
     }
 }
 
-Tags.propTypes = {
+Tags.PropTypes = {
     onSelected: PropTypes.func,
+    setSelectedIndex: PropTypes.func,
 }
 
-Tags.defaultProps = {
+Tags.DefaultProps = {
     dataSource: []
 }
 

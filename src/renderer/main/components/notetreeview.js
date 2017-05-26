@@ -3,15 +3,22 @@ import PropTypes from 'prop-types'
 import {Tree} from 'antd'
 import Notebook from './notebook'
 const TreeNode = Tree.TreeNode
+import _ from 'underscore'
 
 export default class NoteTreeView extends Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            selectedKeys: []
+        }
+
         this.handleSelectNotebook = this.handleSelectNotebook.bind(this);
         this.handleAddNotebook = this.handleAddNotebook.bind(this);
         this.handleModifyNotebook = this.handleModifyNotebook.bind(this);
         this.handleDeleteNotebook = this.handleDeleteNotebook.bind(this);
+        this.clearSelected = this.clearSelected.bind(this);
     }
 
     handleAddNotebook(e, data) {
@@ -26,8 +33,20 @@ export default class NoteTreeView extends Component {
         this.props.onDeleteNotebook(e, data);
     }
 
-    handleSelectNotebook(key, data) {
-        this.props.onSelectNotebook(key, data);
+    handleSelectNotebook(keys, data) {
+        if (this.state.selectedKeys.length === 1 &&
+            this.state.selectedKeys[0] === data.node.props.eventKey) {
+
+        } else {
+            this.props.onSelectNotebook(keys, _.find(this.props.dataSource, (item) => {
+                return item._id === keys[0];
+            }));
+            this.setState({selectedKeys: [keys[0]]})
+        }
+    }
+
+    clearSelected() {
+        this.setState({selectedKeys: []})
     }
 
     renderTreeNode(parentId) {
@@ -52,12 +71,14 @@ export default class NoteTreeView extends Component {
                         break;
                     }
                 }
-                if (!isLeaf)
-                    root.push(<TreeNode key={item._id} title={header} data={item}
+                if (!isLeaf) {
+                    root.push(<TreeNode key={item._id} title={header}
                                         isLeaf={isLeaf}>{this.renderTreeNode(item._id)}</TreeNode>);
-                else
-                    root.push(<TreeNode key={item._id} title={header} data={item}
+                }
+                else {
+                    root.push(<TreeNode key={item._id} title={header}
                                         isLeaf={isLeaf}></TreeNode>);
+                }
             }
         })
         return root;
@@ -66,7 +87,8 @@ export default class NoteTreeView extends Component {
     render() {
         return (<div>
             {
-                <Tree onSelect={this.handleSelectNotebook} multiple={false} defaultExpandAll={true}>
+                <Tree onSelect={this.handleSelectNotebook} multiple={false} defaultExpandAll={true}
+                      selectedKeys={this.state.selectedKeys}>
                     {
                         this.renderTreeNode(undefined)
                     }

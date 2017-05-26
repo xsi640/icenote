@@ -6,7 +6,7 @@ export const save = (content, callback) => {
     return dispatch => {
         ipcRenderer.once(IPCMESSAGE.NOTE_SAVE, (event, args) => {
             if (typeof args.error === 'undefined') {
-                callback();
+                callback(args.data);
             } else {
                 dispatch({
                     type: ACTION_MESSAGE.NOTE_SAVE,
@@ -34,6 +34,25 @@ export const list = (notebookId) => {
             }
         })
         ipcRenderer.send(IPCMESSAGE.NOTE_LIST, {notebookId: notebookId})
+    }
+}
+
+export const listByTag = (tag) => {
+    return dispatch => {
+        ipcRenderer.once(IPCMESSAGE.NOTE_LIST, (event, args) => {
+            if (typeof args.error === 'undefined') {
+                dispatch({
+                    type: ACTION_MESSAGE.NOTE_LIST,
+                    payload: args.data,
+                })
+            } else {
+                dispatch({
+                    type: ACTION_MESSAGE.NOTE_LIST,
+                    error: args.error,
+                })
+            }
+        })
+        ipcRenderer.send(IPCMESSAGE.NOTE_LIST, {tags: tag})
     }
 }
 

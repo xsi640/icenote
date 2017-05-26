@@ -20,7 +20,16 @@ export default class NoteList extends Component {
     }
 
     setSelectedIndex(index) {
-        this.setState({selectedIndexs: [index]});
+        this._lastSelectedIndex = index;
+        if (index === -1) {
+            this.setState({selectedIndexs: []});
+        } else {
+            this.setState({selectedIndexs: [index]});
+        }
+    }
+
+    get lastSelectedIndex() {
+        return this._lastSelectedIndex;
     }
 
     onSelect(e, id) {

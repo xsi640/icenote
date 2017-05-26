@@ -17,7 +17,7 @@ class Note extends Component {
 
         this.state = {
             title: '',
-            mask: true,
+            readOnly: true,
         }
 
         this.setNotebook = this.setNotebook.bind(this);
@@ -29,6 +29,17 @@ class Note extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        if (nextProps.dataSource.length === 0) {
+            this.refs.editor.clear();
+            this.refs.noteList.setSelectedIndex(-1);
+        } else {
+            let note = nextProps.dataSource[this.refs.noteList.lastSelectedIndex];
+            if (typeof note === 'undefined') {
+                note = nextProps.dataSource[0]
+                this.refs.noteList.setSelectedIndex(0);
+            }
+            this.refs.editor.setNote(note);
+        }
     }
 
     handleSelectChanged(e, note) {
@@ -42,13 +53,13 @@ class Note extends Component {
         this._note = note;
         this._note.lastUpdateTime = new Date();
         this.props.save(note, () => {
-            this.props.list(this._notebook._id);
+            this.load();
         });
     }
 
     handleClickNoteMenu(e, cmd, data) {
-        let {deleteNote, list} = this.props;
-        let notebookId = this._notebook._id;
+        let {deleteNote, list, listByTag} = this.props;
+        let {_notebook, _tag} = this;
         if (cmd === 'delete') {
             let title = '';
             if (data.selectedItems.length > 1) {
@@ -64,7 +75,11 @@ class Note extends Component {
                     for (let item of data.selectedItems)
                         ids.push(item._id)
                     deleteNote(ids, () => {
-                        list(notebookId)
+                        if (_notebook != null) {
+                            list(_notebook._id)
+                        } else if (_tag != null) {
+                            listByTag(_tag);
+                        }
                     });
                 },
                 onCancel() {
@@ -76,7 +91,7 @@ class Note extends Component {
     }
 
     handleMoveModalSaved() {
-        this.props.list(this._notebook._id);
+        this.load();
     }
 
     handleNewNote() {
@@ -88,22 +103,42 @@ class Note extends Component {
             lastUpdateTime: new Date(),
             tags: [],
             notebookId: this._notebook._id,
-        }, () => {
-            this.props.list(this._notebook._id);
+        }, (newNote) => {
+            this.load();
+            this.refs.noteList.setSelectedIndex(0);
+            this.refs.editor.setNote(newNote);
         });
     }
 
+    load() {
+        if (this._notebook != null) {
+            this.props.list(this._notebook._id)
+        } else if (this._tag != null) {
+            this.props.listByTag(this._tag);
+        }
+    }
+
     setNotebook(notebook) {
+        this._tag = null;
         this._notebook = notebook;
-        this.setState({title: this._notebook.title, mask: false})
-        this.props.list(this._notebook._id)
+        this.setState({title: this._notebook.title, readOnly: false})
+        this.load();
+        this.refs.noteList.setSelectedIndex(0);
+    }
+
+    setTag(tag) {
+        this._tag = tag;
+        this._notebook = null;
+        this.setState({title: tag, readOnly: false})
+        this.load();
+        this.refs.noteList.setSelectedIndex(0);
     }
 
     render() {
         return (
             <SplitPane split="vertical" minSize={270} defaultSize={300} maxSize={-300}>
                 <div className="nb_list">
-                    {this.state.mask ? <div className="mask"></div> : null}
+                    {this.state.readOnly ? <div className="mask"></div> : null}
                     <div className="top">
                         <div className="nb_left">
                             <Button shape="circle" icon="file-add"></Button>

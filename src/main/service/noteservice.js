@@ -1,6 +1,7 @@
 const NoteDB = require('../db/notedb')
 const TagService = require('./tagservice')
 const utils = require('../utils/utils')
+const _ = require('underscore')
 
 const insertOrUpdate = (note, callback) => {
     if (typeof note._id === 'undefined') {
@@ -80,6 +81,9 @@ const findNotesByNotebookId = (notebookId, callback) => {
 }
 
 const findNotesByTags = (tags, callback) => {
+    if (!_.isArray(tags)) {
+        tags = [tags];
+    }
     NoteDB.findNotesByTags(tags, callback)
 }
 
