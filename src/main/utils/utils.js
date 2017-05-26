@@ -38,13 +38,17 @@ const extract = (array, propName) => {
     return result;
 }
 
-const loop = (min, max, func) => {
+const loop = (min, max, func, callback, reject) => {
     return new Promise((resolve, reject) => {
         func(min, resolve, reject);
-    }).then(() => {
+    }).then((result) => {
         if (min < max) {
-            loop(min + 1, max, func)
+            loop(min + 1, max, func, callback, reject)
+        } else {
+            callback(result)
         }
+    }).catch((err) => {
+        reject(err)
     })
 }
 

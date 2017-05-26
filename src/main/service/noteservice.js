@@ -89,7 +89,7 @@ const move = (ids, notebookId, callback) => {
             callback(err, undefined);
         } else {
             let size = 0;
-            utils.loop(0, docs.length, (index, resolve, reject) => {
+            utils.loop(0, docs.length - 1, (index, resolve, reject) => {
                 let doc = docs[index];
                 doc.notebookId = notebookId;
                 NoteDB.update(doc, (err, num) => {
@@ -100,9 +100,9 @@ const move = (ids, notebookId, callback) => {
                         resolve();
                     }
                 })
-            }).then(() => {
+            }, () => {
                 callback(undefined, size);
-            }).catch((err) => {
+            }, (err) => {
                 callback(err, undefined);
             })
         }
