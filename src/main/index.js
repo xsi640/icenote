@@ -3,10 +3,6 @@ const path = require('path')
 const url = require('url')
 const fs = require('fs')
 const regIPCMessage = require('./ipcMessage')
-const guid = require('./utils/guid')
-
-
-
 
 let mainWindow, loadingScreen, windowParams = {
     width: 1100,

@@ -1,37 +1,41 @@
 const electron = require('electron')
 const path = require('path')
 const fs = require('fs')
+const _ = require('underscore')
 
 const getUserDataPath = () => {
     return (electron.app || electron.remote.app).getPath('userData');
 }
 
 const save = (path, jsonObject) => {
-    fs.writeFileSync(path, jsonObject);
+    fs.writeFileSync(path, JSON.stringify(jsonObject));
 }
 
 const read = (path) => {
-    return JSON.stringify(fs.readFileSync(path));
+    return JSON.parse(fs.readFileSync(path));
 }
 
-const compare = (name) => {
-    return function (o, p) {
-        var a, b;
-        if (typeof o === "object" && typeof p === "object" && o && p) {
-            a = o[name];
-            b = p[name];
-            if (a === b) {
-                return 0;
-            }
-            if (typeof a === typeof b) {
-                return a < b ? -1 : 1;
-            }
-            return typeof a < typeof b ? -1 : 1;
-        }
-        else {
-            throw ("error");
+const convert = (array, predicate) => {
+    let result = [];
+    if (_.isArray(array)) {
+        for (let item of array) {
+            result.push(predicate(item));
         }
     }
+    return result;
+}
+
+const extract = (array, propName) => {
+    let result = [];
+    if (_.isArray(array)) {
+        for (let item of array) {
+            let v = item[propName];
+            if (!_.isUndefined(v)) {
+                result.push(v);
+            }
+        }
+    }
+    return result;
 }
 
 const loop = (min, max, func) => {
@@ -48,6 +52,7 @@ module.exports = {
     getUserDataPath,
     save,
     read,
-    compare,
+    convert,
+    extract,
     loop,
 }

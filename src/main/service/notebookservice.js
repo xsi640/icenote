@@ -1,25 +1,25 @@
-const NotebookCache = require('../cache/notebookcache')
+const NoteBookCache = require('../cache/notebookcache')
 const NoteService = require('./noteservice')
 const utils = require('../utils/utils')
 const _ = require('underscore')
 
-const NotebookCache = new NotebookCache();
+const _NotebookCache = new NoteBookCache();
 
 const insertOrUpdate = (notebook, callback) => {
-    NotebookCache.insertOrUpdate(notebook);
+    _NotebookCache.insertOrUpdate(notebook);
     callback(undefined, notebook);
 }
 
 const remove = (ids, callback) => {
     if (_.isArray(ids)) {
         utils.loop(0, ids.length, (index, resolve, reject) => {
-            let nb = NotebookCache.get(ids[index]);
+            let nb = _NotebookCache.get(ids[index]);
             if (!_.isUndefined(nb)) {
                 NoteService.removeByNotebookId(nb._id, (err, num) => {
                     if (err) {
                         reject(err);
                     } else {
-                        NotebookCache.delete(ids);
+                        _NotebookCache.delete(ids);
                         resolve();
                     }
                 })
@@ -32,13 +32,13 @@ const remove = (ids, callback) => {
             callback(err, undefined);
         });
     } else {
-        let nb = NotebookCache.get(ids);
+        let nb = _NotebookCache.get(ids);
         if (!_.isUndefined(nb)) {
             NoteService.removeByNotebookId(nb._id, (err, num) => {
                 if (err) {
                     callback(err, undefined);
                 } else {
-                    NotebookCache.delete(ids);
+                    _NotebookCache.delete(ids);
                     callback(undefined, err);
                 }
             })
@@ -47,7 +47,7 @@ const remove = (ids, callback) => {
 }
 
 const findAll = (callback) => {
-    callback(undefined, NotebookCache.findAll());
+    callback(undefined, _NotebookCache.findAll());
 }
 
 module.exports = {

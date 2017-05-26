@@ -1,5 +1,6 @@
 const NoteDB = require('../db/notedb')
 const TagService = require('./tagservice')
+const utils = require('../utils/utils')
 
 const insertOrUpdate = (note, callback) => {
     if (typeof note._id === 'undefined') {
@@ -7,7 +8,7 @@ const insertOrUpdate = (note, callback) => {
             if (err) {
                 callback(err, undefined);
             } else {
-                TagService.addTags(newDoc.tags);
+                TagService.addTags(utils.extract(newDoc.tags, 'text'));
                 callback(err, newDoc);
             }
         });
@@ -21,18 +22,18 @@ const insertOrUpdate = (note, callback) => {
                         if (err) {
                             callback(err, undefined);
                         } else {
-                            TagService.addTags(note.tags);
+                            TagService.addTags(utils.extract(note.tags, 'text'));
                             callback(err, newDoc);
                         }
                     });
                 } else {
-                    NoteDB.update(note, (err, newDoc) => {
+                    NoteDB.update(note, (err, num) => {
                         if (err) {
                             callback(err, undefined);
                         } else {
-                            TagService.deleteTags(oldDoc.tags);
-                            TagService.addTags(newDoc.tags);
-                            callback(err, newDoc);
+                            TagService.deleteTags(utils.extract(oldDoc.tags, 'text'));
+                            TagService.addTags(utils.extract(note.tags, 'text'));
+                            callback(err, note);
                         }
                     });
                 }
@@ -69,7 +70,7 @@ const removeByNotebookId = (notebookId, callback) => {
             for (let doc of docs) {
                 ids.push(doc._id);
             }
-            this.remove(ids, callback);
+            remove(ids, callback);
         }
     })
 }

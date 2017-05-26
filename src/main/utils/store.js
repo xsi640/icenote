@@ -4,6 +4,7 @@ const utils = require('./utils')
 class Store {
     constructor(fileName) {
         this._path = path.join(utils.getUserDataPath(), fileName);
+        console.log(this._path);
         this.load();
     }
 

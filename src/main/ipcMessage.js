@@ -22,7 +22,7 @@ const regIPCMessage = () => {
                 event.sender.send(msg, result)
             })
         })
-    };
+    }
 
     _reg(IPCMESSAGE.NOTEBOOK_LIST, (event, args, callback) => {
         NotebookService.findAll(callback)

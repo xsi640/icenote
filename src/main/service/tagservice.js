@@ -1,29 +1,34 @@
 const TagsCache = require('../cache/tagscache')
 const _ = require('underscore')
 
-const TagsCache = new TagsCache();
+const _TagsCache = new TagsCache();
 
 const findAll = (callback) => {
-    callback(undefined, TagsCache.findAll())
+    callback(undefined, _TagsCache.findAll())
 }
 
 const addTags = (tags) => {
+    if (_.isUndefined(tags))
+        return;
     if (_.isArray(tags)) {
         for (let tag of tags) {
-            TagsCache.add(tag);
+            console.log(tag);
+            _TagsCache.add(tag);
         }
     } else {
-        TagsCache.add(tags);
+        _TagsCache.add(tags);
     }
 }
 
 const deleteTags = (tags) => {
+    if (_.isUndefined(tags))
+        return;
     if (_.isArray(tags)) {
         for (let tag of tags) {
-            TagsCache.remove(tag);
+            _TagsCache.remove(tag);
         }
     } else {
-        TagsCache.remove(tags);
+        _TagsCache.remove(tags);
     }
 }
 
