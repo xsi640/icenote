@@ -15,7 +15,7 @@ export default class NoteList extends Component {
 
         this._lastSelectedIndex = -1;
         this.onSelect = this.onSelect.bind(this);
-        this.onClickMenu = this.onClickMenu.bind(this);
+        this.handleClickMenu = this.handleClickMenu.bind(this);
         this.setSelectedIndex = this.setSelectedIndex.bind(this);
     }
 
@@ -63,12 +63,12 @@ export default class NoteList extends Component {
         e.preventDefault();
     }
 
-    onClickMenu(e, cmd) {
+    handleClickMenu(e, cmd) {
         let data = [];
         for (let index of this.state.selectedIndexs) {
             data.push(this.props.dataSource[index]);
         }
-        this.props.handleClickNoteMenu(e, cmd, data);
+        this.props.onClickMenu(e, cmd, data);
     }
 
     render() {
@@ -98,14 +98,14 @@ export default class NoteList extends Component {
                     </ContextMenuTrigger>
                     <ContextMenu id={item._id}>
                         <MenuItem data={item} onClick={(e) => {
-                            this.onClickMenu(e, 'move')
+                            this.handleClickMenu(e, 'move')
                         }} onMouseMove={e => {
                         }} onMouseLeave={e => {
                         }}>
                             Move to Notebook
                         </MenuItem>
                         <MenuItem data={item} onClick={(e) => {
-                            this.onClickMenu(e, 'delete')
+                            this.handleClickMenu(e, 'delete')
                         }} onMouseMove={e => {
                         }} onMouseLeave={e => {
                         }}>
@@ -115,14 +115,14 @@ export default class NoteList extends Component {
                         }} onMouseLeave={e => {
                         }}/>
                         <MenuItem data={item} onClick={(e) => {
-                            this.onClickMenu(e, 'export_pdf')
+                            this.handleClickMenu(e, 'export_pdf')
                         }} onMouseMove={e => {
                         }} onMouseLeave={e => {
                         }}>
                             Export to pdf
                         </MenuItem>
                         <MenuItem data={item} onClick={(e) => {
-                            this.onClickMenu(e, 'export_html')
+                            this.handleClickMenu(e, 'export_html')
                         }} onMouseMove={e => {
                         }} onMouseLeave={e => {
                         }}>

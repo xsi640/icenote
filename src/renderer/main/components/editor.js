@@ -20,6 +20,7 @@ export default class Editor extends Component {
             content: '',
             title: '',
             preview: false,
+            readOnly: true,
         };
         this.handleDelete = this.handleDelete.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
@@ -63,7 +64,7 @@ export default class Editor extends Component {
     }
 
     handleSave() {
-        if(_.isUndefined(this._note))
+        if (_.isUndefined(this._note))
             return;
 
         this._note.title = this.state.title;
@@ -78,7 +79,8 @@ export default class Editor extends Component {
         this.setState({
             title: this._note.title,
             content: this._note.content,
-            tags: this._note.tags
+            tags: this._note.tags,
+            readOnly: false,
         })
     }
 
@@ -128,19 +130,14 @@ export default class Editor extends Component {
                         <ReactMarkdown escapeHtml={false} skipHtml={false} source={content}/>
                     </div>
                 </div>
-                {this.props.readOnly ? <div className="mask"></div> : null}
+                {this.state.readOnly ? <div className="mask"></div> : null}
             </div>
         )
     }
 }
 
 Editor.PropTypes = {
-    readOnly: PropTypes.bool,
     setNote: PropTypes.func,
     clear: PropTypes.func,
     onSave: PropTypes.func,
-}
-
-Editor.DefaultProps = {
-    readOnly: false
 }

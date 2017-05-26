@@ -92,7 +92,8 @@ class NoteMoveModal extends Component {
                             /> : null
                     }
                     <div className="unselect">
-                        The note:{this._note ? this._note.title : null}
+                        The
+                        note:{typeof this._note !== 'undefined' && typeof this.note.title !== 'undefined' && this.note.title === '' ? this.note.title : 'Untitled'}
                     </div>
                     <div className="unselect">
                         Move to:
