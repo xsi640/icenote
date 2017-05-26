@@ -20,27 +20,15 @@ export default class Editor extends Component {
             content: '',
             title: '',
             preview: false,
-            mask: true,
         };
         this.handleDelete = this.handleDelete.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.handleDrag = this.handleDrag.bind(this);
-        this.onSave = this.onSave.bind(this);
-        this.onChange = this.onChange.bind(this);
-        this.changePreviewState = this.changePreviewState.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+
         this.setNote = this.setNote.bind(this);
         this.clear = this.clear.bind(this);
-        this.readOnly = this.readOnly.bind(this);
-    }
-
-    setNote(note) {
-        this._note = note;
-        this.setState({
-            title: this._note.title,
-            content: this._note.content,
-            tags: this._note.tags,
-            mask: false,
-        })
     }
 
     handleDelete(i) {
@@ -70,32 +58,36 @@ export default class Editor extends Component {
         this.setState({tags: tags});
     }
 
+    handleChange(name, value) {
+        this.setState({[name]: value})
+    }
+
+    handleSave() {
+        if(_.isUndefined(this._note))
+            return;
+
+        this._note.title = this.state.title;
+        this._note.content = this.state.content;
+        this._note.tags = this.state.tags;
+
+        this.props.onSave(this._note);
+    }
+
+    setNote(note) {
+        this._note = note;
+        this.setState({
+            title: this._note.title,
+            content: this._note.content,
+            tags: this._note.tags
+        })
+    }
+
     clear() {
         this.setState({
             title: '',
             content: '',
             tags: [],
         })
-    }
-
-    readOnly() {
-        this.setState({mask: true})
-    }
-
-    changePreviewState() {
-        this.setState({preview: !this.state.preview});
-    }
-
-    onChange(name, value) {
-        this.setState({[name]: value})
-    }
-
-    onSave() {
-        this._note.title = this.state.title;
-        this._note.content = this.state.content;
-        this._note.tags = this.state.tags;
-
-        this.props.onSave(this._note);
     }
 
     render() {
@@ -109,38 +101,46 @@ export default class Editor extends Component {
             <div className="editor-root">
                 <div className="title">
                     <Input className="in-title" placeholder="title" value={title} onChange={e => {
-                        this.onChange('title', e.target.value)
-                    }} onblur={this.onSave}/>
+                        this.handleChange('title', e.target.value)
+                    }} onBlur={this.handleSave}/>
                 </div>
                 <div className="tags">
                     <ReactTags tags={tags}
                                suggestions={suggestions}
                                handleDelete={this.handleDelete}
                                handleAddition={this.handleAddition}
-                               handleDrag={this.handleDrag} handleInputBlur={this.onSave}/>
+                               handleDrag={this.handleDrag} handleInputBlur={this.handleSave}/>
                 </div>
                 <div className="toolbar">
-                     {/*预览、分屏阅读；加粗、倾斜、删除线；标题、引用、code；项目列表，编号列表，checkbox；链接、分割线*/}
-                    <Button icon="eye-o" shape="circle" onClick={this.changePreviewState}/>
+                    {/*预览、分屏阅读；加粗、倾斜、删除线；标题、引用、code；项目列表，编号列表，checkbox；链接、分割线*/}
+                    <Button icon="eye-o" shape="circle" onClick={(e) => {
+                        this.handleChange('preview', !this.state.preview)
+                    }}/>
                 </div>
                 <div className="editor">
                     <div style={{display: this.state.preview ? 'none' : 'block'}}>
-                        <CodeMirror ref="codeMirror" value={content} options={options} onFocusChange={this.onSave}
+                        <CodeMirror ref="codeMirror" value={content} options={options} onFocusChange={this.handleSave}
                                     onChange={e => {
-                                        this.onChange('content', e)
+                                        this.handleChange('content', e)
                                     }}/>
                     </div>
                     <div className="md" style={{display: this.state.preview ? 'block' : 'none'}}>
                         <ReactMarkdown escapeHtml={false} skipHtml={false} source={content}/>
                     </div>
                 </div>
-                {this.state.mask ? <div className="mask"></div> : null}
+                {this.props.readOnly ? <div className="mask"></div> : null}
             </div>
         )
     }
 }
 
 Editor.PropTypes = {
-    setContent: PropTypes.func,
+    readOnly: PropTypes.bool,
+    setNote: PropTypes.func,
+    clear: PropTypes.func,
     onSave: PropTypes.func,
+}
+
+Editor.DefaultProps = {
+    readOnly: false
 }

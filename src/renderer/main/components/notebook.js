@@ -7,20 +7,20 @@ export default class Notebook extends Component {
 
     constructor(props) {
         super(props);
-        this.onAddNotebook = this.onAddNotebook.bind(this)
-        this.onModifyNotebook = this.onModifyNotebook.bind(this)
-        this.onDeleteNotebook = this.onDeleteNotebook.bind(this)
+        this.handleAddNotebook = this.handleAddNotebook.bind(this)
+        this.handleModifyNotebook = this.handleModifyNotebook.bind(this)
+        this.handleDeleteNotebook = this.handleDeleteNotebook.bind(this)
     }
 
-    onAddNotebook(e) {
+    handleAddNotebook(e) {
         this.props.onAddNotebook(e, this.props.data)
     }
 
-    onModifyNotebook(e) {
+    handleModifyNotebook(e) {
         this.props.onModifyNotebook(e, this.props.data)
     }
 
-    onDeleteNotebook(e) {
+    handleDeleteNotebook(e) {
         this.props.onDeleteNotebook(e, this.props.data);
     }
 
@@ -35,13 +35,13 @@ export default class Notebook extends Component {
                     </div>
                 </ContextMenuTrigger>
                 <ContextMenu id={this.props.id}>
-                    <MenuItem data={this.props.data} onClick={this.onAddNotebook}>
+                    <MenuItem data={this.props.data} onClick={this.handleAddNotebook} onMouseLeave={e=>{}} onMouseMove={e=>{}}>
                         New
                     </MenuItem>
-                    <MenuItem data={this.props.data} onClick={this.onModifyNotebook}>
+                    <MenuItem data={this.props.data} onClick={this.handleModifyNotebook} onMouseLeave={e=>{}} onMouseMove={e=>{}}>
                         Rename
                     </MenuItem>
-                    <MenuItem data={this.props.data} onClick={this.onDeleteNotebook}>
+                    <MenuItem data={this.props.data} onClick={this.handleDeleteNotebook} onMouseLeave={e=>{}} onMouseMove={e=>{}}>
                         Delete
                     </MenuItem>
                 </ContextMenu>

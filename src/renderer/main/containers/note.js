@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import PropTypes from 'prop-types'
 import * as NoteActions from '../actions/noteactions'
 import NoteList from '../components/notelist'
 import Editor from '../components/editor'
@@ -20,44 +21,24 @@ class Note extends Component {
         }
 
         this.setNotebook = this.setNotebook.bind(this);
-        this.addNote = this.addNote.bind(this);
-        this.onSelect = this.onSelect.bind(this);
-        this.onClickMenu = this.onClickMenu.bind(this);
-        this.onSave = this.onSave.bind(this);
-        this.closeMoveModal = this.closeMoveModal.bind(this);
+        this.handleNewNote = this.handleNewNote.bind(this);
+        this.handleSelectChanged = this.handleSelectChanged.bind(this);
+        this.handleClickNoteMenu = this.handleClickNoteMenu.bind(this);
+        this.handleNoteSave = this.handleNoteSave.bind(this);
+        this.handleMoveModalSaved = this.handleMoveModalSaved.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
     }
 
-    setNotebook(notebook) {
-        this._notebook = notebook;
-        this.setState({title: this._notebook.title, mask: false})
-        this.props.list(this._notebook._id)
-    }
-
-    addNote() {
-        this.props.save({
-            title: '',
-            content: '',
-            type: 'markdown',
-            createTime: new Date(),
-            lastUpdateTime: new Date(),
-            tags: [],
-            notebookId: this._notebook._id,
-        }, () => {
-            this.props.list(this._notebook._id);
-        });
-    }
-
-    onSelect(e, note) {
+    handleSelectChanged(e, note) {
         if (note == null)
             return;
         this._note = note;
         this.refs.editor.setNote(note);
     }
 
-    onSave(note) {
+    handleNoteSave(note) {
         this._note = note;
         this._note.lastUpdateTime = new Date();
         this.props.save(note, () => {
@@ -65,7 +46,7 @@ class Note extends Component {
         });
     }
 
-    onClickMenu(e, cmd, items) {
+    handleClickNoteMenu(e, cmd, items) {
         let {deleteNote, list} = this.props;
         let notebookId = this._notebook._id;
         if (cmd === 'delete') {
@@ -88,8 +69,28 @@ class Note extends Component {
         }
     }
 
-    closeMoveModal() {
+    handleMoveModalSaved() {
         this.props.list(this._notebook._id);
+    }
+
+    handleNewNote() {
+        this.props.save({
+            title: '',
+            content: '',
+            type: 'markdown',
+            createTime: new Date(),
+            lastUpdateTime: new Date(),
+            tags: [],
+            notebookId: this._notebook._id,
+        }, () => {
+            this.props.list(this._notebook._id);
+        });
+    }
+
+    setNotebook(notebook) {
+        this._notebook = notebook;
+        this.setState({title: this._notebook.title, mask: false})
+        this.props.list(this._notebook._id)
     }
 
     render() {
@@ -105,7 +106,7 @@ class Note extends Component {
                             {this.state.title}
                         </div>
                         <div className="right">
-                            <Button shape="circle" icon="edit" onClick={this.addNote}></Button>
+                            <Button shape="circle" icon="edit" onClick={this.handleNewNote}></Button>
                         </div>
                         <div className="search">
                             <Search
@@ -115,19 +116,23 @@ class Note extends Component {
                         </div>
                     </div>
                     <div className="list">
-                        <NoteList ref="noteList" onClickMenu={this.onClickMenu}
+                        <NoteList ref="noteList" onClickMenu={this.handleClickNoteMenu}
                                   dataSource={this.props.dataSource}
-                                  onSelect={this.onSelect}/>
+                                  onSelect={this.handleSelectChanged}/>
                     </div>
                     <NoteMoveModal ref="noteMoveModal" dataSource={this.props.noteBookDataSource}
-                                   onClose={this.closeMoveModal}/>
+                                   onClose={this.handleMoveModalSaved}/>
                 </div>
                 <div className="nb_content">
-                    <Editor ref="editor" onSave={this.onSave}/>
+                    <Editor ref="editor" onSave={this.handleNoteSave}/>
                 </div>
             </SplitPane>
         );
     }
+}
+
+Note.PropTypes = {
+    setNotebook: PropTypes.func
 }
 
 

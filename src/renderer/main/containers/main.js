@@ -19,12 +19,12 @@ class Main extends Component {
             dataSource: []
         }
 
-        this.onAddNotebook = this.onAddNotebook.bind(this);
-        this.onModifyNotebook = this.onModifyNotebook.bind(this);
-        this.onDeleteNotebook = this.onDeleteNotebook.bind(this);
-        this.onSelectNotebook = this.onSelectNotebook.bind(this);
-        this.noteBookModalClose = this.noteBookModalClose.bind(this);
-        this.onSaved = this.onSaved.bind(this);
+        this.handleAddNotebook = this.handleAddNotebook.bind(this);
+        this.handleModifyNotebook = this.handleModifyNotebook.bind(this);
+        this.handleDeleteNotebook = this.handleDeleteNotebook.bind(this);
+        this.handleSelectNotebook = this.handleSelectNotebook.bind(this);
+        this.handleNotebookSaved = this.handleNotebookSaved.bind(this);
+        this.handleNoteSaved = this.handleNoteSaved.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -35,15 +35,15 @@ class Main extends Component {
         this.props.getNotebookList();
     }
 
-    onAddNotebook(e, data) {
+    handleAddNotebook(e, data) {
         this.refs.notebookModal.getWrappedInstance().show(data, null);
     }
 
-    onModifyNotebook(e, data) {
+    handleModifyNotebook(e, data) {
         this.refs.notebookModal.getWrappedInstance().show(null, data);
     }
 
-    onDeleteNotebook(e, data) {
+    handleDeleteNotebook(e, data) {
         let {deleteNotebookList} = this.props;
         Modal.confirm({
             title: 'delete "' + data.title + '" notebook?',
@@ -56,7 +56,7 @@ class Main extends Component {
         });
     }
 
-    onSelectNotebook(keys, sender) {
+    handleSelectNotebook(keys, sender) {
         let notebook = _.find(this.state.dataSource, (item)=>{
             return _.contains(keys, item._id);
         })
@@ -65,11 +65,11 @@ class Main extends Component {
         }
     }
 
-    noteBookModalClose() {
+    handleNotebookSaved() {
         this.props.getNotebookList();
     }
 
-    onSaved() {
+    handleNoteSaved() {
         this.refs.tags.getWrappedInstance().refresh();
     }
 
@@ -87,10 +87,10 @@ class Main extends Component {
                             </div>
                             <div className="notebook-root">
                                 <NoteTreeView dataSource={this.state.dataSource}
-                                              onAddNotebook={this.onAddNotebook}
-                                              onModifyNotebook={this.onModifyNotebook}
-                                              onDeleteNotebook={this.onDeleteNotebook}
-                                              onSelectNotebook={this.onSelectNotebook}/>
+                                              onAddNotebook={this.handleAddNotebook}
+                                              onModifyNotebook={this.handleModifyNotebook}
+                                              onDeleteNotebook={this.handleDeleteNotebook}
+                                              onSelectNotebook={this.handleSelectNotebook}/>
                             </div>
                         </div>
                         <div className="tags">
@@ -99,10 +99,10 @@ class Main extends Component {
                         </div>
                     </SplitPane>
                     <div className="content">
-                        <Note ref="note" onSaved={this.onSaved} noteBookDataSource={this.state.dataSource}/>
+                        <Note ref="note" onSaved={this.handleNoteSaved} noteBookDataSource={this.state.dataSource}/>
                     </div>
                 </SplitPane>
-                <NotebookModal ref="notebookModal" onClose={this.noteBookModalClose}/>
+                <NotebookModal ref="notebookModal" onSave={this.handleNotebookSaved}/>
             </div>)
     }
 }

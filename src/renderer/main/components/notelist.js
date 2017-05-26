@@ -68,7 +68,7 @@ export default class NoteList extends Component {
         for (let index of this.state.selectedIndexs) {
             data.push(this.props.dataSource[index]);
         }
-        this.props.onClickMenu(e, cmd, data);
+        this.props.handleClickNoteMenu(e, cmd, data);
     }
 
     render() {
@@ -99,22 +99,32 @@ export default class NoteList extends Component {
                     <ContextMenu id={item._id}>
                         <MenuItem data={item} onClick={(e) => {
                             this.onClickMenu(e, 'move')
+                        }} onMouseMove={e => {
+                        }} onMouseLeave={e => {
                         }}>
                             Move to Notebook
                         </MenuItem>
                         <MenuItem data={item} onClick={(e) => {
                             this.onClickMenu(e, 'delete')
+                        }} onMouseMove={e => {
+                        }} onMouseLeave={e => {
                         }}>
                             Delete Note
                         </MenuItem>
-                        <MenuItem divider/>
+                        <MenuItem divider onMouseMove={e => {
+                        }} onMouseLeave={e => {
+                        }}/>
                         <MenuItem data={item} onClick={(e) => {
                             this.onClickMenu(e, 'export_pdf')
+                        }} onMouseMove={e => {
+                        }} onMouseLeave={e => {
                         }}>
                             Export to pdf
                         </MenuItem>
                         <MenuItem data={item} onClick={(e) => {
                             this.onClickMenu(e, 'export_html')
+                        }} onMouseMove={e => {
+                        }} onMouseLeave={e => {
                         }}>
                             Export to html
                         </MenuItem>

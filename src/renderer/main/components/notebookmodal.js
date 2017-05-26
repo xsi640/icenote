@@ -13,19 +13,51 @@ class NotebookModal extends Component {
             error: '',
             title: '',
         }
-        this._save = this._save.bind(this);
+        this.handleSave = this.handleSave.bind(this);
         this.show = this.show.bind(this);
-        this.close = this.close.bind(this);
-        this.change = this.change.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({...nextProps});
         if (typeof nextProps.notebook !== 'undefined') {
             this._notebook = nextProps.notebook;
-            this.props.onClose(this._notebook);
-            this.close();
+            this.props.onSave(this._notebook);
+            this.handleClose();
         }
+    }
+
+    handleSave() {
+        if (!this._validInput()) {
+            return;
+        }
+        let notebook = {};
+        if (this._notebook !== null) {
+            notebook._id = this._notebook._id;
+            notebook.parentId = this._notebook.parentId;
+        }
+        if (this._parent !== null) {
+            notebook.parentId = this._parent._id;
+        }
+        notebook.title = this.state.title;
+        this.props.save(notebook)
+    }
+
+    handleClose() {
+        this.setState({visible: false});
+    }
+
+    handleChange(name, value) {
+        this.setState({[name]: value})
+    }
+
+    _validInput() {
+        if (this.state.title === '') {
+            this.setState({error: 'title is null.'})
+            return false;
+        }
+        return true;
     }
 
     show(parentNotebook, notebook) {
@@ -39,45 +71,13 @@ class NotebookModal extends Component {
         this.setState({visible: true});
     }
 
-    _save() {
-        if (!this._validInput()) {
-            return;
-        }
-        let notebook = {};
-        if (this._notebook !== null) {
-            notebook._id = this._notebook._id;
-            notebook.parentId = this._notebook.parentId;
-        }
-        if(this._parent !== null){
-            notebook.parentId = this._parent._id;
-        }
-        notebook.title = this.state.title;
-        this.props.save(notebook)
-    }
-
-    close() {
-        this.setState({visible: false});
-    }
-
-    _validInput() {
-        if (this.state.title === '') {
-            this.setState({error: 'title is null.'})
-            return false;
-        }
-        return true;
-    }
-
-    change(name, value) {
-        this.setState({[name]: value})
-    }
-
     render() {
         return (
             <div>
                 <Modal title={<div
                     className="unselect">{typeof this._notebook === 'undefined' || this._notebook === null ? 'Add NoteBook' : 'Modify NoteBook'}</div>}
                        visible={this.state.visible}
-                       onOk={this._save} onCancel={this.close}
+                       onOk={this.handleSave} onCancel={this.handleClose}
                        closable={false}>
                     {
                         typeof this.state.error === 'string' && this.state.error !== '' ?
@@ -94,8 +94,9 @@ class NotebookModal extends Component {
                         Title:
                     </div>
                     <div>
-                        <Input placeholder="Input the notebook title." value={this.state.title} onPressEnter={this._save} onChange={(e) => {
-                            this.change('title', e.target.value)
+                        <Input placeholder="Input the notebook title." value={this.state.title}
+                               onPressEnter={this.handleSave} onChange={(e) => {
+                            this.handleChange('title', e.target.value)
                         }}/>
                     </div>
                 </Modal>
@@ -104,8 +105,7 @@ class NotebookModal extends Component {
 }
 
 NotebookModal.PropTypes = {
-    onClose: PropTypes.func,
-    show: PropTypes.func,
+    onSave: PropTypes.func,
 }
 
 const mapStateToProps = (state) => {
