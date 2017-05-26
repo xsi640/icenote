@@ -64,11 +64,14 @@ export default class NoteList extends Component {
     }
 
     handleClickMenu(e, cmd) {
-        let data = [];
+        let selectedItems = [];
         for (let index of this.state.selectedIndexs) {
-            data.push(this.props.dataSource[index]);
+            selectedItems.push(this.props.dataSource[index]);
         }
-        this.props.onClickMenu(e, cmd, data);
+        this.props.onClickMenu(e, cmd, {
+            selectedItems,
+            selectedItem: this.props.dataSource[this._lastSelectedIndex]
+        });
     }
 
     render() {

@@ -5,7 +5,8 @@ const IPCMESSAGE = {
     TAGS_LIST: 'TAGS_LIST',
     NOTE_LIST: 'NOTE_LIST',
     NOTE_DELETE: 'NOTE_DELETE',
-    NOTE_SAVE: 'NOTE_SAVE'
+    NOTE_SAVE: 'NOTE_SAVE',
+    NOTE_MOVE:'NOTE_MOVE',
 };
 
 module.exports = IPCMESSAGE

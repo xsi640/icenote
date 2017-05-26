@@ -3,23 +3,24 @@ const {ipcRenderer} = require('electron')
 import {ACTION_MESSAGE} from './constaction'
 import _ from 'underscore'
 
-export const move = (note, notebookId) => {
-    let cnote = _.clone(note);
-    cnote.notebookId = notebookId;
+export const move = (notes, notebookId) => {
+    let ids = [];
+    for (let note of notes)
+        ids.push(note._id);
     return dispatch => {
-        ipcRenderer.once(IPCMESSAGE.NOTE_SAVE, (event, args) => {
+        ipcRenderer.once(IPCMESSAGE.NOTE_MOVE, (event, args) => {
             if (typeof args.error === 'undefined') {
                 dispatch({
-                    type: ACTION_MESSAGE.NOTE_SAVE,
+                    type: ACTION_MESSAGE.NOTE_MOVE,
                     payload: args.data,
                 })
             } else {
                 dispatch({
-                    type: ACTION_MESSAGE.NOTE_SAVE,
+                    type: ACTION_MESSAGE.NOTE_MOVE,
                     error: args.error,
                 })
             }
         })
-        ipcRenderer.send(IPCMESSAGE.NOTE_SAVE, cnote)
+        ipcRenderer.send(IPCMESSAGE.NOTE_MOVE, {ids, notebookId})
     }
 }

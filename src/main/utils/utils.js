@@ -39,7 +39,7 @@ const extract = (array, propName) => {
 }
 
 const loop = (min, max, func) => {
-    new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         func(min, resolve, reject);
     }).then(() => {
         if (min < max) {

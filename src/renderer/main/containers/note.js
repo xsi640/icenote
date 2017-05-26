@@ -46,16 +46,22 @@ class Note extends Component {
         });
     }
 
-    handleClickNoteMenu(e, cmd, items) {
+    handleClickNoteMenu(e, cmd, data) {
         let {deleteNote, list} = this.props;
         let notebookId = this._notebook._id;
         if (cmd === 'delete') {
+            let title = '';
+            if (data.selectedItems.length > 1) {
+                title = 'delete selected notes?'
+            } else {
+                title = `delete the ${data.selectedItems[0].title === '' ? 'Untitled' : data.selectedItems[0].title } note?`
+            }
             Modal.confirm({
-                title: 'delete selected notes?',
+                title,
                 content: 'you can\'t undo the action.',
                 onOk() {
                     let ids = [];
-                    for (let item of items)
+                    for (let item of data.selectedItems)
                         ids.push(item._id)
                     deleteNote(ids, () => {
                         list(notebookId)
@@ -65,7 +71,7 @@ class Note extends Component {
                 },
             });
         } else if (cmd === 'move') {
-            this.refs.noteMoveModal.getWrappedInstance().show(items[0]);
+            this.refs.noteMoveModal.getWrappedInstance().show(data.selectedItems);
         }
     }
 
@@ -121,7 +127,7 @@ class Note extends Component {
                                   onSelect={this.handleSelectChanged}/>
                     </div>
                     <NoteMoveModal ref="noteMoveModal" dataSource={this.props.noteBookDataSource}
-                                   onClose={this.handleMoveModalSaved}/>
+                                   onSaved={this.handleMoveModalSaved}/>
                 </div>
                 <div className="nb_content">
                     <Editor ref="editor" onSave={this.handleNoteSave}/>

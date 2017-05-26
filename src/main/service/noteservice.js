@@ -83,10 +83,37 @@ const findNotesByTags = (tags, callback) => {
     NoteDB.findNotesByTags(tags, callback)
 }
 
+const move = (ids, notebookId, callback) => {
+    NoteDB.get(ids, (err, docs) => {
+        if (err) {
+            callback(err, undefined);
+        } else {
+            let size = 0;
+            utils.loop(0, docs.length, (index, resolve, reject) => {
+                let doc = docs[index];
+                doc.notebookId = notebookId;
+                NoteDB.update(doc, (err, num) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        size += num;
+                        resolve();
+                    }
+                })
+            }).then(() => {
+                callback(undefined, size);
+            }).catch((err) => {
+                callback(err, undefined);
+            })
+        }
+    })
+}
+
 module.exports = {
     insertOrUpdate,
     remove,
     removeByNotebookId,
     findNotesByNotebookId,
-    findNotesByTags
+    findNotesByTags,
+    move
 }

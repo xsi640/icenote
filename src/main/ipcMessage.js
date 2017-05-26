@@ -54,6 +54,10 @@ const regIPCMessage = () => {
     _reg(IPCMESSAGE.NOTE_SAVE, (event, args, callback) => {
         NoteService.insertOrUpdate(args, callback)
     })
+
+    _reg(IPCMESSAGE.NOTE_MOVE, (event, args, callback) => {
+        NoteService.move(args.ids, args.notebookId, callback)
+    })
 }
 
 module.exports = regIPCMessage

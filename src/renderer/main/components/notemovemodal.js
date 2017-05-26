@@ -14,40 +14,39 @@ class NoteMoveModal extends Component {
             error: '',
             notebookId: '',
         }
-        this._save = this._save.bind(this);
+        this.handleSave = this.handleSave.bind(this);
         this.show = this.show.bind(this);
-        this.onClose = this.onClose.bind(this);
-        this.onChange = this.onChange.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({...nextProps});
-        if (typeof nextProps.note !== 'undefined') {
-            this._note = nextProps.note;
-            this.props.onClose();
-            this.onClose();
+        if (typeof nextProps.num !== 'undefined') {
+            this.props.onSaved();
+            this.handleClose();
         }
     }
 
-    show(note) {
-        this._note = note;
-        this.setState({visible: true, notebookId: this._note.notebookId});
-    }
-
-    _save() {
-        if (this._note.notebookId === this.state.notebookId) {
-            this.onClose();
-        } else {
-            this.props.move(this._note, this.state.notebookId);
-        }
-    }
-
-    onClose() {
+    handleClose() {
         this.setState({visible: false});
     }
 
-    onChange(value) {
+    handleChange(value) {
         this.setState({notebookId: value})
+    }
+
+    show(notes) {
+        this._notes = notes;
+        this.setState({visible: true, notebookId: this._notes[0].notebookId});
+    }
+
+    handleSave() {
+        if (this._notes[0].notebookId === this.state.notebookId) {
+            this.handleClose();
+        } else {
+            this.props.move(this._notes, this.state.notebookId);
+        }
     }
 
     renderTreeNode(parentId) {
@@ -77,12 +76,22 @@ class NoteMoveModal extends Component {
     }
 
     render() {
+        let title = "The Untitled Note.";
+        if (typeof this._notes !== 'undefined') {
+            if (this._notes.length === 1) {
+                if (this._notes[0].title !== '') {
+                    title = `The ${this._notes[0].title} Note.`
+                }
+            } else {
+                title = "Selected Notes."
+            }
+        }
         return (
             <div>
                 <Modal title={<div
                     className="unselect">Move to</div>}
                        visible={this.state.visible}
-                       onOk={this._save} onCancel={this.onClose}
+                       onOk={this.handleSave} onCancel={this.handleClose}
                        closable={false}>
                     {
                         typeof this.state.error === 'string' && this.state.error !== '' ?
@@ -92,8 +101,7 @@ class NoteMoveModal extends Component {
                             /> : null
                     }
                     <div className="unselect">
-                        The
-                        note:{typeof this._note !== 'undefined' && typeof this.note.title !== 'undefined' && this.note.title === '' ? this.note.title : 'Untitled'}
+                        {title}
                     </div>
                     <div className="unselect">
                         Move to:
@@ -106,7 +114,7 @@ class NoteMoveModal extends Component {
                                 placeholder="Please select"
                                 allowClear={false}
                                 treeDefaultExpandAll
-                                onChange={this.onChange}
+                                onChange={this.handleChange}
                             >
                                 {
                                     this.renderTreeNode(undefined)
@@ -120,7 +128,7 @@ class NoteMoveModal extends Component {
 }
 
 NoteMoveModal.PropTypes = {
-    onClose: PropTypes.func,
+    onSaved: PropTypes.func,
     show: PropTypes.func,
     dataSource: PropTypes.array,
 }
