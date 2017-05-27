@@ -93,6 +93,20 @@
 }
 
 .mynb_icon {
+  display:inline-block;
+  background-color: #818ca9;
+  mask: url('../images/notebook.svg') no-repeat center;
+  mask-size:16px 16px;
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+}
+
+.mytag_icon {
+  display:inline-block;
+  background-color: #818ca9;
+  mask: url('../images/tag.svg') no-repeat center;
+  mask-size: 16px 16px;
   width: 16px;
   height: 16px;
   margin-right: 5px;
