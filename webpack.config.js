@@ -35,7 +35,7 @@ module.exports = {
                     use: ['css-loader', 'sass-loader', 'postcss-loader']
                 })
             }, {
-                test: /\.(jpg|png|gif)$/,
+                test: /\.(jpg|png|gif|svg)$/,
                 loader: "url-loader",
                 query: {
                     limit: 8196,

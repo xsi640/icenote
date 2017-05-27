@@ -87,7 +87,7 @@ class Main extends Component {
                     <SplitPane split="horizontal" minSize={300} defaultSize={400} maxSize={-200} className="left">
                         <div className="notebook">
                             <div className="title unselect">
-                                My Notebook
+                                <img className="mynb_icon" src={require('../images/notebook.svg')}></img>My Notebook
                                 <Button shape="circle" onClick={(e) => {
                                     this.refs.notebookModal.getWrappedInstance().show(null, null)
                                 }}>Add</Button>
