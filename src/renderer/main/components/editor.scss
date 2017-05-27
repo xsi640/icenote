@@ -98,6 +98,71 @@ div.ReactTags__suggestions ul li.ReactTags__activeSuggestion {
       border: none;
       width: 40px;
       height: 40px;
+      float: left;
+    }
+
+    Button div {
+      background-color: black;
+      width: 16px;
+      height: 16px;
+    }
+
+    .icon-preview {
+      mask: url('../images/preview.svg') no-repeat center;
+      mask-size: 16px 16px;
+    }
+
+    .icon-book {
+      mask: url('../images/book.svg') no-repeat center;
+      mask-size: 16px 16px;
+    }
+
+    .icon-bold {
+      mask: url('../images/bold.svg') no-repeat center;
+      mask-size: 16px 16px;
+    }
+
+    .icon-italic {
+      mask: url('../images/italic.svg') no-repeat center;
+      mask-size: 16px 16px;
+    }
+    .icon-strike {
+      mask: url('../images/strike.svg') no-repeat center;
+      mask-size: 16px 16px;
+    }
+    .icon-title {
+      mask: url('../images/title.svg') no-repeat center;
+      mask-size: 16px 16px;
+    }
+    .icon-refs {
+      mask: url('../images/refs.svg') no-repeat center;
+      mask-size: 16px 16px;
+    }
+    .icon-code {
+      mask: url('../images/code.svg') no-repeat center;
+      mask-size: 16px 16px;
+    }
+
+    .icon-list {
+      mask: url('../images/list.svg') no-repeat center;
+      mask-size: 16px 16px;
+    }
+    .icon-list-num {
+      mask: url('../images/ul.svg') no-repeat center;
+      mask-size: 16px 16px;
+    }
+    .icon-checkbox {
+      mask: url('../images/checkbox.svg') no-repeat center;
+      mask-size: 16px 16px;
+    }
+
+    .icon-link {
+      mask: url('../images/link.svg') no-repeat center;
+      mask-size: 16px 16px;
+    }
+    .icon-line {
+      mask: url('../images/line.svg') no-repeat center;
+      mask-size: 16px 16px;
     }
   }
 
@@ -109,6 +174,10 @@ div.ReactTags__suggestions ul li.ReactTags__activeSuggestion {
     height: calc(100vh - 120px);
   }
 
+  .book {
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
 }
 
 .md {

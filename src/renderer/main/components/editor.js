@@ -19,7 +19,7 @@ export default class Editor extends Component {
             suggestions: [],
             content: '',
             title: '',
-            preview: false,
+            mode: 0,
             readOnly: true,
         };
         this.handleDelete = this.handleDelete.bind(this);
@@ -27,6 +27,7 @@ export default class Editor extends Component {
         this.handleDrag = this.handleDrag.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSave = this.handleSave.bind(this);
+        this.handleToolbar = this.handleToolbar.bind(this);
 
         this.setNote = this.setNote.bind(this);
         this.clear = this.clear.bind(this);
@@ -74,6 +75,27 @@ export default class Editor extends Component {
         this.props.onSave(this._note);
     }
 
+    handleToolbar(e, cmd) {
+        switch (cmd) {
+            case 'preview':
+                if (this.state.mode === 0) {
+                    this.setState({mode: 1})
+                } else if (this.state.mode === 1) {
+                    this.setState({mode: 0})
+                } else if (this.state.mode === 2) {
+                    this.setState({mode: 1});
+                }
+                break;
+            case 'book':
+                if(this.state.mode === 2){
+                    this.setState({mode: 0})
+                }else {
+                    this.setState({mode: 2})
+                }
+                break;
+        }
+    }
+
     setNote(note) {
         this._note = note;
         this.setState({
@@ -96,7 +118,6 @@ export default class Editor extends Component {
     render() {
         const {tags, suggestions, content, title} = this.state;
         const options = {
-            lineNumbers: true,
             mode: 'markdown',
             theme: '3024-day',
         };
@@ -116,19 +137,96 @@ export default class Editor extends Component {
                 </div>
                 <div className="toolbar">
                     {/*预览、分屏阅读；加粗、倾斜、删除线；标题、引用、code；项目列表，编号列表，checkbox；链接、分割线*/}
-                    <Button icon="eye-o" shape="circle" onClick={(e) => {
-                        this.handleChange('preview', !this.state.preview)
-                    }}/>
+                    <Button onClick={e => {
+                        this.handleToolbar(e, 'preview');
+                    }} title="Preview">
+                        <div className="icon-preview"></div>
+                    </Button>
+                    <Button onClick={e => {
+                        this.handleToolbar(e, 'book');
+                    }}>
+                        <div className="icon-book"></div>
+                    </Button>
+                    <Button onClick={e => {
+                        this.handleToolbar(e, 'bold');
+                    }}>
+                        <div className="icon-bold"></div>
+                    </Button>
+                    <Button onClick={e => {
+                        this.handleToolbar(e, 'italic');
+                    }}>
+                        <div className="icon-italic"></div>
+                    </Button>
+                    <Button onClick={e => {
+                        this.handleToolbar(e, 'strike');
+                    }}>
+                        <div className="icon-strike"></div>
+                    </Button>
+
+                    <Button onClick={e => {
+                        this.handleToolbar(e, 'title');
+                    }}>
+                        <div className="icon-title"></div>
+                    </Button>
+                    <Button onClick={e => {
+                        this.handleToolbar(e, 'refs');
+                    }}>
+                        <div className="icon-refs"></div>
+                    </Button>
+                    <Button onClick={e => {
+                        this.handleToolbar(e, 'code');
+                    }}>
+                        <div className="icon-code"></div>
+                    </Button>
+
+                    <Button onClick={e => {
+                        this.handleToolbar(e, 'list');
+                    }}>
+                        <div className="icon-list"></div>
+                    </Button>
+                    <Button onClick={e => {
+                        this.handleToolbar(e, 'list-num');
+                    }}>
+                        <div className="icon-list-num"></div>
+                    </Button>
+                    <Button onClick={e => {
+                        this.handleToolbar(e, 'checkbox');
+                    }}>
+                        <div className="icon-checkbox"></div>
+                    </Button>
+
+                    <Button onClick={e => {
+                        this.handleToolbar(e, 'link');
+                    }}>
+                        <div className="icon-link"></div>
+                    </Button>
+                    <Button onClick={e => {
+                        this.handleToolbar(e, 'line');
+                    }}>
+                        <div className="icon-line"></div>
+                    </Button>
                 </div>
                 <div className="editor">
-                    <div style={{display: this.state.preview ? 'none' : 'block'}}>
+                    <div style={{display: this.state.mode === 0 ? 'block' : 'none'}}>
                         <CodeMirror ref="codeMirror" value={content} options={options} onFocusChange={this.handleSave}
                                     onChange={e => {
                                         this.handleChange('content', e)
                                     }}/>
                     </div>
-                    <div className="md" style={{display: this.state.preview ? 'block' : 'none'}}>
+                    <div className="md" style={{display: this.state.mode === 1 ? 'block' : 'none'}}>
                         <ReactMarkdown escapeHtml={false} skipHtml={false} source={content}/>
+                    </div>
+                    <div className="book" style={{display: this.state.mode === 2 ? 'grid' : 'none'}}>
+                        <div className="book-left">
+                            <CodeMirror ref="codeMirror" value={content} options={options}
+                                        onFocusChange={this.handleSave}
+                                        onChange={e => {
+                                            this.handleChange('content', e)
+                                        }}/>
+                        </div>
+                        <div className="book-right">
+                            <ReactMarkdown escapeHtml={false} skipHtml={false} source={content}/>
+                        </div>
                     </div>
                 </div>
                 {this.state.readOnly ? <div className="mask"></div> : null}
