@@ -7,6 +7,7 @@ import Editor from '../components/editor'
 import {Button, Input, Modal} from 'antd'
 import SplitPane from 'react-split-pane'
 import NoteMoveModal from '../components/notemovemodal'
+import AppContext from '../context/appcontext'
 const Search = Input.Search;
 import './note.scss'
 
@@ -54,6 +55,7 @@ class Note extends Component {
         this._note.lastUpdateTime = new Date();
         this.props.save(note, () => {
             this.load();
+            AppContext.tagListChanged();
         });
     }
 
@@ -80,6 +82,7 @@ class Note extends Component {
                         } else if (_tag != null) {
                             listByTag(_tag);
                         }
+                        AppContext.tagListChanged();
                     });
                 },
                 onCancel() {
@@ -95,9 +98,6 @@ class Note extends Component {
     }
 
     handleNewNote() {
-        if (this._notebook === null)
-            return;
-
         this.props.save({
             title: '',
             content: '',
@@ -150,7 +150,8 @@ class Note extends Component {
                             {this.state.title}
                         </div>
                         <div className="right">
-                            <Button shape="circle" icon="edit" onClick={this.handleNewNote}></Button>
+                            <Button shape="circle" icon="edit" onClick={this.handleNewNote}
+                                    disabled={this._notebook === null ? true : false}></Button>
                         </div>
                         <div className="search">
                             <Search
@@ -164,7 +165,7 @@ class Note extends Component {
                                   dataSource={this.props.dataSource}
                                   onSelect={this.handleSelectChanged}/>
                     </div>
-                    <NoteMoveModal ref="noteMoveModal" dataSource={this.props.noteBookDataSource}
+                    <NoteMoveModal ref="noteMoveModal"
                                    onSaved={this.handleMoveModalSaved}/>
                 </div>
                 <div className="nb_content">

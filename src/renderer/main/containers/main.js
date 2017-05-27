@@ -10,6 +10,7 @@ import * as MainActions from '../actions/mainactions'
 import _ from 'underscore'
 import './main.scss'
 import './splitpane.scss'
+import AppContext from '../context/appcontext'
 
 class Main extends Component {
 
@@ -32,10 +33,6 @@ class Main extends Component {
         this.setState({...nextProps});
     }
 
-    componentDidMount() {
-        this.props.getNotebookList();
-    }
-
     handleAddNotebook(e, data) {
         this.refs.notebookModal.getWrappedInstance().show(data, null);
     }
@@ -45,12 +42,16 @@ class Main extends Component {
     }
 
     handleDeleteNotebook(e, data) {
-        let {deleteNotebookList} = this.props;
+        let {deleteNotebookList, getNotebookList} = this.props;
+        let {note} = this.refs.note.getWrappedInstance();
+        let {tags} = this.refs.tags;
         Modal.confirm({
             title: 'delete "' + data.title + '" notebook?',
             content: 'you can\'t undo the action.',
             onOk() {
-                deleteNotebookList(data._id);
+                deleteNotebookList(data._id, (id) => {
+                    note.clear();
+                });
             },
             onCancel() {
             },
@@ -61,7 +62,7 @@ class Main extends Component {
         if (notebook != null) {
             this.refs.note.getWrappedInstance().setNotebook(notebook);
         }
-        this.refs.tags.getWrappedInstance().setSelectedIndex(-1);
+        this.refs.tags.setSelectedIndex(-1);
     }
 
     handleSelectTag(e, tag) {
@@ -76,7 +77,7 @@ class Main extends Component {
     }
 
     handleNoteSaved() {
-        this.refs.tags.getWrappedInstance().refresh();
+        this.refs.tags.refresh();
     }
 
     render() {
@@ -105,7 +106,7 @@ class Main extends Component {
                         </div>
                     </SplitPane>
                     <div className="content">
-                        <Note ref="note" onSaved={this.handleNoteSaved} noteBookDataSource={this.state.dataSource}/>
+                        <Note ref="note" onSaved={this.handleNoteSaved}/>
                     </div>
                 </SplitPane>
                 <NotebookModal ref="notebookModal" onSave={this.handleNotebookSaved}/>

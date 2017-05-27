@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {Tree} from 'antd'
 import Notebook from './notebook'
+import AppContext from '../context/appcontext'
 const TreeNode = Tree.TreeNode
 import _ from 'underscore'
 
@@ -11,7 +12,8 @@ export default class NoteTreeView extends Component {
         super(props);
 
         this.state = {
-            selectedKeys: []
+            selectedKeys: [],
+            dataSource: []
         }
 
         this.handleSelectNotebook = this.handleSelectNotebook.bind(this);
@@ -19,6 +21,20 @@ export default class NoteTreeView extends Component {
         this.handleModifyNotebook = this.handleModifyNotebook.bind(this);
         this.handleDeleteNotebook = this.handleDeleteNotebook.bind(this);
         this.clearSelected = this.clearSelected.bind(this);
+    }
+
+    componentDidMount() {
+        AppContext.loadNotebook(() => {
+            if (!_.isUndefined(AppContext.NotebookList)) {
+                this.setState({dataSource: AppContext.NotebookList})
+            }
+        })
+
+        AppContext.onNotebookChanged(() => {
+            if (!_.isUndefined(AppContext.NotebookList)) {
+                this.setState({dataSource: AppContext.NotebookList})
+            }
+        })
     }
 
     handleAddNotebook(e, data) {
@@ -38,7 +54,7 @@ export default class NoteTreeView extends Component {
             this.state.selectedKeys[0] === data.node.props.eventKey) {
 
         } else {
-            this.props.onSelectNotebook(keys, _.find(this.props.dataSource, (item) => {
+            this.props.onSelectNotebook(keys, _.find(this.state.dataSource, (item) => {
                 return item._id === keys[0];
             }));
             this.setState({selectedKeys: [keys[0]]})
@@ -50,7 +66,7 @@ export default class NoteTreeView extends Component {
     }
 
     renderTreeNode(parentId) {
-        let {dataSource} = this.props;
+        let {dataSource} = this.state;
         if (typeof dataSource === 'undefined')
             return;
         if (dataSource.length === 0) return;
@@ -103,9 +119,4 @@ NoteTreeView.PropTypes = {
     onModifyNotebook: PropTypes.func,
     onDeleteNotebook: PropTypes.func,
     onSelectNotebook: PropTypes.func,
-    dataSource: PropTypes.array,
-}
-
-NoteTreeView.DefaultProps = {
-    dataSource: []
 }

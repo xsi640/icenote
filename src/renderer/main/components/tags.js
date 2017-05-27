@@ -1,23 +1,31 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
-import * as TagsActions from '../actions/tagsactions'
+import AppContext from '../context/appcontext'
+import _ from 'underscore'
 import './tags.scss'
 
-class Tags extends Component {
+export default class Tags extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            dataSource: [],
             selectedIndex: -1,
         }
         this.handleChange = this.handleChange.bind(this);
-        this.refresh = this.refresh.bind(this);
         this.setSelectedIndex = this.setSelectedIndex.bind(this);
     }
 
     componentDidMount() {
-        this.props.list();
+        AppContext.loadTags(() => {
+            if (!_.isUndefined(AppContext.TagList))
+                this.setState({dataSource: AppContext.TagList})
+        })
+
+        AppContext.onTagListChanged(() => {
+            if (!_.isUndefined(AppContext.TagList))
+                this.setState({dataSource: AppContext.TagList})
+        })
     }
 
     setSelectedIndex(index) {
@@ -26,7 +34,7 @@ class Tags extends Component {
 
     handleChange(e) {
         let obj = null;
-        let {dataSource} = this.props;
+        let {dataSource} = this.state;
         for (let i = 0; i < dataSource.length; i++) {
             if (dataSource[i]._id === e.target.value) {
                 this.setState({selectedIndex: i})
@@ -37,13 +45,9 @@ class Tags extends Component {
         this.props.onSelected(e, obj);
     }
 
-    refresh() {
-        this.props.list();
-    }
-
     render() {
         let {selectedIndex} = this.state;
-        let {dataSource} = this.props;
+        let {dataSource} = this.state;
         let list = [];
         if (!_.isUndefined(dataSource)) {
             for (let i = 0; i < dataSource.length; i++) {
@@ -73,13 +77,3 @@ Tags.PropTypes = {
     onSelected: PropTypes.func,
     setSelectedIndex: PropTypes.func,
 }
-
-Tags.DefaultProps = {
-    dataSource: []
-}
-
-const mapStateToProps = (state) => {
-    return state.TagsReducer;
-}
-
-export default connect(mapStateToProps, TagsActions, null, {withRef: true})(Tags)

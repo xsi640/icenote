@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Modal, TreeSelect, Alert} from 'antd'
 const TreeNode = TreeSelect.TreeNode;
+import AppContext from '../context/appcontext'
+import _ from 'underscore'
 import * as NoteMoveModalActions from '../actions/notemovemodalactions'
 
 class NoteMoveModal extends Component {
@@ -11,6 +13,7 @@ class NoteMoveModal extends Component {
         super(props)
         this.state = {
             visible: false,
+            dataSource: [],
             error: '',
             notebookId: '',
         }
@@ -18,6 +21,15 @@ class NoteMoveModal extends Component {
         this.show = this.show.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentDidMount() {
+        this.setState({dataSource: AppContext.NotebookList})
+        AppContext.onNotebookChanged(() => {
+            if (!_.isUndefined(AppContext.NotebookList)) {
+                this.setState({dataSource: AppContext.NotebookList})
+            }
+        })
     }
 
     componentWillReceiveProps(nextProps) {
@@ -50,7 +62,7 @@ class NoteMoveModal extends Component {
     }
 
     renderTreeNode(parentId) {
-        let {dataSource} = this.props;
+        let {dataSource} = this.state;
         if (typeof dataSource === 'undefined')
             return;
         if (dataSource.length === 0) return;
@@ -130,7 +142,6 @@ class NoteMoveModal extends Component {
 NoteMoveModal.PropTypes = {
     onSaved: PropTypes.func,
     show: PropTypes.func,
-    dataSource: PropTypes.array,
 }
 
 const mapStateToProps = (state) => {
