@@ -2,6 +2,10 @@ const NoteDB = require('../db/notedb')
 const TagService = require('./tagservice')
 const utils = require('../utils/utils')
 const _ = require('underscore')
+const markdownpdf = require("markdown-pdf")
+const {dialog} = require('electron')
+const Stream = require('stream');
+const fs = require('fs');
 
 const insertOrUpdate = (note, callback) => {
     if (typeof note._id === 'undefined') {
@@ -113,11 +117,41 @@ const move = (ids, notebookId, callback) => {
     })
 }
 
+const exportToPdf = (id) => {
+    dialog.showSaveDialog({
+        title: 'export to pdf', filters: [
+            {name: 'pdf file', extensions: ['pdf']},
+        ]
+    }, (outputPath) => {
+        if (!_.isUndefined(outputPath) && outputPath !== '') {
+            NoteDB.get(id, (error, doc) => {
+                markdownpdf().from.string(doc.content).to(outputPath);
+            })
+        }
+    })
+}
+
+const exportToFile = (id) => {
+    dialog.showSaveDialog({
+        title: 'export to file', filters: [
+            {name: 'markdown file', extensions: ['md']},
+        ]
+    }, (outputPath) => {
+        if (!_.isUndefined(outputPath) && outputPath !== '') {
+            NoteDB.get(id, (error, doc) => {
+                fs.writeFile(outputPath, doc.content);
+            })
+        }
+    })
+}
+
 module.exports = {
     insertOrUpdate,
     remove,
     removeByNotebookId,
     findNotesByNotebookId,
     findNotesByTags,
-    move
+    move,
+    exportToPdf,
+    exportToFile
 }

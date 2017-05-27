@@ -58,6 +58,14 @@ const regIPCMessage = () => {
     _reg(IPCMESSAGE.NOTE_MOVE, (event, args, callback) => {
         NoteService.move(args.ids, args.notebookId, callback)
     })
+
+    _reg(IPCMESSAGE.NOTE_EXPORT_PDF, (event, args, callback) => {
+        NoteService.exportToPdf(args);
+    })
+
+    _reg(IPCMESSAGE.NOTE_EXPORT_FILE, (event, args, callback) => {
+        NoteService.exportToFile(args);
+    })
 }
 
 module.exports = regIPCMessage

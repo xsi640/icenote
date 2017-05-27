@@ -134,11 +134,11 @@ export default class NoteList extends Component {
                             Export to pdf
                         </MenuItem>
                         <MenuItem data={item} onClick={(e) => {
-                            this.handleClickMenu(e, 'export_html')
+                            this.handleClickMenu(e, 'export_file')
                         }} onMouseMove={e => {
                         }} onMouseLeave={e => {
                         }}>
-                            Export to html
+                            Export to file
                         </MenuItem>
                     </ContextMenu>
                 </div>

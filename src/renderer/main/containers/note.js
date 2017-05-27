@@ -90,6 +90,10 @@ class Note extends Component {
             });
         } else if (cmd === 'move') {
             this.refs.noteMoveModal.getWrappedInstance().show(data.selectedItems);
+        } else if (cmd === 'export_pdf') {
+            this.props.exportPdf(data.selectedItem._id);
+        } else if (cmd === 'export_file') {
+            this.props.exportFile(data.selectedItem._id);
         }
     }
 

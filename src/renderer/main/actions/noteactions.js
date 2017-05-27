@@ -71,3 +71,15 @@ export const deleteNote = (ids, callback) => {
         ipcRenderer.send(IPCMESSAGE.NOTE_DELETE, ids)
     }
 }
+
+export const exportPdf = (id) => {
+    return dispatch => {
+        ipcRenderer.send(IPCMESSAGE.NOTE_EXPORT_PDF, id)
+    }
+}
+
+export const exportFile = (id) =>{
+    return dispatch =>{
+        ipcRenderer.send(IPCMESSAGE.NOTE_EXPORT_FILE, id)
+    }
+}
