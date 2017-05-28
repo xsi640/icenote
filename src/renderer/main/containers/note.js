@@ -9,6 +9,7 @@ import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu"
 import SplitPane from 'react-split-pane'
 import NoteMoveModal from '../components/notemovemodal'
 import AppContext from '../context/appcontext'
+import Guid from '../../../main/utils/guid'
 const Search = Input.Search;
 import './note.scss'
 
@@ -42,12 +43,22 @@ class Note extends Component {
             this.refs.editor.clear();
             this.refs.noteList.setSelectedIndex(-1);
         } else {
-            let note = nextProps.dataSource[this.refs.noteList.lastSelectedIndex];
-            if (typeof note === 'undefined') {
-                note = nextProps.dataSource[0]
-                this.refs.noteList.setSelectedIndex(0);
+            if (typeof this._note === 'undefined') {
+                this._note = nextProps.dataSource[this.refs.noteList.lastSelectedIndex];
             }
-            this.refs.editor.setNote(note);
+            if (typeof this._note !== 'undefined') {
+                let index = _.findIndex(nextProps.dataSource, (item) => {
+                    return item._id === this._note._id;
+                })
+                if (index !== -1) {
+                    this.refs.noteList.setSelectedIndex(index);
+                    this.refs.editor.setNote(this._note);
+                } else {
+                    this._note = nextProps.dataSource[0];
+                    this.refs.noteList.setSelectedIndex(0);
+                    this.refs.editor.setNote(this._note);
+                }
+            }
         }
     }
 
@@ -112,6 +123,7 @@ class Note extends Component {
 
     handleNewNote() {
         this.props.save({
+            _id: Guid.create().value,
             title: '',
             content: '',
             type: 'markdown',
@@ -120,9 +132,9 @@ class Note extends Component {
             tags: [],
             notebookId: this._notebook._id,
         }, (newNote) => {
+            this._note = newNote;
+            this.refs.editor.setNote(this._note);
             this.load();
-            this.refs.noteList.setSelectedIndex(0);
-            this.refs.editor.setNote(newNote);
         });
     }
 
