@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Modal, Input, Alert} from 'antd'
 import * as NotebookModalActions from '../actions/notebookmodalactions'
+import AppContext from '../context/appcontext'
 
 class NotebookModal extends Component {
 
@@ -23,7 +24,7 @@ class NotebookModal extends Component {
         this.setState({...nextProps});
         if (typeof nextProps.notebook !== 'undefined') {
             this._notebook = nextProps.notebook;
-            this.props.onSave(this._notebook);
+            AppContext.notebookChanged();
             this.handleClose();
         }
     }
@@ -102,10 +103,6 @@ class NotebookModal extends Component {
                 </Modal>
             </div>)
     }
-}
-
-NotebookModal.PropTypes = {
-    onSave: PropTypes.func,
 }
 
 const mapStateToProps = (state) => {

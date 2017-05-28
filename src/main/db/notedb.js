@@ -55,8 +55,16 @@ const findNotesByNotebookId = (notebookId, callback) => {
     db.find({notebookId: notebookId}).sort({createTime: -1}).exec(callback);
 }
 
+const findNotesByNotebookIdSort = (notebookId, sort, order, callback) => {
+    db.find({notebookId: notebookId}).sort({[sort]: order}).exec(callback);
+}
+
 const findNotesByTags = (tags, callback) => {
     db.find({"tags.text": {$in: tags}}).sort({createTime: -1}).exec(callback);
+}
+
+const findNotesByTagsSort = (tags, sort, order, callback) => {
+    db.find({"tags.text": {$in: tags}}).sort({[sort]: order}).exec(callback);
 }
 
 module.exports = {
@@ -67,5 +75,7 @@ module.exports = {
     remove,
     removeByNotebookId,
     findNotesByNotebookId,
-    findNotesByTags
+    findNotesByNotebookIdSort,
+    findNotesByTags,
+    findNotesByTagsSort,
 }

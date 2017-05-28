@@ -218,7 +218,7 @@ export default class Editor extends Component {
                     </div>
                     <div className="book" style={{display: this.state.mode === 2 ? 'grid' : 'none'}}>
                         <div className="book-left">
-                            <CodeMirror ref="codeMirror" value={content} options={options}
+                            <CodeMirror ref="codeMirror2" value={content} options={options}
                                         onFocusChange={this.handleSave}
                                         onChange={e => {
                                             this.handleChange('content', e)

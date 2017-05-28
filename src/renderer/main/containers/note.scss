@@ -29,9 +29,44 @@
 
     .nb_left Button {
       float: left;
+      border: none;
+      width: 40px;
+      height: 40px;
+
+      div {
+        background-color: #a9b4d2;
+        width: 16px;
+        height: 16px;
+
+        &:hover {
+          background-color: #d2eafb;
+        }
+      }
+
+      .icon-sort {
+        mask: url('../images/sort.svg') no-repeat center;
+        mask-size: 16px 16px;
+      }
     }
     .right Button {
       float: right;
+      border: none;
+      width: 40px;
+      height: 40px;
+
+      div {
+        background-color: #a9b4d2;
+        width: 16px;
+        height: 16px;
+
+        &:hover {
+          background-color: #d2eafb;
+        }
+      }
+      .icon-new {
+        mask: url('../images/new.svg') no-repeat center;
+        mask-size: 16px 16px;
+      }
     }
     .search {
       grid-column: 1/4;
@@ -70,5 +105,18 @@
   .list {
     height: calc(100vh - 80px);
     overflow: auto;
+  }
+}
+
+.menu-item {
+  .prex {
+    display: inline-block;
+    float: left;
+    width: 20px;
+  }
+  .title {
+    display: inline-block;
+    float: left;
+    overflow: hidden;
   }
 }

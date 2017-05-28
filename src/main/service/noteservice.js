@@ -81,14 +81,36 @@ const removeByNotebookId = (notebookId, callback) => {
 }
 
 const findNotesByNotebookId = (notebookId, callback) => {
-    NoteDB.findNotesByNotebookId(notebookId, callback)
+    NoteDB.findNotesByNotebookId(notebookId, callback);
+}
+
+const findNotesByNotebookIdSort = (notebookId, sort, order, callback) => {
+    let o = 1;
+    if (!_.isUndefined(order) && order === 'desc')
+        o = -1;
+    let s = 'createTime';
+    if (!_.isUndefined(sort)) {
+        s = sort;
+    }
+    NoteDB.findNotesByNotebookIdSort(notebookId, s, o, callback)
 }
 
 const findNotesByTags = (tags, callback) => {
+    NoteDB.findNotesByTags(tags, callback);
+}
+
+const findNotesByTagsSort = (tags, sort, order, callback) => {
     if (!_.isArray(tags)) {
         tags = [tags];
     }
-    NoteDB.findNotesByTags(tags, callback)
+    let o = 1;
+    if (!_.isUndefined(order) && order === 'desc')
+        o = -1;
+    let s = 'createTime';
+    if (!_.isUndefined(sort)) {
+        s = sort;
+    }
+    NoteDB.findNotesByTagsSort(tags, s, o, callback)
 }
 
 const move = (ids, notebookId, callback) => {
@@ -150,7 +172,9 @@ module.exports = {
     remove,
     removeByNotebookId,
     findNotesByNotebookId,
+    findNotesByNotebookIdSort,
     findNotesByTags,
+    findNotesByTagsSort,
     move,
     exportToPdf,
     exportToFile

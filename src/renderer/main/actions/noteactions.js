@@ -18,7 +18,7 @@ export const save = (content, callback) => {
     }
 }
 
-export const list = (notebookId) => {
+export const list = (notebookId, sort, order) => {
     return dispatch => {
         ipcRenderer.once(IPCMESSAGE.NOTE_LIST, (event, args) => {
             if (typeof args.error === 'undefined') {
@@ -33,11 +33,11 @@ export const list = (notebookId) => {
                 })
             }
         })
-        ipcRenderer.send(IPCMESSAGE.NOTE_LIST, {notebookId: notebookId})
+        ipcRenderer.send(IPCMESSAGE.NOTE_LIST, {notebookId: notebookId, sort, order})
     }
 }
 
-export const listByTag = (tag) => {
+export const listByTag = (tag, sort, order) => {
     return dispatch => {
         ipcRenderer.once(IPCMESSAGE.NOTE_LIST, (event, args) => {
             if (typeof args.error === 'undefined') {
@@ -52,7 +52,7 @@ export const listByTag = (tag) => {
                 })
             }
         })
-        ipcRenderer.send(IPCMESSAGE.NOTE_LIST, {tags: tag})
+        ipcRenderer.send(IPCMESSAGE.NOTE_LIST, {tags: tag, sort, order})
     }
 }
 
@@ -78,8 +78,8 @@ export const exportPdf = (id) => {
     }
 }
 
-export const exportFile = (id) =>{
-    return dispatch =>{
+export const exportFile = (id) => {
+    return dispatch => {
         ipcRenderer.send(IPCMESSAGE.NOTE_EXPORT_FILE, id)
     }
 }

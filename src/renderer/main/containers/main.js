@@ -24,7 +24,6 @@ class Main extends Component {
         this.handleModifyNotebook = this.handleModifyNotebook.bind(this);
         this.handleDeleteNotebook = this.handleDeleteNotebook.bind(this);
         this.handleSelectNotebook = this.handleSelectNotebook.bind(this);
-        this.handleNotebookSaved = this.handleNotebookSaved.bind(this);
         this.handleNoteSaved = this.handleNoteSaved.bind(this);
         this.handleSelectTag = this.handleSelectTag.bind(this);
     }
@@ -42,15 +41,16 @@ class Main extends Component {
     }
 
     handleDeleteNotebook(e, data) {
-        let {deleteNotebookList, getNotebookList} = this.props;
-        let {note} = this.refs.note.getWrappedInstance();
-        let {tags} = this.refs.tags;
+        let {deleteNotebookList} = this.props;
+        let clear = this.refs.note.getWrappedInstance().clear;
         Modal.confirm({
             title: 'delete "' + data.title + '" notebook?',
             content: 'you can\'t undo the action.',
             onOk() {
                 deleteNotebookList(data._id, (id) => {
-                    note.clear();
+                    clear();
+                    AppContext.notebookChanged();
+                    AppContext.tagListChanged();
                 });
             },
             onCancel() {
@@ -72,10 +72,6 @@ class Main extends Component {
         this.refs.noteTreeView.clearSelected();
     }
 
-    handleNotebookSaved() {
-        this.props.getNotebookList();
-    }
-
     handleNoteSaved() {
         this.refs.tags.refresh();
     }
@@ -87,7 +83,8 @@ class Main extends Component {
                     <SplitPane split="horizontal" minSize={300} defaultSize={400} maxSize={-200} className="left">
                         <div className="notebook">
                             <div className="title unselect">
-                                <div className="mynb_icon"></div>My Notebook
+                                <div className="mynb_icon"></div>
+                                My Notebook
                                 <Button shape="circle" onClick={(e) => {
                                     this.refs.notebookModal.getWrappedInstance().show(null, null)
                                 }}>Add</Button>
@@ -102,7 +99,8 @@ class Main extends Component {
                         </div>
                         <div className="tags">
                             <div className="title unselect">
-                                <div className="mytag_icon"></div>Tags
+                                <div className="mytag_icon"></div>
+                                Tags
                             </div>
                             <Tags ref="tags" onSelected={this.handleSelectTag}/>
                         </div>
@@ -111,7 +109,7 @@ class Main extends Component {
                         <Note ref="note" onSaved={this.handleNoteSaved}/>
                     </div>
                 </SplitPane>
-                <NotebookModal ref="notebookModal" onSave={this.handleNotebookSaved}/>
+                <NotebookModal ref="notebookModal"/>
             </div>)
     }
 }

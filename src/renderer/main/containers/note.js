@@ -5,6 +5,7 @@ import * as NoteActions from '../actions/noteactions'
 import NoteList from '../components/notelist'
 import Editor from '../components/editor'
 import {Button, Input, Modal} from 'antd'
+import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu"
 import SplitPane from 'react-split-pane'
 import NoteMoveModal from '../components/notemovemodal'
 import AppContext from '../context/appcontext'
@@ -18,7 +19,10 @@ class Note extends Component {
 
         this.state = {
             title: '',
+            dataSource: [],
             readOnly: true,
+            sort: 'createTime',
+            order: 'desc',
         }
 
         this.setNotebook = this.setNotebook.bind(this);
@@ -27,9 +31,13 @@ class Note extends Component {
         this.handleClickNoteMenu = this.handleClickNoteMenu.bind(this);
         this.handleNoteSave = this.handleNoteSave.bind(this);
         this.handleMoveModalSaved = this.handleMoveModalSaved.bind(this);
+        this.handleSortMenu = this.handleSortMenu.bind(this);
+        this.handleToggleSortMenu = this.handleToggleSortMenu.bind(this);
+        this.clear = this.clear.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
+        this.setState({...nextProps});
         if (nextProps.dataSource.length === 0) {
             this.refs.editor.clear();
             this.refs.noteList.setSelectedIndex(-1);
@@ -62,6 +70,7 @@ class Note extends Component {
     handleClickNoteMenu(e, cmd, data) {
         let {deleteNote, list, listByTag} = this.props;
         let {_notebook, _tag} = this;
+        let {sort, order} = this.state;
         if (cmd === 'delete') {
             let title = '';
             if (data.selectedItems.length > 1) {
@@ -78,9 +87,9 @@ class Note extends Component {
                         ids.push(item._id)
                     deleteNote(ids, () => {
                         if (_notebook != null) {
-                            list(_notebook._id)
+                            list(_notebook._id, sort, order)
                         } else if (_tag != null) {
-                            listByTag(_tag);
+                            listByTag(_tag, sort, order);
                         }
                         AppContext.tagListChanged();
                     });
@@ -117,11 +126,50 @@ class Note extends Component {
         });
     }
 
+    handleSortMenu(cmd) {
+        switch (cmd) {
+            case 'createTime':
+                if (this.state.sort !== 'createTime') {
+                    this.state.sort = 'createTime';
+                    this.load();
+                }
+                break;
+            case 'lastUpdateTime':
+                if (this.state.sort !== 'lastUpdateTime') {
+                    this.state.sort = 'lastUpdateTime';
+                    this.load();
+                }
+                break;
+            case 'title':
+                if (this.state.sort !== 'title') {
+                    this.state.sort = 'title';
+                    this.load();
+                }
+                break;
+            case 'asc':
+                if (this.state.order !== 'asc') {
+                    this.state.order = 'asc';
+                    this.load();
+                }
+                break;
+            case 'desc':
+                if (this.state.order !== 'desc') {
+                    this.state.order = 'desc';
+                    this.load();
+                }
+                break;
+        }
+    }
+
+    handleToggleSortMenu(e) {
+        this.refs.sortMenuTrigger.handleContextClick(e);
+    }
+
     load() {
         if (this._notebook != null) {
-            this.props.list(this._notebook._id)
+            this.props.list(this._notebook._id, this.state.sort, this.state.order)
         } else if (this._tag != null) {
-            this.props.listByTag(this._tag);
+            this.props.listByTag(this._tag, this.state.sort, this.state.order);
         }
     }
 
@@ -141,6 +189,14 @@ class Note extends Component {
         this.refs.noteList.setSelectedIndex(0);
     }
 
+    clear() {
+        this._note = null;
+        this._tag = null;
+        this._notebook = null;
+        this.setState({title: '', readOnly: true, dataSource: []});
+        this.refs.editor.clear();
+    }
+
     render() {
         return (
             <SplitPane split="vertical" minSize={270} defaultSize={300} maxSize={-300}>
@@ -148,14 +204,64 @@ class Note extends Component {
                     {this.state.readOnly ? <div className="mask"></div> : null}
                     <div className="top">
                         <div className="nb_left">
-                            <Button shape="circle" icon="file-add"></Button>
+                            <ContextMenuTrigger id="note_sort" ref="sortMenuTrigger">
+                                <Button onClick={this.handleToggleSortMenu}>
+                                    <div className="icon-sort"></div>
+                                </Button>
+                            </ContextMenuTrigger>
+                            <ContextMenu id="note_sort">
+                                <MenuItem onClick={e => this.handleSortMenu('createTime')} onMouseLeave={e => {
+                                }} onMouseMove={e => {
+                                }}>
+                                    <div className="menu-item">
+                                        <div className="prex">{this.state.sort === 'createTime' ? '✓' : '\u00A0'}</div>
+                                        <div className="name">CreateTime</div>
+                                    </div>
+                                </MenuItem>
+                                <MenuItem onClick={e => this.handleSortMenu('lastUpdateTime')} onMouseLeave={e => {
+                                }} onMouseMove={e => {
+                                }}>
+                                    <div className="menu-item">
+                                        <div
+                                            className="prex">{this.state.sort === 'lastUpdateTime' ? '✓' : '\u00A0'}</div>
+                                        <div className="name">LastModifyTime</div>
+                                    </div>
+                                </MenuItem>
+                                <MenuItem onClick={e => this.handleSortMenu('title')} onMouseLeave={e => {
+                                }} onMouseMove={e => {
+                                }}>
+                                    <div className="menu-item">
+                                        <div className="prex">{this.state.sort === 'title' ? '✓' : '\u00A0'}</div>
+                                        <div className="name">Title</div>
+                                    </div>
+                                </MenuItem>
+                                <MenuItem divider/>
+                                <MenuItem onClick={e => this.handleSortMenu('asc')} onMouseLeave={e => {
+                                }} onMouseMove={e => {
+                                }}>
+                                    <div className="menu-item">
+                                        <div className="prex">{this.state.order === 'asc' ? '✓' : '\u00A0'}</div>
+                                        <div className="name">Ascending</div>
+                                    </div>
+                                </MenuItem>
+                                <MenuItem onClick={e => this.handleSortMenu('desc')} onMouseLeave={e => {
+                                }} onMouseMove={e => {
+                                }}>
+                                    <div className="menu-item">
+                                        <div className="prex">{this.state.order === 'desc' ? '✓' : '\u00A0'}</div>
+                                        <div className="name">Descending</div>
+                                    </div>
+                                </MenuItem>
+                            </ContextMenu>
                         </div>
                         <div className="title unselect">
                             {this.state.title}
                         </div>
                         <div className="right">
-                            <Button shape="circle" icon="edit" onClick={this.handleNewNote}
-                                    disabled={this._notebook === null ? true : false}></Button>
+                            <Button onClick={this.handleNewNote}
+                                    disabled={this._notebook === null ? true : false}>
+                                <div className="icon-new"></div>
+                            </Button>
                         </div>
                         <div className="search">
                             <Search
@@ -166,7 +272,7 @@ class Note extends Component {
                     </div>
                     <div className="list">
                         <NoteList ref="noteList" onClickMenu={this.handleClickNoteMenu}
-                                  dataSource={this.props.dataSource}
+                                  dataSource={this.state.dataSource}
                                   onSelect={this.handleSelectChanged}/>
                     </div>
                     <NoteMoveModal ref="noteMoveModal"
@@ -181,7 +287,8 @@ class Note extends Component {
 }
 
 Note.PropTypes = {
-    setNotebook: PropTypes.func
+    setNotebook: PropTypes.func,
+    clear: PropTypes.func,
 }
 
 

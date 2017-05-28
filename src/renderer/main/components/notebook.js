@@ -36,13 +36,13 @@ export default class Notebook extends Component {
                 </ContextMenuTrigger>
                 <ContextMenu id={this.props.id}>
                     <MenuItem data={this.props.data} onClick={this.handleAddNotebook} onMouseLeave={e=>{}} onMouseMove={e=>{}}>
-                        New
+                        New Notebook
                     </MenuItem>
                     <MenuItem data={this.props.data} onClick={this.handleModifyNotebook} onMouseLeave={e=>{}} onMouseMove={e=>{}}>
-                        Rename
+                        Rename Notebook
                     </MenuItem>
                     <MenuItem data={this.props.data} onClick={this.handleDeleteNotebook} onMouseLeave={e=>{}} onMouseMove={e=>{}}>
-                        Delete
+                        Delete Notebook
                     </MenuItem>
                 </ContextMenu>
             </div>

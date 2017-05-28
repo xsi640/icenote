@@ -70,6 +70,10 @@
   color: #818ca9;
 }
 
+.ant-btn.disabled, .ant-btn.disabled.active, .ant-btn.disabled:active, .ant-btn.disabled:focus, .ant-btn.disabled:hover, .ant-btn[disabled], .ant-btn[disabled].active, .ant-btn[disabled]:active, .ant-btn[disabled]:focus, .ant-btn[disabled]:hover{
+  background-color: transparent;
+}
+
 .notebook {
   color: #818ca9;
 }

@@ -102,9 +102,13 @@ div.ReactTags__suggestions ul li.ReactTags__activeSuggestion {
     }
 
     Button div {
-      background-color: black;
+      background-color: #444;
       width: 16px;
       height: 16px;
+
+      &:hover{
+        background-color: #000;
+      }
     }
 
     .icon-preview {
