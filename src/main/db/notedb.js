@@ -55,16 +55,28 @@ const findNotesByNotebookId = (notebookId, callback) => {
     db.find({notebookId: notebookId}).sort({createTime: -1}).exec(callback);
 }
 
-const findNotesByNotebookIdSort = (notebookId, sort, order, callback) => {
-    db.find({notebookId: notebookId}).sort({[sort]: order}).exec(callback);
+const findNotesByNotebookIdSort = (notebookId, keyword, sort, order, callback) => {
+    if (!_.isUndefined(keyword) && keyword.length > 0)
+        db.find({
+            notebookId: notebookId,
+            $or: [{title: new RegExp(keyword, 'igm')}, {content: new RegExp(keyword, 'igm')}]
+        }).sort({[sort]: order}).exec(callback);
+    else
+        db.find({notebookId: notebookId}).sort({[sort]: order}).exec(callback);
 }
 
 const findNotesByTags = (tags, callback) => {
     db.find({"tags.text": {$in: tags}}).sort({createTime: -1}).exec(callback);
 }
 
-const findNotesByTagsSort = (tags, sort, order, callback) => {
-    db.find({"tags.text": {$in: tags}}).sort({[sort]: order}).exec(callback);
+const findNotesByTagsSort = (tags, keyword, sort, order, callback) => {
+    if (!_.isUndefined(keyword) && keyword.length > 0)
+        db.find({
+            "tags.text": {$in: tags},
+            $or: [{title: new RegExp(keyword, 'igm')}, {content: new RegExp(keyword, 'igm')}]
+        }).sort({[sort]: order}).exec(callback);
+    else
+        db.find({"tags.text": {$in: tags}}).sort({[sort]: order}).exec(callback);
 }
 
 module.exports = {

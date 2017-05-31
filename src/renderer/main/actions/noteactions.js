@@ -18,7 +18,7 @@ export const save = (content, callback) => {
     }
 }
 
-export const list = (notebookId, sort, order) => {
+export const list = (notebookId, keyword, sort, order) => {
     return dispatch => {
         ipcRenderer.once(IPCMESSAGE.NOTE_LIST, (event, args) => {
             if (typeof args.error === 'undefined') {
@@ -33,11 +33,11 @@ export const list = (notebookId, sort, order) => {
                 })
             }
         })
-        ipcRenderer.send(IPCMESSAGE.NOTE_LIST, {notebookId: notebookId, sort, order})
+        ipcRenderer.send(IPCMESSAGE.NOTE_LIST, {notebookId: notebookId, sort, order, keyword})
     }
 }
 
-export const listByTag = (tag, sort, order) => {
+export const listByTag = (tag, keyword, sort, order) => {
     return dispatch => {
         ipcRenderer.once(IPCMESSAGE.NOTE_LIST, (event, args) => {
             if (typeof args.error === 'undefined') {
@@ -52,7 +52,7 @@ export const listByTag = (tag, sort, order) => {
                 })
             }
         })
-        ipcRenderer.send(IPCMESSAGE.NOTE_LIST, {tags: tag, sort, order})
+        ipcRenderer.send(IPCMESSAGE.NOTE_LIST, {tags: tag, sort, order, keyword})
     }
 }
 

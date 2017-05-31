@@ -84,7 +84,7 @@ const findNotesByNotebookId = (notebookId, callback) => {
     NoteDB.findNotesByNotebookId(notebookId, callback);
 }
 
-const findNotesByNotebookIdSort = (notebookId, sort, order, callback) => {
+const findNotesByNotebookIdSort = (notebookId, keyword, sort, order, callback) => {
     let o = 1;
     if (!_.isUndefined(order) && order === 'desc')
         o = -1;
@@ -92,14 +92,14 @@ const findNotesByNotebookIdSort = (notebookId, sort, order, callback) => {
     if (!_.isUndefined(sort)) {
         s = sort;
     }
-    NoteDB.findNotesByNotebookIdSort(notebookId, s, o, callback)
+    NoteDB.findNotesByNotebookIdSort(notebookId,keyword, s, o, callback)
 }
 
 const findNotesByTags = (tags, callback) => {
     NoteDB.findNotesByTags(tags, callback);
 }
 
-const findNotesByTagsSort = (tags, sort, order, callback) => {
+const findNotesByTagsSort = (tags, keyword, sort, order, callback) => {
     if (!_.isArray(tags)) {
         tags = [tags];
     }
@@ -110,7 +110,7 @@ const findNotesByTagsSort = (tags, sort, order, callback) => {
     if (!_.isUndefined(sort)) {
         s = sort;
     }
-    NoteDB.findNotesByTagsSort(tags, s, o, callback)
+    NoteDB.findNotesByTagsSort(tags,keyword, s, o, callback)
 }
 
 const move = (ids, notebookId, callback) => {

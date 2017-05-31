@@ -24,6 +24,7 @@ class Note extends Component {
             readOnly: true,
             sort: 'createTime',
             order: 'desc',
+            keyword: '',
         }
 
         this.setNotebook = this.setNotebook.bind(this);
@@ -35,6 +36,7 @@ class Note extends Component {
         this.handleSortMenu = this.handleSortMenu.bind(this);
         this.handleToggleSortMenu = this.handleToggleSortMenu.bind(this);
         this.clear = this.clear.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -177,18 +179,22 @@ class Note extends Component {
         this.refs.sortMenuTrigger.handleContextClick(e);
     }
 
+    handleSearch() {
+        this.load();
+    }
+
     load() {
         if (this._notebook != null) {
-            this.props.list(this._notebook._id, this.state.sort, this.state.order)
+            this.props.list(this._notebook._id, this.state.keyword, this.state.sort, this.state.order)
         } else if (this._tag != null) {
-            this.props.listByTag(this._tag, this.state.sort, this.state.order);
+            this.props.listByTag(this._tag, this.state.keyword, this.state.sort, this.state.order);
         }
     }
 
     setNotebook(notebook) {
         this._tag = null;
         this._notebook = notebook;
-        this.setState({title: 'title: ' + this._notebook.title, readOnly: false})
+        this.setState({title: 'title: ' + this._notebook.title, readOnly: false, keyword: ''})
         this.load();
         this.refs.noteList.setSelectedIndex(0);
     }
@@ -196,7 +202,7 @@ class Note extends Component {
     setTag(tag) {
         this._tag = tag;
         this._notebook = null;
-        this.setState({title: 'tag: ' + tag, readOnly: false})
+        this.setState({title: 'tag: ' + tag, readOnly: false, keyword: ''})
         this.load();
         this.refs.noteList.setSelectedIndex(0);
     }
@@ -278,7 +284,11 @@ class Note extends Component {
                         <div className="search">
                             <Search
                                 placeholder="input search text"
-                                onSearch={value => console.log(value)}
+                                onSearch={this.handleSearch}
+                                value={this.state.keyword}
+                                onChange={(e) => {
+                                    this.setState({keyword: e.target.value})
+                                }}
                             />
                         </div>
                     </div>

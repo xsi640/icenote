@@ -42,9 +42,9 @@ const regIPCMessage = () => {
 
     _reg(IPCMESSAGE.NOTE_LIST, (event, args, callback) => {
         if (typeof args.notebookId !== 'undefined')
-            NoteService.findNotesByNotebookIdSort(args.notebookId, args.sort, args.order, callback)
+            NoteService.findNotesByNotebookIdSort(args.notebookId, args.keyword, args.sort, args.order, callback)
         else
-            NoteService.findNotesByTagsSort(args.tags, args.sort, args.order, callback)
+            NoteService.findNotesByTagsSort(args.tags, args.keyword, args.sort, args.order, callback)
     })
 
     _reg(IPCMESSAGE.NOTE_DELETE, (event, args, callback) => {
