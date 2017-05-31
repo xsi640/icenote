@@ -101,7 +101,7 @@ class NoteMoveModal extends Component {
         return (
             <div>
                 <Modal title={<div
-                    className="unselect">Move to</div>}
+                    className="unselect">Move to notebook</div>}
                        visible={this.state.visible}
                        onOk={this.handleSave} onCancel={this.handleClose}
                        closable={false}>

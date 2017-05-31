@@ -76,7 +76,7 @@ class NotebookModal extends Component {
         return (
             <div>
                 <Modal title={<div
-                    className="unselect">{typeof this._notebook === 'undefined' || this._notebook === null ? 'Add NoteBook' : 'Modify NoteBook'}</div>}
+                    className="unselect">{typeof this._notebook === 'undefined' || this._notebook === null ? 'New noteBook' : 'Rename noteBook'}</div>}
                        visible={this.state.visible}
                        onOk={this.handleSave} onCancel={this.handleClose}
                        closable={false}>

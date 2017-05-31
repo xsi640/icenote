@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown'
 import './editor.scss'
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/markdown/markdown"
-import "codemirror/theme/3024-day.css";
+import "codemirror/theme/seti.css";
 
 export default class Editor extends Component {
 
@@ -87,12 +87,132 @@ export default class Editor extends Component {
                 }
                 break;
             case 'book':
-                if(this.state.mode === 2){
+                if (this.state.mode === 2) {
                     this.setState({mode: 0})
-                }else {
+                } else {
                     this.setState({mode: 2})
                 }
                 break;
+            default:
+                this.handleEditor(cmd);
+                break;
+            // case 'bold':
+            //     let editor = this.refs.codeMirror;
+            //     if (editor) {
+            //         let codeMirror = editor.getCodeMirror();
+            //         let selection = codeMirror.getSelection();
+            //         codeMirror.replaceSelection('***' + selection + '***');
+            //     }
+            //     break;
+            // case 'italic':
+            //     let editor = this.refs.codeMirror;
+            //     if (editor) {
+            //         let codeMirror = editor.getCodeMirror();
+            //         let selection = codeMirror.getSelection();
+            //         codeMirror.replaceSelection('*' + selection + '*');
+            //     }
+            //     break;
+            // case 'strike':
+            //     let editor = this.refs.codeMirror;
+            //     if (editor) {
+            //         let codeMirror = editor.getCodeMirror();
+            //         let selection = codeMirror.getSelection();
+            //         codeMirror.replaceSelection('~~' + selection + '~~');
+            //     }
+            //     break;
+            // case 'title':
+            //     let editor = this.refs.codeMirror;
+            //     if (editor) {
+            //         let codeMirror = editor.getCodeMirror();
+            //         let selection = codeMirror.getSelection();
+            //         codeMirror.replaceSelection('# ' + selection);
+            //     }
+            //     break;
+            // case 'refs':
+            //     let editor = this.refs.codeMirror;
+            //     if (editor) {
+            //         let codeMirror = editor.getCodeMirror();
+            //         let selection = codeMirror.getSelection();
+            //         codeMirror.replaceSelection('> ' + selection);
+            //     }
+            //     break;
+            // case 'code':
+            //     let editor = this.refs.codeMirror;
+            //     if (editor) {
+            //         let codeMirror = editor.getCodeMirror();
+            //         let selection = codeMirror.getSelection();
+            //         codeMirror.replaceSelection('```' + selection + '```');
+            //     }
+            //     break;
+            // case 'list':
+            //     let editor = this.refs.codeMirror;
+            //     if (editor) {
+            //         let codeMirror = editor.getCodeMirror();
+            //         let selection = codeMirror.getSelection();
+            //         codeMirror.replaceSelection('* ' + selection);
+            //     }
+            //     break;
+            // case 'list-num':
+            //     let editor = this.refs.codeMirror;
+            //     if (editor) {
+            //         let codeMirror = editor.getCodeMirror();
+            //         let selection = codeMirror.getSelection();
+            //         codeMirror.replaceSelection('1. ' + selection);
+            //     }
+            //     break;
+            // case 'checkbox':
+            //     let editor = this.refs.codeMirror;
+            //     if (editor) {
+            //         let codeMirror = editor.getCodeMirror();
+            //         let selection = codeMirror.getSelection();
+            //         codeMirror.replaceSelection('[ ]' + selection);
+            //     }
+            //     break;
+            // case 'link':
+            //     let editor = this.refs.codeMirror;
+            //     if (editor) {
+            //         let codeMirror = editor.getCodeMirror();
+            //         let selection = codeMirror.getSelection();
+            //         codeMirror.replaceSelection('[' + selection + '](http://)');
+            //     }
+            //     break;
+            // case 'line':
+            //     let editor = this.refs.codeMirror;
+            //     if (editor) {
+            //         let codeMirror = editor.getCodeMirror();
+            //         let selection = codeMirror.getSelection();
+            //         codeMirror.replaceSelection('* * *');
+            //     }
+            //     break;
+
+        }
+    }
+
+    handleEditor(cmd) {
+        let editor = this.refs.codeMirror;
+        if (editor) {
+            let codeMirror = editor.getCodeMirror();
+            let selection = codeMirror.getSelection();
+            let cursor = codeMirror.getCursor();
+            if (cmd === 'bold') {
+                codeMirror.replaceSelection('***' + selection + '***');
+            } else if (cmd === 'italic') {
+                codeMirror.replaceSelection('*' + selection + '*');
+            } else if (cmd === 'title') {
+                codeMirror.replaceRange('# ', {line: cursor.line, ch: 0});
+            } else if (cmd === 'refs') {
+                codeMirror.replaceRange('> ', {line: cursor.line, ch: 0});
+            } else if (cmd === 'code') {
+                codeMirror.replaceSelection('```\n' + selection + '\n```');
+            } else if (cmd === 'list') {
+                codeMirror.replaceRange('* ', {line: cursor.line, ch: 0});
+            } else if (cmd === 'list-num') {
+                codeMirror.replaceRange('1. ', {line: cursor.line, ch: 0});
+            } else if (cmd === 'link') {
+                codeMirror.replaceSelection('[' + selection + '](http://)');
+            } else if (cmd === 'line') {
+                codeMirror.replaceSelection('---\n' + selection);
+            }
         }
     }
 
@@ -116,11 +236,40 @@ export default class Editor extends Component {
     }
 
     render() {
-        const {tags, suggestions, content, title} = this.state;
+        const {tags, suggestions, content, title, mode, readOnly} = this.state;
         const options = {
             mode: 'markdown',
-            theme: '3024-day',
+            theme: 'seti',
         };
+
+        let editor = null;
+        if (mode === 0) {
+            editor = <div>
+                <CodeMirror ref="codeMirror" value={content} options={{...options, autofocus: !readOnly}}
+                            onFocusChange={this.handleSave}
+                            onChange={e => {
+                                this.handleChange('content', e)
+                            }}/>
+            </div>;
+        } else if (mode === 1) {
+            editor = <div className="md">
+                <ReactMarkdown escapeHtml={true} skipHtml={false} source={content}/>
+            </div>
+        } else if (mode === 2) {
+            editor = <div className="book">
+                <div className="book-left">
+                    <CodeMirror ref="codeMirror" value={content} options={{...options, autofocus: !readOnly}}
+                                onFocusChange={this.handleSave}
+                                onChange={e => {
+                                    this.handleChange('content', e)
+                                }}/>
+                </div>
+                <div className="book-right md">
+                    <ReactMarkdown escapeHtml={true} skipHtml={false} source={content}/>
+                </div>
+            </div>
+        }
+
         return (
             <div className="editor-root">
                 <div className="title">
@@ -157,11 +306,11 @@ export default class Editor extends Component {
                     }}>
                         <div className="icon-italic"></div>
                     </Button>
-                    <Button onClick={e => {
-                        this.handleToolbar(e, 'strike');
-                    }}>
-                        <div className="icon-strike"></div>
-                    </Button>
+                    {/*<Button onClick={e => {*/}
+                    {/*this.handleToolbar(e, 'strike');*/}
+                    {/*}}>*/}
+                    {/*<div className="icon-strike"></div>*/}
+                    {/*</Button>*/}
 
                     <Button onClick={e => {
                         this.handleToolbar(e, 'title');
@@ -189,11 +338,11 @@ export default class Editor extends Component {
                     }}>
                         <div className="icon-list-num"></div>
                     </Button>
-                    <Button onClick={e => {
-                        this.handleToolbar(e, 'checkbox');
-                    }}>
-                        <div className="icon-checkbox"></div>
-                    </Button>
+                    {/*<Button onClick={e => {*/}
+                    {/*this.handleToolbar(e, 'checkbox');*/}
+                    {/*}}>*/}
+                    {/*<div className="icon-checkbox"></div>*/}
+                    {/*</Button>*/}
 
                     <Button onClick={e => {
                         this.handleToolbar(e, 'link');
@@ -207,27 +356,7 @@ export default class Editor extends Component {
                     </Button>
                 </div>
                 <div className="editor">
-                    <div style={{display: this.state.mode === 0 ? 'block' : 'none'}}>
-                        <CodeMirror ref="codeMirror" value={content} options={options} onFocusChange={this.handleSave}
-                                    onChange={e => {
-                                        this.handleChange('content', e)
-                                    }}/>
-                    </div>
-                    <div className="md" style={{display: this.state.mode === 1 ? 'block' : 'none'}}>
-                        <ReactMarkdown escapeHtml={false} skipHtml={false} source={content}/>
-                    </div>
-                    <div className="book" style={{display: this.state.mode === 2 ? 'grid' : 'none'}}>
-                        <div className="book-left">
-                            <CodeMirror ref="codeMirror2" value={content} options={options}
-                                        onFocusChange={this.handleSave}
-                                        onChange={e => {
-                                            this.handleChange('content', e)
-                                        }}/>
-                        </div>
-                        <div className="book-right">
-                            <ReactMarkdown escapeHtml={false} skipHtml={false} source={content}/>
-                        </div>
-                    </div>
+                    {editor}
                 </div>
                 {this.state.readOnly ? <div className="mask"></div> : null}
             </div>
