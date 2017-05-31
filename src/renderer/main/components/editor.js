@@ -244,7 +244,7 @@ export default class Editor extends Component {
 
         let editor = null;
         if (mode === 0) {
-            editor = <div>
+            editor = <div className="editor">
                 <CodeMirror ref="codeMirror" value={content} options={{...options, autofocus: !readOnly}}
                             onFocusChange={this.handleSave}
                             onChange={e => {
