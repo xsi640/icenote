@@ -79,7 +79,7 @@ class Main extends Component {
     render() {
         return (
             <div>
-                <SplitPane split="vertical" minSize={200} defaultSize={220} maxSize={-800}>
+                <SplitPane split="vertical" minSize={180} defaultSize={200} maxSize={-500}>
                     <SplitPane split="horizontal" minSize={300} defaultSize={400} maxSize={-200} className="left">
                         <div className="notebook">
                             <div className="title unselect">

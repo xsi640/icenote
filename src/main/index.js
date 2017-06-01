@@ -3,10 +3,11 @@ const path = require('path')
 const url = require('url')
 const fs = require('fs')
 const regIPCMessage = require('./ipcMessage')
+const AppContext = require('./appcontext')
 
 let mainWindow, loadingScreen, windowParams = {
-    width: 1100,
-    height: 700,
+    width: 1200,
+    height: 600,
     icon: '../../resources/logo.png',
     show: false,
     webPreferences: {
@@ -19,6 +20,7 @@ function createWindow() {
     regIPCMessage();
 
     mainWindow = new BrowserWindow(windowParams)
+    AppContext.mainWindow = mainWindow;
 
     console.log(__dirname);
 
@@ -45,6 +47,8 @@ function createWindow() {
     mainWindow.on('closed', () => {
         mainWindow = null
     })
+
+    require('./menu');
 }
 
 function createLoadingScreen() {

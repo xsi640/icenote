@@ -4,11 +4,13 @@ import PropTypes from 'prop-types'
 import * as NoteActions from '../actions/noteactions'
 import NoteList from '../components/notelist'
 import Editor from '../components/editor'
-import {Button, Input, Modal} from 'antd'
+import {Button, Input, Modal, message} from 'antd'
 import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu"
 import SplitPane from 'react-split-pane'
 import NoteMoveModal from '../components/notemovemodal'
 import AppContext from '../context/appcontext'
+const {ipcRenderer} = require('electron')
+import IPCMESSAGE from '../../../constipc'
 import Guid from '../../../main/utils/guid'
 const Search = Input.Search;
 import './note.scss'
@@ -37,6 +39,7 @@ class Note extends Component {
         this.handleToggleSortMenu = this.handleToggleSortMenu.bind(this);
         this.clear = this.clear.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+        this.handleMenuNewNote = this.handleMenuNewNote.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -62,6 +65,21 @@ class Note extends Component {
                 }
             }
         }
+    }
+
+    componentDidMount() {
+        ipcRenderer.on(IPCMESSAGE.MENU_NOTE_NEW, this.handleMenuNewNote)
+    }
+
+    componentWillUnmount() {
+        ipcRenderer.removeListener(IPCMESSAGE.MENU_NOTE_NEW, this.handleMenuNewNote)
+    }
+
+    handleMenuNewNote() {
+        if (_.isUndefined(this._notebook) || this._notebook === null) {
+            message.error('Select the notebook, please.');
+        }
+        this.handleNewNote();
     }
 
     handleSelectChanged(e, note) {
@@ -217,7 +235,7 @@ class Note extends Component {
 
     render() {
         return (
-            <SplitPane split="vertical" minSize={270} defaultSize={300} maxSize={-300}>
+            <SplitPane split="vertical" minSize={260} defaultSize={260} maxSize={-300}>
                 <div className="nb_list">
                     {this.state.readOnly ? <div className="mask"></div> : null}
                     <div className="top">

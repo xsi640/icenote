@@ -4,6 +4,8 @@ import {Input, Button} from 'antd';
 import {WithContext as ReactTags} from 'react-tag-input';
 import CodeMirror from 'react-codemirror'
 import ReactMarkdown from 'react-markdown'
+const {ipcRenderer} = require('electron')
+import IPCMESSAGE from '../../../constipc'
 import './editor.scss'
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/markdown/markdown"
@@ -31,6 +33,32 @@ export default class Editor extends Component {
 
         this.setNote = this.setNote.bind(this);
         this.clear = this.clear.bind(this);
+
+        this.handleMenuSelectAll = this.handleMenuSelectAll.bind(this);
+        this.handleMenuSave = this.handleMenuSave.bind(this);
+    }
+
+    componentDidMount() {
+        ipcRenderer.on(IPCMESSAGE.MENU_SELECT_ALL, this.handleMenuSelectAll)
+        ipcRenderer.on(IPCMESSAGE.MENU_NOTE_SAVE, this.handleMenuSave)
+    }
+
+    componentWillUnmount() {
+        ipcRenderer.removeListener(IPCMESSAGE.MENU_SELECT_ALL, this.handleMenuSelectAll)
+        ipcRenderer.removeListener(IPCMESSAGE.MENU_NOTE_SAVE, this.handleMenuSave)
+    }
+
+    handleMenuSave() {
+        this.handleSave();
+    }
+
+    handleMenuSelectAll() {
+        let editor = this.refs.codeMirror;
+        if (editor) {
+            let codeMirror = editor.getCodeMirror();
+            codeMirror.execCommand('selectAll');
+            console.log('selectAll');
+        }
     }
 
     handleDelete(i) {
@@ -65,7 +93,7 @@ export default class Editor extends Component {
     }
 
     handleSave() {
-        if (_.isUndefined(this._note))
+        if (_.isUndefined(this._note) || this._note === null)
             return;
 
         this._note.title = this.state.title;
@@ -96,95 +124,6 @@ export default class Editor extends Component {
             default:
                 this.handleEditor(cmd);
                 break;
-            // case 'bold':
-            //     let editor = this.refs.codeMirror;
-            //     if (editor) {
-            //         let codeMirror = editor.getCodeMirror();
-            //         let selection = codeMirror.getSelection();
-            //         codeMirror.replaceSelection('***' + selection + '***');
-            //     }
-            //     break;
-            // case 'italic':
-            //     let editor = this.refs.codeMirror;
-            //     if (editor) {
-            //         let codeMirror = editor.getCodeMirror();
-            //         let selection = codeMirror.getSelection();
-            //         codeMirror.replaceSelection('*' + selection + '*');
-            //     }
-            //     break;
-            // case 'strike':
-            //     let editor = this.refs.codeMirror;
-            //     if (editor) {
-            //         let codeMirror = editor.getCodeMirror();
-            //         let selection = codeMirror.getSelection();
-            //         codeMirror.replaceSelection('~~' + selection + '~~');
-            //     }
-            //     break;
-            // case 'title':
-            //     let editor = this.refs.codeMirror;
-            //     if (editor) {
-            //         let codeMirror = editor.getCodeMirror();
-            //         let selection = codeMirror.getSelection();
-            //         codeMirror.replaceSelection('# ' + selection);
-            //     }
-            //     break;
-            // case 'refs':
-            //     let editor = this.refs.codeMirror;
-            //     if (editor) {
-            //         let codeMirror = editor.getCodeMirror();
-            //         let selection = codeMirror.getSelection();
-            //         codeMirror.replaceSelection('> ' + selection);
-            //     }
-            //     break;
-            // case 'code':
-            //     let editor = this.refs.codeMirror;
-            //     if (editor) {
-            //         let codeMirror = editor.getCodeMirror();
-            //         let selection = codeMirror.getSelection();
-            //         codeMirror.replaceSelection('```' + selection + '```');
-            //     }
-            //     break;
-            // case 'list':
-            //     let editor = this.refs.codeMirror;
-            //     if (editor) {
-            //         let codeMirror = editor.getCodeMirror();
-            //         let selection = codeMirror.getSelection();
-            //         codeMirror.replaceSelection('* ' + selection);
-            //     }
-            //     break;
-            // case 'list-num':
-            //     let editor = this.refs.codeMirror;
-            //     if (editor) {
-            //         let codeMirror = editor.getCodeMirror();
-            //         let selection = codeMirror.getSelection();
-            //         codeMirror.replaceSelection('1. ' + selection);
-            //     }
-            //     break;
-            // case 'checkbox':
-            //     let editor = this.refs.codeMirror;
-            //     if (editor) {
-            //         let codeMirror = editor.getCodeMirror();
-            //         let selection = codeMirror.getSelection();
-            //         codeMirror.replaceSelection('[ ]' + selection);
-            //     }
-            //     break;
-            // case 'link':
-            //     let editor = this.refs.codeMirror;
-            //     if (editor) {
-            //         let codeMirror = editor.getCodeMirror();
-            //         let selection = codeMirror.getSelection();
-            //         codeMirror.replaceSelection('[' + selection + '](http://)');
-            //     }
-            //     break;
-            // case 'line':
-            //     let editor = this.refs.codeMirror;
-            //     if (editor) {
-            //         let codeMirror = editor.getCodeMirror();
-            //         let selection = codeMirror.getSelection();
-            //         codeMirror.replaceSelection('* * *');
-            //     }
-            //     break;
-
         }
     }
 
