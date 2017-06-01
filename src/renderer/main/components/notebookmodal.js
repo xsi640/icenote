@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Modal, Input, Alert} from 'antd'
+import _ from 'underscore'
+import _s from 'underscore.string'
 import * as NotebookModalActions from '../actions/notebookmodalactions'
 import AppContext from '../context/appcontext'
 
@@ -30,6 +32,7 @@ class NotebookModal extends Component {
     }
 
     handleSave() {
+        this.state.title = _s.trim(this.state.title);
         if (!this._validInput()) {
             return;
         }
@@ -55,7 +58,13 @@ class NotebookModal extends Component {
 
     _validInput() {
         if (this.state.title === '') {
-            this.setState({error: 'title is null.'})
+            this.setState({error: 'The title is null.'})
+            return false;
+        }
+        if (_.findIndex(AppContext.NotebookList, (item) => {
+                return this.state.title === item.title;
+            }) !== -1) {
+            this.setState({error: 'The notebook exists.'})
             return false;
         }
         return true;
@@ -103,6 +112,10 @@ class NotebookModal extends Component {
                 </Modal>
             </div>)
     }
+}
+
+NotebookModal.PropTypes = {
+    save: PropTypes.func
 }
 
 const mapStateToProps = (state) => {
