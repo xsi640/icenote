@@ -19,3 +19,6 @@ md记事本
 + markdown-pdf
 + underscore
 # 界面截图
+![image](https://github.com/xsi640/icenote/blob/master/1.png)
+![image](https://github.com/xsi640/icenote/blob/master/2.png)
+![image](https://github.com/xsi640/icenote/blob/master/3.png)
